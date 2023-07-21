@@ -21,7 +21,7 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
         <Link
-          href="/docs"
+          href="/shadcn/docs"
           className={cn(
             "transition-colors hover:text-foreground/80",
             pathname === "/docs" ? "text-foreground" : "text-foreground/60"
@@ -41,10 +41,10 @@ export function MainNav() {
           Components
         </Link>
         <Link
-          href="/examples"
+          href="/shadcn/examples/dashboard"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/examples")
+            pathname?.startsWith("/shadcn/examples")
               ? "text-foreground"
               : "text-foreground/60"
           )}

@@ -1,12 +1,12 @@
 export const siteConfig = {
-  name: "shadcn/ui",
+  name: "koksmat/ui",
   url: "https://ui.shadcn.com",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Beautifully designed PowerShell integrations .",
   links: {
     twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
+    github: "https://github.com/koksmat-com/ui",
   },
 }
 

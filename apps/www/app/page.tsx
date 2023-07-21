@@ -2,9 +2,20 @@
 import Link from "next/link";
 import Logo from "@/components/logo";
 
+import './globals.css'
+//import { NextAuthProvider } from "./providers";
+
+export const metadata = {
+  title: 'Nexi Group - Intranet',
+  
+}
+
+
 
 export default function Home() {
   return (
+    <html lang="en">
+    <body>
     <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
       <div className="absolute left-8 top-4">
         <Logo homeUrl="/" />
@@ -22,5 +33,7 @@ export default function Home() {
         </div>
       </div>
     </div>
+    </body>
+    </html>
   );
 }
