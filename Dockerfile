@@ -1,4 +1,4 @@
-FROM node:16 
+FROM node:lts
 WORKDIR /usr/src/app
 COPY apps/www .
 RUN npm install -g pnpm turbo ts-node
