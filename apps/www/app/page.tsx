@@ -1,77 +1,26 @@
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { ExamplesNav } from "@/components/examples-nav"
-import { Icons } from "@/components/icons"
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from "@/components/page-header"
-import { buttonVariants } from "@/registry/new-york/ui/button"
-import { Separator } from "@/registry/new-york/ui/separator"
-import DashboardPage from "@/app/examples/dashboard/page"
+import Link from "next/link";
+import Logo from "@/components/logo";
 
-export default function IndexPage() {
+
+export default function Home() {
   return (
-    <div className="container relative">
-      <PageHeader className="pb-8">
-        <Link
-          href="/docs/changelog"
-          className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
-        >
-          🎉 <Separator className="mx-2 h-4" orientation="vertical" />{" "}
-          <span className="sm:hidden">Style, a new CLI and more.</span>
-          <span className="hidden sm:inline">
-            Introducing Style, a new CLI and more.
-          </span>
-          <ArrowRightIcon className="ml-1 h-4 w-4" />
-        </Link>
-        <PageHeaderHeading>Build your component library.</PageHeaderHeading>
-        <PageHeaderDescription>
-          Beautifully designed components that you can copy and paste into your
-          apps. Accessible. Customizable. Open Source.
-        </PageHeaderDescription>
-        <div className="flex w-full items-center space-x-4 pb-8 pt-4 md:pb-10">
-          <Link href="/docs" className={cn(buttonVariants())}>
-            Get Started
-          </Link>
-          <Link
-            target="_blank"
-            rel="noreferrer"
-            href={siteConfig.links.github}
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            <Icons.gitHub className="mr-2 h-4 w-4" />
-            GitHub
-          </Link>
+    <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
+      <div className="absolute left-8 top-4">
+        <Logo homeUrl="/" />
+      </div>
+      {/* <TopNavigation {...topNavigationProps} /> */}
+      <div className="grid h-screen place-items-center">
+        <div className=" w-screen bg-[#FFFFFFAA] p-10">
+          <div className="pb-4 text-2xl text-black">Welcome to Nexi Group</div>
+          <div>
+            <button className="rounded-full bg-[#2D32A9] from-green-400 to-blue-500 p-2 px-10 text-white hover:from-pink-500 hover:to-yellow-500">
+              {" "}
+              <Link href="/welcome">Click to get started</Link>
+            </button>
+          </div>
         </div>
-      </PageHeader>
-      <ExamplesNav className="[&>a:first-child]:text-primary" />
-      <section className="space-y-8 overflow-hidden rounded-lg border-2 border-primary dark:border-muted md:hidden">
-        <Image
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </section>
-      <section className="hidden md:block">
-        <div className="overflow-hidden rounded-lg border bg-background shadow">
-          <DashboardPage />
-        </div>
-      </section>
+      </div>
     </div>
-  )
+  );
 }

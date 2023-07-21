@@ -11,37 +11,37 @@ const nextConfig = {
     return [
       {
         source: "/components",
-        destination: "/docs/components/accordion",
+        destination: "/shadcn/docs/components/accordion",
         permanent: true,
       },
       {
-        source: "/docs/components",
-        destination: "/docs/components/accordion",
+        source: "/shadcn/docs/components",
+        destination: "/shadcn/docs/components/accordion",
         permanent: true,
       },
       {
         source: "/examples",
-        destination: "/examples/dashboard",
+        destination: "/shadcn/examples/dashboard",
         permanent: false,
       },
       {
-        source: "/docs/primitives/:path*",
-        destination: "/docs/components/:path*",
+        source: "/shadcn/docs/primitives/:path*",
+        destination: "/shadcn/docs/components/:path*",
         permanent: true,
       },
       {
         source: "/figma",
-        destination: "/docs/figma",
+        destination: "/shadcn/docs/figma",
         permanent: true,
       },
       {
-        source: "/docs/forms",
-        destination: "/docs/components/form",
+        source: "/shadcn/docs/forms",
+        destination: "/shadcn/docs/components/form",
         permanent: false,
       },
       {
-        source: "/docs/forms/react-hook-form",
-        destination: "/docs/components/form",
+        source: "/shadcn/docs/forms/react-hook-form",
+        destination: "/shadcn/docs/components/form",
         permanent: false,
       },
     ]

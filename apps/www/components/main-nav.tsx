@@ -30,10 +30,10 @@ export function MainNav() {
           Documentation
         </Link>
         <Link
-          href="/docs/components"
+          href="/shadcn/docs/components"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/docs/components")
+            pathname?.startsWith("/shadcn/docs/components")
               ? "text-foreground"
               : "text-foreground/60"
           )}
@@ -50,6 +50,17 @@ export function MainNav() {
           )}
         >
           Examples
+        </Link>
+        <Link
+          href="/koksmat"
+          className={cn(
+            "transition-colors hover:text-foreground/80",
+            pathname?.startsWith("/koksmat")
+              ? "text-foreground"
+              : "text-foreground/60"
+          )}
+        >
+          Koksmat
         </Link>
         <Link
           href={siteConfig.links.github}

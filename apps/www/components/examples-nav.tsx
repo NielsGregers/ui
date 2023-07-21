@@ -10,38 +10,38 @@ import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area"
 const examples = [
   {
     name: "Dashboard",
-    href: "/examples/dashboard",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/dashboard",
+    href: "/shadcn/examples/dashboard",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/dashboard",
   },
   {
     name: "Cards",
-    href: "/examples/cards",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/cards",
+    href: "/shadcn/examples/cards",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/cards",
   },
   {
     name: "Tasks",
-    href: "/examples/tasks",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/tasks",
+    href: "/shadcn/examples/tasks",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/tasks",
   },
   {
     name: "Playground",
-    href: "/examples/playground",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/playground",
+    href: "/shadcn/examples/playground",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/playground",
   },
   {
     name: "Forms",
-    href: "/examples/forms",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/forms",
+    href: "/shadcn/examples/forms",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/forms",
   },
   {
     name: "Music",
-    href: "/examples/music",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/music",
+    href: "/shadcn/examples/music",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/music",
   },
   {
     name: "Authentication",
-    href: "/examples/authentication",
-    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/examples/authentication",
+    href: "/shadcn/examples/authentication",
+    code: "https://github.com/shadcn/ui/tree/main/apps/www/app/shadcn/examples/authentication",
   },
 ]
 
@@ -72,7 +72,7 @@ export function ExamplesNav({ className, ...props }: ExamplesNavProps) {
         <ScrollBar orientation="horizontal" className="invisible" />
       </ScrollArea>
       <ExampleCodeLink
-        pathname={pathname === "/" ? "/examples/dashboard" : pathname}
+        pathname={pathname === "/" ? "/shadcn/examples/dashboard" : pathname}
       />
     </div>
   )

@@ -71,7 +71,7 @@ export default function SelectForm() {
               </Select>
               <FormDescription>
                 You can manage email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+                <Link href="/shadcn/examples/forms">email settings</Link>.
               </FormDescription>
               <FormMessage />
             </FormItem>

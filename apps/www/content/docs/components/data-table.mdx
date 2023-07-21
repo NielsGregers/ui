@@ -10,7 +10,7 @@ component: true
 
 Every data table or datagrid I've created has been unique. They all behave differently, have specific sorting and filtering requirements, and work with different data sources.
 
-It doesn't make sense to combine all of these variations into a single component. If we do that, we'll lose the flexibility that [headless UI](https://tanstack.com/table/v8/docs/guide/introduction#what-is-headless-ui) provides.
+It doesn't make sense to combine all of these variations into a single component. If we do that, we'll lose the flexibility that [headless UI](https://tanstack.com/table/v8/shadcn/docs/guide/introduction#what-is-headless-ui) provides.
 
 So instead of a data-table component, I thought it would be more helpful to provide a guide on how to build your own.
 
@@ -401,7 +401,7 @@ export function DataTable<TData, TValue>({
 }
 ```
 
-This will automatically paginate your rows into pages of 10. See the [pagination docs](https://tanstack.com/table/v8/docs/api/features/pagination) for more information on customizing page size and implementing manual pagination.
+This will automatically paginate your rows into pages of 10. See the [pagination docs](https://tanstack.com/table/v8/shadcn/docs/api/features/pagination) for more information on customizing page size and implementing manual pagination.
 
 ### Add pagination controls
 
@@ -608,7 +608,7 @@ export function DataTable<TData, TValue>({
 }
 ```
 
-Filtering is now enabled for the `email` column. You can add filters to other columns as well. See the [filtering docs](https://tanstack.com/table/v8/docs/guide/filters) for more information on customizing filters.
+Filtering is now enabled for the `email` column. You can add filters to other columns as well. See the [filtering docs](https://tanstack.com/table/v8/shadcn/docs/guide/filters) for more information on customizing filters.
 
 </Steps>
 
@@ -825,13 +825,13 @@ You can show the number of selected rows using the `table.getFilteredSelectedRow
 
 ## Reusable Components
 
-Here are some components you can use to build your data tables. This is from the [Tasks](/examples/tasks) demo.
+Here are some components you can use to build your data tables. This is from the [Tasks](/shadcn/examples/tasks) demo.
 
 ### Column header
 
 Make any column header sortable and hideable.
 
-<ComponentSource src="/app/examples/tasks/components/data-table-column-header.tsx" />
+<ComponentSource src="/app/shadcn/examples/tasks/components/data-table-column-header.tsx" />
 
 ```tsx {5}
 export const columns = [
@@ -848,7 +848,7 @@ export const columns = [
 
 Add pagination controls to your table including page size and selection count.
 
-<ComponentSource src="/app/examples/tasks/components/data-table-pagination.tsx" />
+<ComponentSource src="/app/shadcn/examples/tasks/components/data-table-pagination.tsx" />
 
 ```tsx
 <DataTablePagination table={table} />
@@ -858,7 +858,7 @@ Add pagination controls to your table including page size and selection count.
 
 A component to toggle column visibility.
 
-<ComponentSource src="/app/examples/tasks/components/data-table-view-options.tsx" />
+<ComponentSource src="/app/shadcn/examples/tasks/components/data-table-view-options.tsx" />
 
 ```tsx
 <DataTableViewOptions table={table} />
