@@ -12,7 +12,10 @@
         "npm_config_user_agent",
         "https_proxy",
         "SECRET",
-        "MONGODB"
+        "MONGODB",
+        "AZURE_AD_CLIENT_ID",
+        "AZURE_AD_CLIENT_SECRET",
+        "AZURE_AD_TENANT_ID"
         
       ],
       "outputs": ["dist/**", ".next/**"]
