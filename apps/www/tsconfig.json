@@ -16,9 +16,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
+    
     "paths": {
       "@/*": ["./*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "contentlayer/generated": ["./.contentlayer/generated"],
+      "react": [ "./node_modules/@types/react" ]
     },
     "plugins": [
       {
@@ -26,6 +28,7 @@
       }
     ]
   },
+  
   "include": [
     "next-env.d.ts",
     "**/*.ts",

@@ -1,7 +1,7 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 
 import createClient from "openapi-fetch";
-import { paths } from "../admin.api";
+import { paths } from "../../admin.api";
 import { NOAPPKEY } from "./constants";
 
 export async function authenticate(): Promise<{ token: string | undefined; }> {

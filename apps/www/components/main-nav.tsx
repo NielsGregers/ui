@@ -16,7 +16,7 @@ export function MainNav() {
       <Link href="/" className="mr-6 flex items-center space-x-2">
         <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block">
-          {siteConfig.name}
+          shadcn/ui
         </span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -51,17 +51,7 @@ export function MainNav() {
         >
           Examples
         </Link>
-        <Link
-          href="/koksmat"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/koksmat")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Koksmat
-        </Link>
+
         <Link
           href={siteConfig.links.github}
           className={cn(

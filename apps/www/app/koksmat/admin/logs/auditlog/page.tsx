@@ -2,7 +2,7 @@
 
 import React from "react";
 // npx openapi-typescript http://localhost:4322/shadcn/docs/admin/openapi.json --output admin.d.ts --useOptions --exportClient
-import { components } from "../admin.api"; // (generated from openapi-typescript)
+import { components } from "../../admin.api"; // (generated from openapi-typescript)
 import Link from "next/link";
 import { getClient } from "./getClient";
 import { NOAPPKEY } from "./constants";
