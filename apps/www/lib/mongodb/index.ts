@@ -1,6 +1,6 @@
 // https://www.mongodb.com/community/forums/t/mongodb-equivalent-of-stored-procedures/130476
 
-import { nanoid } from "nanoid";
+
 
 
 import * as mongoDB from "mongodb";
@@ -124,21 +124,20 @@ export function find(databaseName :string,collectionName: any, pipeline: any): P
     resolve(doc.length > 0 ? doc[0] : null);
   });
 }
-export function insert(databaseName : string,collectionName: any, body: any): Promise<any> {
+export function insert(databaseName : string,collectionName: any, body: any): Promise<void> {
   return new Promise(async (resolve, reject) => {
-    var id = nanoid();
+  
     var doc = await execute(databaseName,(client: any) => {
       return client
         .db(databaseName)
         .collection(collectionName)
         .insertOne({
           body,
-          nanoid: id,
 
           date: new Date(Date.now()).toISOString(),
         });
     });
-    resolve(id);
+    resolve();
   });
 }
 
@@ -167,37 +166,26 @@ export function remove(databaseName :string,collectionName: any, nanoid: any): P
     resolve(doc);
   });
 }
-export function log(databaseName : string,title: any, body: any): Promise<any> {
+export function log(databaseName : string,title: any, body: any): Promise<void> {
   return new Promise(async (resolve, reject) => {
-    var id = nanoid();
+
     var doc = await execute(databaseName,(client: any) => {
       return client
         .db(databaseName)
         .collection("logs")
         .insertOne({
-          nanoid: id,
+         
           title,
           body,
 
           date: new Date(Date.now()).toISOString(),
         });
     });
-    resolve(id);
+    resolve();
   });
 }
 
-export function updateLog(databaseName :string,nanoid: any, body: any): Promise<any> {
-  return new Promise(async (resolve, reject) => {
-    var doc = await execute(databaseName,(client: any) => {
-      body.updatedDate = new Date(Date.now()).toISOString();
-      return client
-        .db(databaseName)
-        .collection("logs")
-        .updateOne({ nanoid }, { $set: body });
-    });
-    resolve(doc);
-  });
-}
+
 export function logError(databaseName :string,title: any, body: any): Promise<any> {
   return new Promise(async (resolve, reject) => {
     var doc = await execute(databaseName,(client: any) => {
