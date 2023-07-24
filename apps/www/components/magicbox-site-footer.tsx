@@ -9,9 +9,11 @@ export function SiteFooter() {
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
           Modules: 
         <Button variant="link">
-          <Link href="/koksmat">powershell</Link></Button>
+          <Link href="/powershell">powershell</Link></Button>
           <Button variant="link">
           <Link href="/booking">booking</Link></Button>
+          <Button variant="link">
+          <Link href="/shadcn">shadcn</Link></Button>
         </p>
       </div>
     </footer>

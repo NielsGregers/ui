@@ -5,8 +5,8 @@ import Link, { LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { ViewVerticalIcon } from "@radix-ui/react-icons"
 
-import { docsConfig } from "@/app/booking/config/booking-docs"
-import { siteConfig } from "@/app/booking/config/booking-site"
+import { docsConfig } from "@/app/powershell/config/powershell-docs"
+import { siteConfig } from "@/app/powershell/config/powershell-site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/registry/new-york/ui/button"
@@ -29,12 +29,12 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
         <MobileLink
-          href="/koksmat"
+          href="/powershell"
           className="flex items-center"
           onOpenChange={setOpen}
         >
           <Icons.logo className="mr-2 h-4 w-4" />
-          <span className="font-bold">koksmat/ui</span>
+          <span className="font-bold">magicbox/powershell</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
