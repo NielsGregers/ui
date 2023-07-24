@@ -5,7 +5,12 @@ import React from "react";
 import { components } from "../../admin.api"; // (generated from openapi-typescript)
 import Link from "next/link";
 import { getClient } from "./getClient";
-import { NOAPPKEY } from "./constants";
+
+
+// This is important, if not set, this page will be statically generated causing the build to fail
+// as the build process would need to have access to the database / api's
+export const dynamic = 'force-dynamic' 
+
 const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
   list.reduce((previous, currentItem) => {
     const group = getKey(currentItem);
@@ -27,13 +32,6 @@ export default async function AuditLogEntries({
    
   }
   const { client, token } = await getClient();
-  // happends under build in Docker if the env variable is not set
-  // impact is that the page is not pre-rendered
-  if (token === NOAPPKEY) {
-    console.log("No app key defined")
-    return null
-  }
- 
   const get = client.get
 
 
