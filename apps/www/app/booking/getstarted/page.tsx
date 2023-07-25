@@ -1,30 +1,41 @@
-"use client"
-import { useForm, SubmitHandler } from 'react-hook-form';
 
-export default function Upload() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
 
-  const onSubmit = async (data:any) => {
-    const formData = new FormData();
-    
+import { z } from "zod";
+import { insert } from "@/lib/mongodb"
 
-    await fetch('/api/booking', {
-        method: 'POST',
-        body: formData,
-    });    
+import { redirect } from "next/navigation";
+import { randomUUID } from "crypto";
 
-    reset();
-  };
 
+export default async function Upload() {
+
+  async function submit(form: any) {
+    'use server'
+    const User = z.object({
+      sessionId: z.string(),
+      username: z.string(),
+    });
+
+    const fields = [...form]
+    const item: any = {}
+    fields.map((pair: any) => {
+
+      item[pair[0]] = pair[1]
+    })
+
+    item.sessionId = randomUUID().toString()
+    var user = User.parse(item);
+
+    await insert("karlo", "user", user)
+    redirect("/booking/getstarted/" + user.sessionId)
+
+  }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" name="textfield" />
-      <input type="submit" name="Send"/>
+
+    <form action={submit}>
+      <input type="text" name="username" />
+      <input type="submit" name="Send" />
     </form>
+
   );
 }

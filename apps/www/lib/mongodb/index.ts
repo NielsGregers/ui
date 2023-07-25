@@ -124,20 +124,18 @@ export function find(databaseName :string,collectionName: any, pipeline: any): P
     resolve(doc.length > 0 ? doc[0] : null);
   });
 }
-export function insert(databaseName : string,collectionName: any, body: any): Promise<void> {
+export function insert(databaseName : string,collectionName: any, body: any): Promise<string> {
   return new Promise(async (resolve, reject) => {
-  
-    var doc = await execute(databaseName,(client: any) => {
+    const itemToInsert = {...body,date: new Date(Date.now()).toISOString()}
+    var doc :any= await execute(databaseName,(client: any) => {
       return client
         .db(databaseName)
         .collection(collectionName)
-        .insertOne({
-          body,
-
-          date: new Date(Date.now()).toISOString(),
-        });
+        .insertOne(itemToInsert);
     });
-    resolve();
+    
+    resolve( doc.insertedId.toString())
+    //resolve(doc.insertedId.replace("ObjectId(\"","").replace("\")",""));
   });
 }
 

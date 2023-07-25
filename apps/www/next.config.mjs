@@ -7,6 +7,9 @@ const nextConfig = {
   images: {
     domains: ["avatars.githubusercontent.com", "images.unsplash.com"],
   },
+  experimental : {  
+    serverActions: true,
+  },
   redirects() {
     return [
       {
