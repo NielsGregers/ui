@@ -10,11 +10,11 @@ export function NavigationRootLink({ name, href }: { name: string; href: string;
     href={href}
     className={cn(
       "transition-colors hover:text-foreground/80",
-      pathname?.startsWith("/powershell/exchange")
+      pathname?.startsWith(href)
         ? "text-foreground"
         : "text-foreground/60"
     )}
   >
-    {name}
+    {name }
   </Link>;
 }

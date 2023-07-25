@@ -3,7 +3,7 @@ import { MainNavItem, SidebarNavItem } from "types/nav"
 interface DocsConfig {
   mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[]
-  exchangeNav: SidebarNavItem[]
+  
 }
 
 export const docsConfig: DocsConfig = {
@@ -44,23 +44,6 @@ export const docsConfig: DocsConfig = {
     },
 
   ],
-  exchangeNav: [
-    {
-      title: "Exchange",
-      items: [
-        {
-          title: "Rooms",
-          href: "/powershell/exchange/rooms",
-          items: [
-            {title: "To provision",
-            href: "/powershell/exchange/rooms/provision",items:[]},
 
-          ],
-        },
-       
-      ],
-    },
-
-  ],
   
 }

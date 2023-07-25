@@ -1,46 +1,60 @@
-/* eslint-disable tailwindcss/classnames-order */
-import React, { Suspense } from 'react'
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 
-import { ScrollArea } from '@/registry/new-york/ui/scroll-area';
-import { DocsSidebarNav } from '@/components/sidebar-nav';
-import { docsConfig } from "@/app/powershell/config/powershell-docs"
- function Loading() {
-  // You can add any UI inside Loading, including a Skeleton.
-  return <div>Loading</div>
+
+
+import { Metadata } from "next"
+import Image from "next/image"
+
+import { Separator } from "@/registry/new-york/ui/separator"
+import { SidebarNav } from "@/app/shadcn/examples/forms/components/sidebar-nav"
+import { ForModule } from "@/components/roles"
+import  ToSmall  from "@/components/tosmall"
+
+export const metadata: Metadata = {
+  title: "Forms",
+  description: "Advanced form example using react-hook-form and Zod.",
 }
-export default async function Layout({
-  children,
-}: {
+
+const sidebarNavItems = [
+
+{
+  title: "Rooms",
+  href: "/powershell/exchange/rooms",
+
+},
+
+{
+  title: "Shared Mailboxes",
+  href: "/powershell/exchange/sharedmailboxes",
+
+},
+]
+
+interface SettingsLayoutProps {
   children: React.ReactNode
-}) {
+}
 
-  const session = await getServerSession(authOptions);
-  
-  if (!session){
-    return (
-      <div>Not authorized</div>
-    )
-  }
-  
-
-
-return (
-  <div className="border-b">
-    <div className=" flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
-      <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 md:sticky md:block">
-        <ScrollArea className="h-full py-6 pl-8 pr-6 lg:py-8">
-          <DocsSidebarNav items={docsConfig.exchangeNav} />
-        </ScrollArea>
-      </aside>
-      <Suspense fallback={<Loading />}>
-      {children}</Suspense>
-      </div>
-    </div>
-  
-
-
+export default function SettingsLayout({ children }: SettingsLayoutProps) {
+  return (
+    <ForModule module="PowerShellExchange">
+        <ToSmall/>
+      <div className="hidden space-y-6 p-10 pb-16 md:block">
+        <div className="space-y-0.5">
+          <h2 className="text-2xl font-bold tracking-tight">Exchange Tasks</h2>
+          <p className="text-muted-foreground">
+            Run and monitor the executing of Exchange related tasks
+          </p>
+        </div>
+        <Separator className="my-6" />
         
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+          <aside className="-mx-4 lg:w-1/5">
+            <SidebarNav items={sidebarNavItems} />
+          </aside>
+          <div className="flex-1">{children}</div>
+        </div>
+      </div>
+      </ForModule>
   )
 }
+
+
