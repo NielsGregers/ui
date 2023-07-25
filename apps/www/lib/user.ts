@@ -1,8 +1,9 @@
-import { getServerSession } from "next-auth";
+import { getServerSession,DefaultSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export interface UserSession {
-    user: User;
+export interface UserSession extends DefaultSession{
+    roles?: any;
+   
   }
   
   export interface User {
@@ -10,9 +11,11 @@ export interface UserSession {
     email: string;
     image: string;
   }
-export async function getUserSession() : Promise<UserSession>{
+export async function getUserSession() : Promise<UserSession | null>{
 
-    const session = await getServerSession(authOptions);
-    return session as UserSession;
+    const session  = await getServerSession(authOptions);
+    if (! session) return null
+    const userSession = session as UserSession
+    return userSession
 }
 

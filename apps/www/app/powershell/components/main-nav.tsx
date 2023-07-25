@@ -1,15 +1,17 @@
-"use client"
+
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import { ForRole } from "@/components/roles"
+import { NavigationRootLink } from "./NavigationRootLink"
 
 export function MainNav() {
-  const pathname = usePathname()
+  
 
   return (
     <div className="mr-4 hidden md:flex">
@@ -20,54 +22,25 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
-      <Link
-          href="/powershell/exchange"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/powershell/exchange")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Exchange
-        </Link>
-        <Link
-        
-          href="/powershell/sharepoint"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/powershell/sharepoint")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          SharePoint
-        </Link>
-        <Link
-      
-        href="/powershell/powerapps"
-        className={cn(
-          "transition-colors hover:text-foreground/80",
-          pathname?.startsWith("/powershell/powerapps")
-            ? "text-foreground"
-            : "text-foreground/60"
-        )}
-      >
-        PowerApps
-      </Link>
-        <Link
-          href="/powershell/admin"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/powershell/admin")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Admin
-        </Link>
-  
+        <ForRole role="Admin" module="PowerShellExchange">
+
+          <NavigationRootLink name="Exchange" href="/powershell/exchange" />
+        </ForRole>
+        <ForRole role="Admin" module="PowerShellSharePoint">
+          <NavigationRootLink name="SharePoint" href="/powershell/sharepoint" />
+
+        </ForRole>
+        <ForRole role="Admin" module="PowerShellPowerApps">
+          <NavigationRootLink name="PowerApps" href="/powershell/powerapps" />
+
+        </ForRole>
+        <ForRole role="Admin" module="PowerShell">
+          <NavigationRootLink name="Admin" href="/powershell/admin" />
+
+        </ForRole>
+
       </nav>
     </div>
   )
 }
+

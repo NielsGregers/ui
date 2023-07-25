@@ -1,17 +1,30 @@
+"use client"
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-import React from 'react';
+export default function Upload() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-export default async function Koksmat() {
+  const onSubmit = async (data:any) => {
+    const formData = new FormData();
+    
 
-  return <div className="h-screen w-full">
+    await fetch('/api/booking', {
+        method: 'POST',
+        body: formData,
+    });    
 
-    <div className="grid h-screen place-items-center">
+    reset();
+  };
 
-
-      <div className="place-items-center">
-       WELCOME
-      </div>
-
-    </div>
-  </div>
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="text" name="textfield" />
+      <input type="submit" name="Send"/>
+    </form>
+  );
 }
