@@ -1,8 +1,9 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 import createClient from "openapi-fetch";
-import { paths } from "../../admin.api";
+import { paths } from "./koksmat.api";
 import { authenticate } from "./authenticate";
 
+// npx openapi-typescript http://localhost:4322/shadcn/docs/admin/openapi.json --output admin.d.ts --useOptions --exportClient
 
 
 export async function getClient() {

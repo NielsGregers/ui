@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
-
+import { EXCHANGEPOWERSHELLROOT } from "@/app/powershell/exchange"
 import { Button } from "@/registry/new-york/ui/button"
 import {
   DropdownMenu,
@@ -19,7 +19,8 @@ import {
 } from "@/registry/new-york/ui/dropdown-menu"
 
 import { labels } from "../data/data"
-import { taskSchema } from "../data/schema"
+import { schema } from "../data/schema"
+import Link from "next/link"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -28,7 +29,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  const room = schema.parse(row.original)
 
   return (
     <DropdownMenu>
@@ -42,11 +43,12 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem>View</DropdownMenuItem>
+         {/* 
         <DropdownMenuItem>Make a copy</DropdownMenuItem>
         <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuSub>
+       <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup value={task.label}>
@@ -57,12 +59,21 @@ export function DataTableRowActions<TData>({
               ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        </DropdownMenuSub> */}
         <DropdownMenuSeparator />
+
+        {room.provisioningstatus === "Provision" &&
+        <DropdownMenuItem >
+          <Link href={`${EXCHANGEPOWERSHELLROOT}rooms/${room.id}/provision`}>
+          Provision
+          </Link>
+          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+        </DropdownMenuItem>
+}     {room.provisioningstatus === "Provisioned" &&
         <DropdownMenuItem>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        </DropdownMenuItem>}
       </DropdownMenuContent>
     </DropdownMenu>
   )

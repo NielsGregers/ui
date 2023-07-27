@@ -1,5 +1,5 @@
 import { NOAPPKEY } from "../constants";
-import { getClient } from "../getClient";
+import { getClient } from "../../../../services/koksmat/getClient";
 
 export const metadata = {
   title: 'Auditlog PowerShell details',

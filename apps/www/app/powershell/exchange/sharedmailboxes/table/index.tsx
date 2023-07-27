@@ -41,7 +41,7 @@ async function getItems() {
   return z.array(schema).parse(items)
 }
 
-export  function DynamicTable() {
+export  function SharedMailboxesTable() {
   const tasks = use( getItems())
 
   return (

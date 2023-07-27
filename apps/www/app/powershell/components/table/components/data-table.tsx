@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/registry/new-york/ui/table"
 
-import { DataTablePagination } from "./data-table-pagination"
+import { DataTablePagination } from "../../data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
 
 interface DataTableProps<TData, TValue> {
@@ -45,6 +45,7 @@ export function DataTable<TData, TValue>({
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
 
+  
   const table = useReactTable({
     data,
     columns,

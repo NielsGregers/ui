@@ -25,10 +25,10 @@ export function MainNav({
       </Link>
       
       <Link
-        href="/powershell/admin/settings"
+        href="/powershell/admin/accesscontrol"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Settings
+        Access Control
       </Link>
     </nav>
   )

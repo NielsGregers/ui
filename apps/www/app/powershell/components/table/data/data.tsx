@@ -26,29 +26,29 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "backlog",
-    label: "Backlog",
-    icon: QuestionMarkCircledIcon,
+    value: "Provisioned",
+    label: "Provisioned",
+ 
   },
   {
-    value: "todo",
-    label: "Todo",
-    icon: CircleIcon,
+    value: "Deleted",
+    label: "Deleted"
+    
   },
   {
-    value: "in progress",
-    label: "In Progress",
-    icon: StopwatchIcon,
+    value: "Provision",
+    label: "Provision",
+  
   },
   {
-    value: "done",
-    label: "Done",
-    icon: CheckCircledIcon,
+    value: "Update",
+    label: "Update",
+
   },
   {
-    value: "canceled",
-    label: "Canceled",
-    icon: CrossCircledIcon,
+    value: "Delete",
+    label: "Delete",
+
   },
 ]
 

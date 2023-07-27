@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
-
+import { EXCHANGEPOWERSHELLROOT, POWERSHELLROOT } from "@/app/powershell/exchange"
 import { Button } from "@/registry/new-york/ui/button"
 import {
   DropdownMenu,
@@ -18,16 +18,19 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
 
-
+import { labels } from "../data/data"
+import { schema } from "../data/schema"
+import Link from "next/link"
 
 interface DataTableRowActionsProps<TData> {
-  room: any
+  row: Row<TData>
 }
 
-export function RoomActions<TData>({
-  room,
+export function DataTableRowActions<TData>({
+  row,
 }: DataTableRowActionsProps<TData>) {
-  
+  const logentry = schema.parse(row.original)
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,16 +43,18 @@ export function RoomActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
- 
-
+        <DropdownMenuItem>View</DropdownMenuItem>
+         
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Delete
+
+        {logentry.subject === "Provision" &&
+        <DropdownMenuItem >
+          <Link href={`${POWERSHELLROOT}admin/auditlog/${logentry.id}`}>
+          View Details
+          </Link>
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
+}    
       </DropdownMenuContent>
     </DropdownMenu>
   )
