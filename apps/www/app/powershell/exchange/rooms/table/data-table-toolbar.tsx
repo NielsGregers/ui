@@ -7,7 +7,7 @@ import { Button } from "@/registry/new-york/ui/button"
 import { Input } from "@/registry/new-york/ui/input"
 import { DataTableViewOptions } from "@/app/shadcn/examples/tasks/components/data-table-view-options"
 
-import { priorities, statuses } from "../data/data"
+import { priorities, statuses } from "./data"
 import { DataTableFacetedFilter } from "@/app/powershell/components/data-table-faceted-filter"
 
 interface DataTableToolbarProps<TData> {
@@ -37,13 +37,7 @@ export function DataTableToolbar<TData>({
             options={statuses}
           />
         )}
-        {table.getColumn("priority") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("priority")}
-            title="Priority"
-            options={priorities}
-          />
-        )}
+   
         {isFiltered && (
           <Button
             variant="ghost"

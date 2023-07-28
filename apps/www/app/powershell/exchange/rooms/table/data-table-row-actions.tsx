@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
-import { EXCHANGEPOWERSHELLROOT } from "@/app/powershell/exchange"
+
 import { Button } from "@/registry/new-york/ui/button"
 import {
   DropdownMenu,
@@ -18,10 +18,12 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
 
-import { labels } from "../data/data"
-import { schema } from "../data/schema"
+import { labels } from "./data"
+import { schema } from "./schema"
 import Link from "next/link"
 
+import { Form } from "react-hook-form"
+import { provisionRoom } from "../actions"
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
 }
@@ -29,6 +31,8 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+
+
   const room = schema.parse(row.original)
 
   return (
@@ -44,36 +48,31 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>View</DropdownMenuItem>
-         {/* 
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
-       <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub> */}
+
         <DropdownMenuSeparator />
 
         {room.provisioningstatus === "Provision" &&
-        <DropdownMenuItem >
-          <Link href={`${EXCHANGEPOWERSHELLROOT}rooms/${room.id}/provision`}>
-          Provision
-          </Link>
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
-}     {room.provisioningstatus === "Provisioned" &&
-        <DropdownMenuItem>
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>}
+          <DropdownMenuItem >
+
+
+            <Button onClick={async () => {
+debugger
+              const r = await provisionRoom(room.id)
+              
+
+            }}
+            >
+
+              Provision
+            </Button>
+
+            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        }     {room.provisioningstatus === "Provisioned" &&
+          <DropdownMenuItem>
+            Delete
+            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          </DropdownMenuItem>}
       </DropdownMenuContent>
     </DropdownMenu>
   )

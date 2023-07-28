@@ -3,15 +3,16 @@ import path from "path"
 
 import { z } from "zod"
 
-import { columns } from "./components/columns"
-import { DataTable } from "./components/data-table"
+import { columns } from "./columns"
+import { DataTable } from "./data-table"
 
-import { schema } from "./data/schema"
+import { schema } from "./schema"
 import ToSmall from "@/components/tosmall"
 
 import { connect } from "@/lib/mongodb"
 import { Sort } from "mongodb"
 import { use } from "react"
+
 
 async function getItems() {
 

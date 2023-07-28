@@ -9,7 +9,7 @@ export async function authenticate(): Promise<{ token: string | undefined; }> {
   });
 
   const { data, error } = await post("/authorize", {
-    next: { revalidate: 300 },
+    next: { revalidate: 0 },
     body: {
       appkey: process.env.KOKSMAT_APPKEY,
     }
