@@ -14,6 +14,7 @@ export function AuditlogDetails({ params }: { params: {
   created_at: string ,
   database: string,
   scriptname: string ,
+  script: string ,
   input: string ,
   result: string ,
   haserror: boolean ,
@@ -92,7 +93,12 @@ export function AuditlogDetails({ params }: { params: {
 
   </div>
 </div>
-
+<div className="p-2">
+  <div>
+    Source
+  </div>
+  <textarea readOnly className="h-40 w-full" value={params.script} />
+</div>
 <div className="p-2">
   <div>
     Result

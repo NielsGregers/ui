@@ -54,7 +54,7 @@ export function DataTableRowActions<TData>({
           <Link href={`${linkPrefix}${logentry.id}`}>
           View Details
           </Link>
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          <DropdownMenuShortcut>⌘v</DropdownMenuShortcut>
         </DropdownMenuItem>
 
       </DropdownMenuContent>

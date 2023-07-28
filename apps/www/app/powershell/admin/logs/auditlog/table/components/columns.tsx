@@ -41,15 +41,7 @@ export const columns: ColumnDef<AuditLogItem>[] = [
     enableSorting: true,
     enableHiding: true,
   },
-  { id:"subject",
-  accessorKey: "subject",
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Type" />
-  ),
-  cell: ({ row }) => <div >{row.original.subject}</div>,
-  enableSorting: true,
-  enableHiding: true,
-},
+  
   {
     accessorKey: "appid",
     header: ({ column }) => (

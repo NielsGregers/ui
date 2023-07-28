@@ -68,6 +68,16 @@ export interface paths {
      */
     post: operations["koksmat/restapi.renameLibrary"];
   };
+  "/v1/admin/user/": {
+    /** Get all users */
+    get: operations["koksmat/restapi.getUsers"];
+    /** Create an user */
+    post: operations["koksmat/restapi.addUser"];
+  };
+  "/v1/admin/user/{upn}/credentials": {
+    /** Update the credentials of an user */
+    patch: operations["koksmat/restapi.updateUserCredentials"];
+  };
   "/v1/business/countries": {
     /** Get a country */
     get: operations["koksmat/restapi.getCountries"];
@@ -207,6 +217,13 @@ export interface components {
       /** Format: date-time */
       updated_at?: string;
     };
+    ModelCredential: {
+      /** Format: date-time */
+      exprires?: string;
+      password?: string;
+      service?: string;
+      username?: string;
+    };
     ModelDomain: {
       Name?: string;
       /** Format: date-time */
@@ -243,6 +260,16 @@ export interface components {
     ModelSharedMailboxNewResponce: {
       primarySmtpAddress?: string;
     };
+    ModelUser: {
+      /** Format: date-time */
+      created_at?: string;
+      credentials?: (components["schemas"]["ModelCredential"])[] | null;
+      displayname?: string;
+      id?: components["schemas"]["PrimitiveObjectID"];
+      /** Format: date-time */
+      updated_at?: string;
+      upn?: string;
+    };
     PrimitiveObjectID: (number)[] | null;
     RestErrResponse: {
       /** @description Application-specific error code. */
@@ -255,6 +282,15 @@ export interface components {
       error?: string;
       /** @description Status text. */
       status?: string;
+    };
+    RestapiAddRequest: {
+      /** @example John Doe */
+      displayName?: string;
+      /** @example jd@domain.com */
+      upn?: string;
+    };
+    RestapiAddResponse: {
+      user?: components["schemas"]["ModelUser"];
     };
     RestapiBlobResponse: {
       content?: {
@@ -292,9 +328,12 @@ export interface components {
       powershellauditlog?: components["schemas"]["AuditPowerShellLog"];
     };
     RestapiGetResponseType3: {
-      countries?: (components["schemas"]["ModelCountry"])[] | null;
+      users?: (components["schemas"]["ModelUser"])[] | null;
     };
     RestapiGetResponseType4: {
+      countries?: (components["schemas"]["ModelCountry"])[] | null;
+    };
+    RestapiGetResponseType5: {
       units?: (components["schemas"]["ModelBusinessGroupUnit"])[] | null;
     };
     RestapiInfoResponse: {
@@ -341,6 +380,12 @@ export interface components {
     };
     RestapiSigninResponse: {
       token?: string;
+    };
+    RestapiUpdateRequest: {
+      credentials?: (components["schemas"]["ModelCredential"])[] | null;
+    };
+    RestapiUpdateResponse: {
+      user?: components["schemas"]["ModelUser"];
     };
   };
   responses: never;
@@ -600,13 +645,97 @@ export interface operations {
       };
     };
   };
+  /** Get all users */
+  "koksmat/restapi.getUsers": {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RestapiGetResponseType3"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+    };
+  };
+  /** Create an user */
+  "koksmat/restapi.addUser": {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["RestapiAddRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RestapiAddResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+    };
+  };
+  /** Update the credentials of an user */
+  "koksmat/restapi.updateUserCredentials": {
+    parameters: {
+      path: {
+        upn: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["RestapiUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["RestapiUpdateResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["RestErrResponse"];
+        };
+      };
+    };
+  };
   /** Get a country */
   "koksmat/restapi.getCountries": {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RestapiGetResponseType3"];
+          "application/json": components["schemas"]["RestapiGetResponseType4"];
         };
       };
       /** @description Bad Request */
@@ -623,7 +752,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["RestapiGetResponseType4"];
+          "application/json": components["schemas"]["RestapiGetResponseType5"];
         };
       };
       /** @description Bad Request */

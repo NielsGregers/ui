@@ -1,13 +1,15 @@
+import { ObjectId } from "mongodb"
 import { z } from "zod"
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
+
 export const schema = z.object({
 
   database:z.string(),
   subject:z.string(),
   appid:z.string(),
-  id:z.string(),
+  _id:z.preprocess((val:any) => {return val.toString()}, z.string()),
   created_at:z.date(),
   updated_at:z.date(),
   

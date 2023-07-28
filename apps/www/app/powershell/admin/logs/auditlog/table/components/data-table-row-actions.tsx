@@ -47,14 +47,14 @@ export function DataTableRowActions<TData>({
          
         <DropdownMenuSeparator />
 
-        {logentry.subject === "Provision" &&
+       
         <DropdownMenuItem >
-          <Link href={`${POWERSHELLROOT}admin/auditlog/${logentry.id}`}>
+          <Link href={`auditlog/${logentry._id}`}>
           View Details
           </Link>
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
-}    
+    
       </DropdownMenuContent>
     </DropdownMenu>
   )

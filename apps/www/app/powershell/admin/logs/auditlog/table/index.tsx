@@ -21,37 +21,30 @@ async function getItems() {
  * https://mongodb.github.io/node-mongodb-native
  */
 
-const agg = [
-  {
-    '$sort': {
-      'created_at': -1
-    }
-  }, {
-    '$match': {
-      'subject': 'powershell'
-    }
-  }, {
-    '$limit': 1000
-  }, {
-    '$project': {
-      'output': 0, 
-      'scriptsrc': 0, 
-      'console': 0
-    }
-  }, {
-    '$addFields': {
-      'id': {
-        '$toString': '$_id'
-      }
-    }
-  }
-]
+/*
+ * Requires the MongoDB Node.js Driver
+ * https://mongodb.github.io/node-mongodb-native
+ */
+
+const filter = {
+  'subject': 'powershell'
+};
+const projection = {
+  'scriptsrc': 0, 
+  'output': 0, 
+  'console': 0
+};
+const sort : Sort = {
+  'created_at': -1
+};
+const limit = 1000;
 
 const client = await connect();
 const coll = client.db('magicbox').collection('audit_log');
-const cursor = coll.aggregate(agg);
+const cursor = coll.find(filter, { projection, sort, limit });
 const result = await cursor.toArray();
 await client.close();
+
   return z.array(schema).parse(result)
 }
 
