@@ -78,7 +78,7 @@ export const columns: ColumnDef<AuditLogItem>[] = [
         <div className="flex space-x-2">
        
           <span>
-            {row.original.haserror}
+            {row.original.haserror ? "Yes" : ""}
           </span>
         </div>
       )

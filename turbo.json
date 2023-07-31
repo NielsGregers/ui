@@ -15,8 +15,11 @@
         "MONGODB",
         "AZURE_AD_CLIENT_ID",
         "AZURE_AD_CLIENT_SECRET",
-        "AZURE_AD_TENANT_ID"
-        
+        "AZURE_AD_TENANT_ID",
+        "SPAUTH_CLIENTSECRET",
+        "SPAUTH_CLIENTID",
+        "SPAUTH_SITEURL",
+        "SPAUTH_TENANTID"
       ],
       "outputs": ["dist/**", ".next/**"]
     },
