@@ -1,1 +1,0 @@
-npx openapi-typescript http://localhost:4300/openapi/all/openapi.json --output "$psscriptroot/koksmat.api.ts" --useOptions --exportClient

@@ -1,9 +1,10 @@
 export const siteConfig = {
-  name: "magicbox/catering",
+  name: "magicbox/cava",
   url: "https://ui.shadcn.com",
+  root: "/cava",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:
-    "Beautifully designed PowerShell integrations .",
+    "Beautifully designed Catetering integrations for Outlook & Teams.",
   links: {
     twitter: "https://twitter.com/shadcn",
     github: "https://github.com/koksmat-com/ui",

@@ -4,14 +4,14 @@ import * as React from "react"
 import Link, { LinkProps } from "next/link"
 import { useRouter } from "next/navigation"
 import { ViewVerticalIcon } from "@radix-ui/react-icons"
-
-import { docsConfig } from "@/app/powershell/config/powershell-docs"
-import { siteConfig } from "@/app/powershell/config/powershell-site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/registry/new-york/ui/button"
 import { ScrollArea } from "@/registry/new-york/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/registry/new-york/ui/sheet"
+
+import { docsConfig } from "../config/docs"
+import { siteConfig } from "../config/site"
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false)

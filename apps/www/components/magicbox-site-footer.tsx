@@ -20,7 +20,7 @@ export function SiteFooter() {
           </ForRole>
           <ForRole role="Admin" module="Catering">
             <Button variant="link">
-              <Link href="/catering">catering</Link>
+              <Link href="/cava">cava</Link>
             </Button>
           </ForRole>
           <ForRole role="Admin" module="Developer">

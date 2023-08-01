@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { UsecaseContext, RoomUseCases } from "./usecasecontext";
-import { ProvisionRoomAction } from "./actions/provisionroom/component";
-import { DeleteRoomAction } from "./actions/deleteroom/component";
+
 
 type Props = {
   children?: React.ReactNode;
@@ -26,12 +25,7 @@ export const UsercaseProvider = ({ children }: Props) => {
     }
   }
   return <UsecaseContext.Provider value={usecases}>
-    {provision &&
-      <ProvisionRoomAction sharepointId={sharepointId} onDone={() => setprovision(false)} />
-    }
-    {showDeleteComponent &&
-      <DeleteRoomAction sharepointId={sharepointId} onDone={() => setshowDeleteComponent(false)} />
-    }
+
 
     {children}
 
