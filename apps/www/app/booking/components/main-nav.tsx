@@ -15,24 +15,20 @@ export function MainNav() {
     <div className="mr-4 hidden md:flex">
       <Link href="/booking" className="mr-6 flex items-center space-x-2">
         <Icons.logo className="h-6 w-6" />
-        <span className="hidden font-bold sm:inline-block">
-          magicbox/booking
-        </span>
+        <span className="hidden font-bold sm:inline-block">Booking</span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
-       
         <Link
           href="/booking/admin"
           className={cn(
             "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/koksmat/admin")
+            pathname?.startsWith("/booking/admin")
               ? "text-foreground"
               : "text-foreground/60"
           )}
         >
           Admin
         </Link>
-  
       </nav>
     </div>
   )

@@ -1,8 +1,7 @@
+import React, { use } from "react"
 
-import React from "react"
-import { use } from "react";
-import { LoginButton, LogoutButton } from "@/components/login"
 import { getUserSession } from "@/lib/user"
+import { LoginButton, LogoutButton } from "@/components/login"
 import {
   Avatar,
   AvatarFallback,
@@ -20,10 +19,10 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
 
-async function getSession(){
+async function getSession() {
   return getUserSession()
 }
-export  function UserNav() {
+export function UserNav() {
   const session = use(getSession())
 
   if (!session) {
@@ -38,10 +37,8 @@ export  function UserNav() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
-       
-          <DropdownMenuItem >
+          <DropdownMenuItem>
             <LoginButton />
-            
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -52,17 +49,27 @@ export  function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-6 w-6 ">
-            <AvatarImage  src={session?.user?.image as string} alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src={session?.user?.image as string} alt="@shadcn" />
+            <AvatarFallback>
+              {session?.user?.name
+                ?.match(/(^\S\S?|\s\S)?/g)
+                ?.map((v) => v.trim())
+                ?.join("")
+                .match(/(^\S|\S$)?/g)
+                ?.join("")
+                .toLocaleUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{session?.user?.name}</p>
+            <p className="text-sm font-medium leading-none">
+              {session?.user?.name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-            {session?.user?.email}
+              {session?.user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -83,7 +90,7 @@ export  function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator /> */}
-        <DropdownMenuItem >
+        <DropdownMenuItem>
           <LogoutButton />
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
