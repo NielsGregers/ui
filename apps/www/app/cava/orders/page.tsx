@@ -3,7 +3,7 @@
 import React from "react"
 import { GenericTable } from "../components/table"
 import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
-import { CateringOrders } from "../sharepoint"
+import { CateringOrders } from "@/services/sharepoint/cava3/sharepoint"
 import {schema} from "../components/table/data/schema"
 import { z } from "zod"
 // This is important, if not set, this page will be statically generated causing the build to fail

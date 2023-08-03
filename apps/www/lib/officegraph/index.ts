@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 
 import { https, httpsGetAll, Result } from "../httphelper"
 
@@ -24,6 +25,10 @@ export async function getToken(tenant:string,app:string,appsecret:string): Promi
     });
 }
 
+export async function getSpAuthToken(){
+    return getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string)
+
+}
 export interface SiteCollection {
     hostname: string;
 }

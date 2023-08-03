@@ -1,11 +1,11 @@
 export const siteConfig = {
-  name: "koksmat/ui",
-  url: "https://ui.shadcn.com",
+  name: "Nexi Group Intranet",
+  url: "https://home.nexi-group.com",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:
-    "Beautifully designed PowerShell integrations .",
+    "Landing page for the Nexi Group Intranet .",
   links: {
-    twitter: "https://twitter.com/shadcn",
+    twitter: "https://twitter.com/nexigroup",
     github: "https://github.com/koksmat-com/ui",
   },
 }

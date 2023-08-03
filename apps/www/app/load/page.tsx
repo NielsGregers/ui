@@ -2,9 +2,7 @@
 import Link from "next/link";
 import Logo from "@/components/logo";
 
-
-
-
+import '../globals.css'
 
 import "@/styles/globals.css"
 import { Metadata } from "next"
@@ -20,9 +18,9 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
 import { NextAuthProvider } from "../providers";
-import { ForModule } from "@/components/roles";
-import { UsercaseProvider } from "./usecaseproviders";
-
+import { ForModule, ForRole } from "@/components/roles";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -84,7 +82,13 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
 
-   return (
+  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string ) : {}
+  if (data.country && data.unit) {
+redirect("https://christianiabpos.sharepoint.com/sites/nexiintra-home?country="+data.country+"&unit="+data.unit)
+
+  }
+
+  return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
@@ -96,26 +100,26 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextAuthProvider>
-              <UsercaseProvider >
-                <div className="grid h-screen place-items-center">
-                
+              <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
                 <div className="absolute left-8 top-4">
                   <Logo homeUrl="/" />
                 </div>
-                  <div >
-                    <div className="p-10">
-                      <div>
-
-                      </div>
-                      {children}
+                {/* <TopNavigation {...topNavigationProps} /> */}
+                <div className="grid h-screen place-items-center">
+                  <div className=" w-screen bg-[#FFFFFFAA] p-10">
+                    <div className="pb-4 text-2xl text-black">Welcome to Nexi Group</div>
+                    <div>
+                      <button  className="cursor-pointer rounded-full bg-[#2D32A9] from-green-400 to-blue-500 p-2 px-10 text-white hover:from-pink-500 hover:to-yellow-500">
+                        {" "}
+                        <a href="/welcome">Click to get started</a>
+                      </button>
                     </div>
-                
-                  </div></div>
-                  <ForModule module="Developer">
-                      <SiteFooter />
-                    </ForModule>
-              </UsercaseProvider>
-     
+                  </div>
+                </div>
+              </div>
+              <ForModule module="Developer">
+                <SiteFooter />
+              </ForModule>
             </NextAuthProvider>
           </ThemeProvider>
           <Analytics />

@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
@@ -12,6 +13,7 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
 import { NextAuthProvider } from "./providers";
+import { MSAL } from "@/components/msal"
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -83,14 +85,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextAuthProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-              <SiteFooter />
-            </div>
-            <TailwindIndicator />
-            </NextAuthProvider>
+           
+              <NextAuthProvider>
+                <div className="relative flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <div className="flex-1">{children}</div>
+                  <SiteFooter />
+                </div>
+                <TailwindIndicator />
+              </NextAuthProvider>
+           
           </ThemeProvider>
           <Analytics />
           <NewYorkToaster />
