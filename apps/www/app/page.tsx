@@ -1,6 +1,8 @@
+import Link from "next/link"
 
-import Link from "next/link";
-import Logo from "@/components/logo";
+import Logo from "@/components/logo"
+
+import "./globals.css"
 
 import './globals.css'
 
@@ -80,53 +82,29 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
 
-//   const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string ) : {}
-//   if (data.country && data.unit) {
-// redirect("https://christianiabpos.sharepoint.com/sites/nexiintra-home?country="+data.country+"&unit="+data.unit)
-
-//   }
 
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NextAuthProvider>
-              <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
-                <div className="absolute left-8 top-4">
-                  <Logo homeUrl="/" />
-                </div>
-                {/* <TopNavigation {...topNavigationProps} /> */}
-                <div className="grid h-screen place-items-center">
-                  <div className=" w-screen bg-[#FFFFFFAA] p-10">
-                    <div className="pb-4 text-2xl text-black">Welcome to Nexi Group</div>
-                    <div>
-                      <button  className="cursor-pointer rounded-full bg-[#2D32A9] from-green-400 to-blue-500 p-2 px-10 text-white hover:from-pink-500 hover:to-yellow-500">
-                        {" "}
-                        <a href="/welcome">Click to get started</a>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <ForModule module="Developer">
-                <SiteFooter />
-              </ForModule>
-            </NextAuthProvider>
-          </ThemeProvider>
-          <Analytics />
-          <NewYorkToaster />
-          <DefaultToaster />
-        </body>
-      </html>
-    </>
-  )
+    <html lang="en">
+    <body>
+    <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
+      <div className="absolute left-8 top-4">
+        <Logo homeUrl="/" />
+      </div>
+      {/* <TopNavigation {...topNavigationProps} /> */}
+      <div className="grid h-screen place-items-center">
+        <div className=" w-screen bg-[#FFFFFFAA] p-10">
+          <div className="pb-4 text-2xl text-black">Welcome to Nexi Group</div>
+          <div>
+            <button className="rounded-full bg-[#2D32A9] from-green-400 to-blue-500 p-2 px-10 text-white hover:from-pink-500 hover:to-yellow-500">
+              {" "}
+              <a href="/welcome">Click to get started</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </body>
+    </html>
+  );
 }
