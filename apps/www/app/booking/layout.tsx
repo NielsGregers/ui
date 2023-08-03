@@ -3,15 +3,21 @@ import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
+import { getUserSession } from "@/lib/user"
 import { cn } from "@/lib/utils"
 import { Analytics } from "@/components/analytics"
-import { ThemeProvider } from "@/components/providers"
+import { LoginButton } from "@/components/login"
 import { SiteFooter } from "@/components/magicbox-site-footer"
-import { SiteHeader } from "@/app/booking/components/site-header"
+import { ThemeProvider } from "@/components/providers"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
-import { NextAuthProvider } from "./providers";
+import { SiteHeader } from "@/app/booking/components/site-header"
+
+import { NexiLogo } from "./components/nexilogo"
+import LoginComponent from "./login"
+import { NextAuthProvider } from "./providers"
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -71,7 +77,8 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await getUserSession()
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -83,13 +90,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextAuthProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-              <SiteFooter />
-            </div>
-            <TailwindIndicator />
+            <NextAuthProvider>
+              <div className="relative flex min-h-screen flex-col">
+                <SiteHeader />
+                {session && <div className="flex-1">{children}</div>}
+                {!session && (
+                  <div className="flex-1">
+                    <LoginComponent />
+                  </div>
+                )}
+                <SiteFooter />
+              </div>
+              {/* <TailwindIndicator /> */}
             </NextAuthProvider>
           </ThemeProvider>
           <Analytics />
