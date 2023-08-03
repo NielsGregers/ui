@@ -80,7 +80,7 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootPage() {
 
   const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string ) : {}
   if (data.country && data.unit) {

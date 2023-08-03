@@ -37,6 +37,8 @@ import { Switch } from "@/registry/default/ui/switch"
 import { toast } from "@/registry/default/ui/use-toast"
 
 import { User } from "./page"
+import { useContext, useState } from "react"
+import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -53,6 +55,9 @@ export type schema = {
 type FormProps = { onSubmit: (values: schema) => void; users: User[] }
 
 export default function NewParkingForm({ onSubmit, users }: FormProps) {
+
+  const usecases = useContext(UsecaseContext);
+  const [working, setworking] = useState(false)
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,15 +68,9 @@ export default function NewParkingForm({ onSubmit, users }: FormProps) {
   })
 
   async function submit(data: z.infer<typeof formSchema>) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
-    await onSubmit(data)
+    setworking(true)
+    await usecases.CreateParkingSlot(data.title, data.bookedBy as string, data.permanent ?? false)
+    setworking(false)
   }
 
   //   const users = [
@@ -94,7 +93,7 @@ export default function NewParkingForm({ onSubmit, users }: FormProps) {
 
   return (
     <div className="container">
-      <Form {...form}>
+      <Form {...form} >
         <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
           <FormField
             control={form.control}

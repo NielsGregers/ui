@@ -13,7 +13,8 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
 import { NextAuthProvider } from "./providers";
-import { MSAL } from "@/components/msal"
+
+import { UsercaseProvider } from "./usecaseproviders"
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -85,16 +86,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-           
-              <NextAuthProvider>
+
+            <NextAuthProvider>
+              <UsercaseProvider>             
                 <div className="relative flex min-h-screen flex-col">
-                  <SiteHeader />
-                  <div className="flex-1">{children}</div>
-                  <SiteFooter />
-                </div>
+                <SiteHeader />
+                <div className="flex-1">{children}</div>
+                <SiteFooter />
+              </div>
                 <TailwindIndicator />
-              </NextAuthProvider>
-           
+              </UsercaseProvider>
+            </NextAuthProvider>
+
           </ThemeProvider>
           <Analytics />
           <NewYorkToaster />

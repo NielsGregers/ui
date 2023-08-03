@@ -81,8 +81,8 @@ export const metadata: Metadata = {
 interface RootLayoutProps {
   children: React.ReactNode
 }
-
-
+export default function WelcomePage()
+{
 
   return (
     <html lang="en">
