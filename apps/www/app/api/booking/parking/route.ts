@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { sharepointid: string } }
+  
   ) {
 
     const session = await getServerSession(authOptions);
@@ -18,16 +18,17 @@ export async function POST(
       );
     }
 
-    const {data,error} = await provisionRoomServerSide(parseInt(params.sharepointid) )
+    var b = request.body
+    const error = "Not implemented"
+
+   // const {data,error} = await provisionRoomServerSide(parseInt(params.sharepointid) )
     
     if (error){
-      return new Response(error.error, {
+      return new Response(error, {
         status: 500,
       })
     }
 
-    return new Response(JSON.stringify({email:data}), {
-      status: 200}
-    )
+   //
     
 }

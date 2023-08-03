@@ -1,5 +1,5 @@
 
-import { getClient, Error } from "@/app/powershell/services/koksmat/getClient";
+import { getClient, Error } from "@/services/koksmat/getClient";
 import { UseCase } from "@/lib/usecase";
 import { z } from "zod";
 

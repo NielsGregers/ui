@@ -1,70 +1,41 @@
 import React from "react";
 
-import createClient from "openapi-fetch";
-import { paths } from "./data/schemas/magicbox.nets-intranets"; // (generated from openapi-typescript)
-import IntranetCountry from "./showcountry";
+import ShowCountries from "./components/selectcountryandunit";
+
+import { ReadCountries } from "./ReadCountries";
+import { ReadUnits } from "./ReadUnits";
+import Status from "./components/status";
+import { cookies } from "next/headers";
+
 
 export default async function Intranet() {
-  const countries = await Countries();
-  const units = await Units();
-  return (
-    <div>
-      <div>{countries}</div>
-      <div>{units}</div>
-    </div>
-  );
-}
 
- async function Countries() {
-  const { get } = createClient<paths>({
-    baseUrl: "https://magicbox.nets-intranets.com",
-    // headers: {
-    //   Authorization: `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
-    // },
-  });
+  const { countries, countryError } = await ReadCountries();
+  const { units, unitsError } = await ReadUnits();
 
-  const { data, error } = await get("/v1/business/countries", {
-    cache: "no-cache",
-  });
+  if (countryError || unitsError) {
+    console.log("countryError", countryError)
+    console.log("unitsError", unitsError)
 
-  if (error) {
-    return <div>{error.code}</div>;
+    return <div>error</div>
   }
+  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string ) : {}
+
+
+
+
   return (
     <div>
-      
-        Hello world
-        {data?.countries?.map((country, id) => {
-          return <IntranetCountry key={id} name={country.Name} code="cc" />;
-        })}
-      
+      <div>
+        <ShowCountries countries={countries as any[]} units={units as any[]} currentCountry={data.country} currentUnit={data.unit} />
+      </div>
+
+     
+
     </div>
   );
 }
 
- async function Units() {
-  const { get } = createClient<paths>({
-    baseUrl: "https://magicbox.nets-intranets.com",
-    // headers: {
-    //   Authorization: `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`,
-    // },
-  });
 
-  const { data, error } = await get("/v1/business/units", {
-    cache: "no-cache",
-  });
 
-  if (error) {
-    return <div>{error.code}</div>;
-  }
-  return (
-    <div>
-     
-        Units
-        {data?.units?.map((unit, id) => {
-          return <IntranetCountry key={id} name={unit.name} code="cc" />;
-        })}
-     
-    </div>
-  );
-}
+

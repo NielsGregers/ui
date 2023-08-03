@@ -1,6 +1,6 @@
 import React from "react"
 import { NOAPPKEY } from "../../../../constants";
-import { getClient } from "../../../../../../../services/koksmat/getClient";
+import { getClient } from "../../../../../../../../../services/koksmat/getClient";
 
 import {
   Table,

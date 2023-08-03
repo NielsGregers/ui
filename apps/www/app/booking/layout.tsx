@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
@@ -12,11 +13,9 @@ import { ThemeProvider } from "@/components/providers"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
-import { SiteHeader } from "@/app/booking/components/site-header"
 
-import { NexiLogo } from "./components/nexilogo"
-import LoginComponent from "./login"
 import { NextAuthProvider } from "./providers"
+import { UsercaseProvider } from "./usecaseproviders"
 
 export const metadata: Metadata = {
   title: {
@@ -91,17 +90,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextAuthProvider>
-              <div className="relative flex min-h-screen flex-col">
-                <SiteHeader />
-                {session && <div className="flex-1">{children}</div>}
-                {!session && (
-                  <div className="flex-1">
-                    <LoginComponent />
-                  </div>
-                )}
-                <SiteFooter />
-              </div>
-              {/* <TailwindIndicator /> */}
+              <UsercaseProvider>
+                <div className="relative flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <div className="flex-1">{children}</div>
+                  <SiteFooter />
+                </div>
+                <TailwindIndicator />
+              </UsercaseProvider>
             </NextAuthProvider>
           </ThemeProvider>
           <Analytics />
