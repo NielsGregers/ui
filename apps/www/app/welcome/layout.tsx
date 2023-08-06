@@ -84,45 +84,30 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
 
-   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NextAuthProvider>
-              <UsercaseProvider >
-                <div className="grid h-screen place-items-center">
-                
-                <div className="absolute left-8 top-4">
-                  <Logo homeUrl="/" />
-                </div>
-                  <div >
-                    <div className="p-10">
-                      <div>
+  return (
 
-                      </div>
-                      {children}
-                    </div>
-                
-                  </div></div>
-                  <ForModule module="Developer">
-                      <SiteFooter />
-                    </ForModule>
-              </UsercaseProvider>
-     
-            </NextAuthProvider>
-          </ThemeProvider>
-          <Analytics />
-          <NewYorkToaster />
-          <DefaultToaster />
-        </body>
-      </html>
-    </>
+    <UsercaseProvider >
+      <div className="h-screen w-full bg-[url('/hard_blur.png')] bg-cover dark:bg-[url('/hard_blur_black.png')]">
+        <div className="grid h-screen place-items-center">
+
+          <div className="absolute left-8 top-4">
+            <Logo homeUrl="/" />
+          </div>
+          <div >
+            <div className="p-10">
+              <div>
+
+              </div>
+              {children}
+            </div>
+
+          </div></div>
+        <ForModule module="Developer">
+          <SiteFooter />
+        </ForModule>
+      </div>
+    </UsercaseProvider>
+
+
   )
 }

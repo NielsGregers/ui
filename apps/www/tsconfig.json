@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    
+    "sourceMap": true,
     "paths": {
       "@/*": ["./*"],
       "@/components/ui/*": ["./registry/new-york/ui/*"],

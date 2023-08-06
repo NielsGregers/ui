@@ -2,16 +2,10 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-import { Analytics } from "@/components/analytics"
-import { ThemeProvider } from "@/components/providers"
+
 import { SiteFooter } from "@/components/magicbox-site-footer"
 import { SiteHeader } from "@/app/cava/components/site-header"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
-import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
-import { NextAuthProvider } from "./providers";
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -73,30 +67,11 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextAuthProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-              <SiteFooter />
-            </div>
-            <TailwindIndicator />
-            </NextAuthProvider>
-          </ThemeProvider>
-          <Analytics />
-          <NewYorkToaster />
-          <DefaultToaster />
-        </body>
-      </html>
-    </>
+
+    <div className="relative flex min-h-screen flex-col">
+      <SiteHeader />
+      <div className="flex-1">{children}</div>
+      <SiteFooter />
+    </div>
   )
 }

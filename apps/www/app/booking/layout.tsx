@@ -80,34 +80,17 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NextAuthProvider>
-              <UsercaseProvider>
-                <div className="relative flex min-h-screen flex-col">
-                  <SiteHeader />
-                  <ForModule module="Booking">
-                    <div className="flex-1">{children}</div>
-                  </ForModule>
-                  <SiteFooter />
-                </div>
-                <TailwindIndicator />
-              </UsercaseProvider>
-            </NextAuthProvider>
-          </ThemeProvider>
-          <Analytics />
-          <NewYorkToaster />
-          <DefaultToaster />
-        </body>
-      </html>
-    </>
+
+    <UsercaseProvider>
+      <div className="relative flex min-h-screen flex-col">
+        <SiteHeader />
+        <ForModule module="Booking">
+          <div className="flex-1">{children}</div>
+        </ForModule>
+        <SiteFooter />
+      </div>
+
+    </UsercaseProvider>
+
   )
 }

@@ -40,7 +40,7 @@ export async function hasRole(role: Roles, module: Modules) : Promise<boolean> {
     if (!session) {
         return false
     }
-    if (session?.roles.includes(module+"."+role) || session?.roles.includes(GLOBALADMIN)) {
+    if (session?.roles?.includes(module+"."+role) || session?.roles?.includes(GLOBALADMIN)) {
         return true
       }
 
@@ -56,7 +56,7 @@ export async function hasModule(module: Modules) : Promise<boolean> {
     const session = await getSession()
     const roleAdmin : Roles = "Admin"
     const roleUser : Roles = "User"
-    if (session?.roles.includes(module+"."+roleUser) ||session?.roles.includes(module+roleAdmin) || session?.roles.includes(GLOBALADMIN)) {
+    if (session?.roles?.includes(module+"."+roleUser) ||session?.roles?.includes(module+roleAdmin) || session?.roles?.includes(GLOBALADMIN)) {
         return true
       }
     return false
