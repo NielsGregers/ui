@@ -107,8 +107,9 @@ export const authOptions: NextAuthOptions = {
       
       // console.log("session callback", session, token.accessTokenExpires)
       if (user) {
+      //  MongoDBAdapter(clientPromise, { databaseName: "nextauth" })
         session.roles = (user as any).roles
-        session.access_token = "test"
+        session.accessToken = (user as any).accessToken
       }
 
       return session
@@ -176,8 +177,8 @@ export const authOptions: NextAuthOptions = {
           name: userinfo.firstName + " " + userinfo.lastName,
           email: userinfo.email,
           image: image ?? null,
-
-
+          accessToken : tokens?.access_token,
+          accessTokenExpires : (tokens?.expires_at as number) * 1000,
           roles: roles,
         };
       },
