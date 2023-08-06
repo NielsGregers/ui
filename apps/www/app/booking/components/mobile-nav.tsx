@@ -48,7 +48,7 @@ export function MobileNav() {
             height={18}
             width={18}
           />
-          <span className="font-bold pl-3">Booking</span>
+          <span className="pl-3 font-bold">Booking</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">

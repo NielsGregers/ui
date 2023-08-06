@@ -163,7 +163,7 @@ export function MongoDBAdapter(
 
   return {
     async createUser(data) {
-      debugger
+      
       const user = to<AdapterUser>(data)
       await (await db).U.insertOne(user)
       return from<AdapterUser>(user)

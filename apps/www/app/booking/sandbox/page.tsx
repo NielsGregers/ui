@@ -14,7 +14,7 @@ import { SearchUserForm } from '../components/searchuser';
 
 export default function Koksmat() {
   const [user, setuser] = useState("")
-  debugger
+  
   return <div className="h-screen w-full">
 
     <div className="container">

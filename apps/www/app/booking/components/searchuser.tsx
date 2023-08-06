@@ -67,7 +67,7 @@ export  function SearchUserForm({ onSelectUser }: Props)  {
   //  resolver: zodResolver(searchFormSchema),
     defaultValues,
   })
-debugger
+
   function onSubmit(data: SearchFormValues) {
     setsearchFor(data.name)
   }
