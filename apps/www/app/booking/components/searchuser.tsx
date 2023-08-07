@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { useSession } from "next-auth/react"
@@ -13,7 +13,7 @@ import { https } from "@/lib/httphelper"
 import { cn } from "@/lib/utils"
 import { ChevronDownIcon, EnvelopeClosedIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/registry/new-york/ui/avatar"
-
+import { MagicboxContext } from "@/app/magicbox-context"
 
 const searchFormSchema = z.object({
   name: z
@@ -156,24 +156,25 @@ async function getImage(upn: string, accessToken: string) {
 }
 
 export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: Props) {
-  const { data: session, status } = useSession()
+  const magicbox=useContext(MagicboxContext);
+
   const [searchFor, setsearchFor] = useState("")
   const [foundUser, setfoundUser] = useState<User | null>(null)
   const [open, setOpen] = React.useState(false)
   const [foundUsers, setfoundUsers] = useState<UserSearchResultItem[]>([])
   const [defaultuser, setdefaultuser] = useState(defaultuserUserPrincipalName)
   const [image, setimage] = useState("")
-  const s: any = session
+
 
   useEffect(() => {
-    const load = async () => {
+    const load = async (accessToken : string) => {
       /**
        * 
        * Retrieve a collection of person objects ordered by their relevance to the user, which is determined by the user's communication and collaboration patterns, and business relationships.
        * 
        * https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0&tabs=http
        */
-      const searchRequestResult = await https<User>(s.accessToken, "GET", `https://graph.microsoft.com/v1.0/users/${defaultuserUserPrincipalName}`)
+      const searchRequestResult = await https<User>(accessToken, "GET", `https://graph.microsoft.com/v1.0/users/${defaultuserUserPrincipalName}`)
 
       if (searchRequestResult.hasError) {
         toast({ variant: "destructive", title: "Error", description: searchRequestResult.errorMessage })
@@ -182,12 +183,12 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
 
 
       setfoundUser(searchRequestResult.data ?? null)
-      const i = await getImage(defaultuserUserPrincipalName as string, s.accessToken)
+      const i = await getImage(defaultuserUserPrincipalName as string, accessToken)
       setimage(i)
     }
 
-    if (defaultuser) {
-      load()
+    if (defaultuser && magicbox.session?.accessToken) {
+      load(magicbox.session.accessToken)
     } else {
       setimage("")
       setfoundUser(null)
@@ -196,14 +197,14 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
   }, [defaultuser])
 
   useEffect(() => {
-    const load = async () => {
+    const load = async (accessToken : string) => {
       /**
        * 
        * Retrieve a collection of person objects ordered by their relevance to the user, which is determined by the user's communication and collaboration patterns, and business relationships.
        * 
        * https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0&tabs=http
        */
-      const searchRequestResult = await https<oData<UserSearchResultItem>>(s.accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=20`)
+      const searchRequestResult = await https<oData<UserSearchResultItem>>(accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=20`)
 
       if (searchRequestResult.hasError) {
         toast({ variant: "destructive", title: "Error", description: searchRequestResult.errorMessage })
@@ -212,13 +213,13 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
 
       if (searchRequestResult.data) setfoundUsers(searchRequestResult.data.value)
     }
-    if (s?.accessToken && searchFor.length > 0) {
-      load()
+    if (magicbox.session?.accessToken && searchFor.length > 0) {
+      load(magicbox.session?.accessToken)
     } else {
       setfoundUsers([])
     }
 
-  }, [s?.accessToken, searchFor])
+  }, [magicbox.session?.accessToken, searchFor])
 
   const form = useForm<SearchFormValues>({
     //  resolver: zodResolver(searchFormSchema),
@@ -276,7 +277,9 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
 
                   }}
                 >
-                  <ShowUser accessToken={s.accessToken} onSelectUser={onSelectUser} user={user} />
+                  {magicbox.session?.accessToken && 
+                  <ShowUser accessToken={magicbox.session.accessToken} onSelectUser={onSelectUser} user={user} />
+                }
                 </CommandItem>
               ))}
             </CommandGroup>

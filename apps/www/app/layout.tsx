@@ -14,7 +14,7 @@ import { ForModule } from "@/components/roles"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
-
+import { MagicboxProvider } from "./magicbox-providers";
 
 import { NextAuthProvider } from "./providers"
 
@@ -91,7 +91,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextAuthProvider>
+              <MagicboxProvider>
               {children}
+              </MagicboxProvider>
             </NextAuthProvider>
           </ThemeProvider>
           <Analytics />

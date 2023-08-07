@@ -5,6 +5,8 @@ import { connect, insert } from "@/lib/mongodb"
 
 import NewParkingForm, { schema } from "./NewParkingForm"
 
+
+
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   permanent: z.boolean().default(false).optional(),
@@ -36,7 +38,10 @@ async function submit(values: schema) {
 }
 
 export default async function NewParking() {
- 
+  
 
-  return <NewParkingForm onSubmit={submit} />
+  return <div> 
+    
+   
+    <NewParkingForm onSubmit={submit} /></div>
 }
