@@ -97,6 +97,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <Analytics />
           <NewYorkToaster />
           <DefaultToaster />
+          <TailwindIndicator/>
         </body>
       </html>
     </>

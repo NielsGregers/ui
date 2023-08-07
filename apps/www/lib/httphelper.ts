@@ -52,7 +52,7 @@
             
             var data = response.data;
   
-            resolve({ hasError: false, data });
+            resolve({ hasError: false, data ,errorMessage:""});
           })
           .catch(async (error: AxiosError) => {
             if (
@@ -61,6 +61,7 @@
             ) {
               resolve({
                 hasError: true,
+              
                 errorMessage:
                   error.message ,
               });

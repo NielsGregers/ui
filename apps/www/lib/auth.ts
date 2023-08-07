@@ -5,6 +5,7 @@ import { MongoDBAdapter } from "./mongodb/nextauth-mongoadapter"
 import { MongoClient } from "mongodb";
 import { AdapterUser } from "next-auth/adapters";
 import { https } from "./httphelper";
+import { get } from "http";
 
 /**
  * Takes a token, and returns a new token with updated
@@ -51,15 +52,19 @@ async function refreshAccessToken(token: JWT) {
 }
 const options = {};
 
-let client;
-let clientPromise: Promise<MongoClient>;
-const uri = (process.env.MONGODB as string)
-client = new MongoClient(uri, options);
-clientPromise = client.connect();
 
 const USERINFOURL = "https://graph.microsoft.com/v1.0/me?$select=id,userPrincipalName,accountEnabled,userType,givenName,surname"
 
-export const authOptions: NextAuthOptions = {
+const getOptions = () : NextAuthOptions => {
+
+  let client;
+  let clientPromise: Promise<MongoClient>;
+ 
+  const uri = (process.env.MONGODB as string)
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
+  
+return {
   session: {
     strategy: "database",
   },
@@ -78,7 +83,7 @@ export const authOptions: NextAuthOptions = {
       //     }
       //   }
       // }
-      console.log("auth", "signin callback", params)
+      //console.log("auth", "signin callback", params)
       return true
     },
     jwt: async ({ token, account, user }) => {
@@ -193,3 +198,8 @@ export const authOptions: NextAuthOptions = {
   ],
   adapter: MongoDBAdapter(clientPromise, { databaseName: "nextauth" })
 };
+
+}
+// will not have been set during build on CI server 
+// eslint-disable-next-line turbo/no-undeclared-env-vars
+export const authOptions: NextAuthOptions =  process.env.MONGODB ? getOptions() : {} as NextAuthOptions
