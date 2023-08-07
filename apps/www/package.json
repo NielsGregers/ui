@@ -58,6 +58,7 @@
     "@tanstack/react-table": "^8.9.1",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.0.21",
+    "async-mutex": "^0.4.0",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
