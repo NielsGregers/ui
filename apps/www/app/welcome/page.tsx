@@ -1,13 +1,13 @@
 import React from "react";
 
-import ShowCountries from "./components/selectcountryandunit";
+import SelectCountryAndUnit from "./components/selectcountryandunit";
 
 
 import { cookies } from "next/headers";
 import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
-import { Countries,Units } from "@/services/sharepoint/nexiintra-home/sharepoint"
+import { Countries, Units } from "@/services/sharepoint/nexiintra-home/sharepoint"
 import { z } from "zod"
-import { Country,Unit } from "./schema"
+import { Country, Unit } from "./schema"
 
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +19,7 @@ async function getGraphItems() {
 
   const countries = await getCountries();
   const units = await getUnits();
-  return {countries,units}
+  return { countries, units }
 
 
   async function getCountries() {
@@ -46,46 +46,41 @@ async function getGraphItems() {
   }
 
 
-async function getUnits() {
-  const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, Units.listName);
-  if (hasError) {
-    console.log(errorMessage);
+  async function getUnits() {
+    const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, Units.listName);
+    if (hasError) {
+      console.log(errorMessage);
+    }
+
+    const items = data?.map((item: any) => {
+      return Units.map(item);
+
+    });
+    const spItems = z.array(Units.schema).parse(items);
+
+    const units = spItems.map((item) => {
+      const i: Unit = {
+        unitName: item.Title,
+        unitCode: item.code,
+        sortOrder: item.SortOrder,
+      };
+      return i;
+    });
+    return units;
   }
-
-  const items = data?.map((item: any) => {
-    return Units.map(item);
-
-  });
-  const spItems = z.array(Units.schema).parse(items);
-
-  const units = spItems.map((item) => {
-    const i: Unit = {
-      unitName: item.Title,
-      unitCode: item.code,
-      sortOrder: item.SortOrder,
-    };
-    return i;
-  });
-  return units;
-}
 }
 export default async function Intranet() {
 
   const { countries, units } = await getGraphItems();
 
-  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string ) : {}
+  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string) : {}
 
 
 
   return (
-    <div>
-      <div>
-        <ShowCountries countries={countries } units={units} currentCountry={data.country} currentUnit={data.unit} />
-      </div>
 
-     
+    <SelectCountryAndUnit countries={countries} units={units} currentCountry={data.country} currentUnit={data.unit} />
 
-    </div>
   );
 }
 

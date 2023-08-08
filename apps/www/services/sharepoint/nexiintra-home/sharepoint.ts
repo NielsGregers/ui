@@ -24,6 +24,58 @@ export namespace brand_identity {
         Title: z.string(),
 
     })
+} export namespace Companies {
+    export const listName = "Companies"
+
+    export function map(item: any) {
+
+
+        return {
+            Id: item.id,
+            Title: item.fields.Title,
+            CreatedBy: item.createdBy.user.email,
+            Created: new Date(item.createdDateTime),
+            ModifiedBy: item.lastModifiedBy.user.email,
+            Modified: new Date(item.lastModifiedDateTime),
+            field_1: item.fields.field_1 ? item.fields.field_1 : "",
+            field_2: item.fields.field_2 ? item.fields.field_2 : "",
+            field_3: item.fields.field_3 ? item.fields.field_3 : "",
+            field_4: item.fields.field_4 ? item.fields.field_4 : "",
+            field_5: item.fields.field_5 ? item.fields.field_5 : "",
+            field_6: item.fields.field_6 ? item.fields.field_6 : "",
+            field_7: item.fields.field_7,
+            field_8: item.fields.field_8 ? item.fields.field_8 : "",
+            field_9: item.fields.field_9,
+            field_10: item.fields.field_10 ? item.fields.field_10 : "",
+            field_11: item.fields.field_11 ? item.fields.field_11 : "",
+            field_12: item.fields.field_12 ? item.fields.field_12 : "",
+            field_13: item.fields.field_13 ? item.fields.field_13 : "",
+            field_14: item.fields.field_14 ? item.fields.field_14 : "",
+        }
+    }
+    export const schema = z.object({
+        CreatedBy: z.string(),
+        Created: z.date(),
+        ModifiedBy: z.string(),
+        Modified: z.date(),
+        Id: z.string(),
+        Title: z.string(),
+
+        field_1: z.string(),
+        field_2: z.string(),
+        field_3: z.string(),
+        field_4: z.string(),
+        field_5: z.string(),
+        field_6: z.string(),
+        field_7: z.string().nullable(),
+        field_8: z.string(),
+        field_9: z.string().nullable(),
+        field_10: z.string(),
+        field_11: z.string(),
+        field_12: z.string(),
+        field_13: z.string(),
+        field_14: z.string(),
+    })
 } export namespace CopyofSharedDocuments {
     export const listName = "Copy of Shared Documents"
 
@@ -71,6 +123,7 @@ export namespace brand_identity {
             Modified: new Date(item.lastModifiedDateTime),
             Code: item.fields.Code ? item.fields.Code : "",
             SortOrder: item.fields.SortOrder,
+            Region: item.fields.Region,
         }
     }
     export const schema = z.object({
@@ -83,6 +136,7 @@ export namespace brand_identity {
 
         Code: z.string(),
         SortOrder: z.number(),
+        Region: z.string().nullable(),
     })
 } export namespace Documents {
     export const listName = "Documents"
@@ -205,6 +259,38 @@ export namespace brand_identity {
         NotesCurrentDocument: z.string(),
         CrossReferenceOtherRegulations: z.string(),
         ProcessOwner: z.string(),
+    })
+} export namespace Links {
+    export const listName = "Links"
+
+    export function map(item: any) {
+
+
+        return {
+            Id: item.id,
+            Title: item.fields.Title,
+            CreatedBy: item.createdBy.user.email,
+            Created: new Date(item.createdDateTime),
+            ModifiedBy: item.lastModifiedBy.user.email,
+            Modified: new Date(item.lastModifiedDateTime),
+            Description: item.fields.Description ? item.fields.Description : "",
+            Slug: item.fields.Slug ? item.fields.Slug : "",
+            URL: item.fields.URL ? item.fields.URL : "",
+            Image: item.fields.Image ? item.fields.Image : "",
+        }
+    }
+    export const schema = z.object({
+        CreatedBy: z.string(),
+        Created: z.date(),
+        ModifiedBy: z.string(),
+        Modified: z.date(),
+        Id: z.string(),
+        Title: z.string(),
+
+        Description: z.string(),
+        Slug: z.string(),
+        URL: z.string(),
+        Image: z.string(),
     })
 } export namespace NewsChannels {
     export const listName = "News Channels"
@@ -371,6 +457,7 @@ export namespace brand_identity {
             Modified: new Date(item.lastModifiedDateTime),
             code: item.fields.code ? item.fields.code : "",
             SortOrder: item.fields.SortOrder,
+            UnitType: item.fields.UnitType,
         }
     }
     export const schema = z.object({
@@ -383,6 +470,7 @@ export namespace brand_identity {
 
         code: z.string(),
         SortOrder: z.number(),
+        UnitType: z.string().nullable(),
     })
 } export namespace Video {
     export const listName = "Video"

@@ -315,6 +315,15 @@ export const getAllItems = (accessToken: string, sharePointSiteId: string, listN
     })
 };
 
+export const getItem = (accessToken: string, sharePointSiteId: string, listName: string, field: string,value:string): Promise<Result<any>> => {
+
+    return new Promise(async (resolve, reject) => {
+        var url = `https://graph.microsoft.com/v1.0/sites/${sharePointSiteId}/lists/${listName}/items?expand=fields&$filter=fields/${field} eq '${value}'`
+        var result = await https<any>(accessToken, "GET", url)
+        resolve(result)
+    })
+};
+
 // export const getSiteDrives = (accessToken: string, siteId: string): Promise<Drive[]> => {
 //     return new Promise(async (resolve, reject) => {
 //         var url = `https://graph.microsoft.com/v1.0/sites/${siteId}/drives`
