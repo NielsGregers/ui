@@ -1,4 +1,4 @@
-import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
+import { getToken, getRootSite, getSubSite, getAllListItems } from "@/lib/officegraph"
 import { NewsChannels } from "@/services/sharepoint/nexiintra-home/sharepoint"
 import { z } from "zod"
 import { NewsChannel } from "./schema"
@@ -17,7 +17,7 @@ export async function getSharePointData() {
 
 
   async function getChannels() {
-    const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, NewsChannels.listName);
+    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, NewsChannels.listName);
     if (hasError) {
       console.log(errorMessage);
     }

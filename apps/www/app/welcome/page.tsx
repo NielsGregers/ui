@@ -4,7 +4,7 @@ import SelectCountryAndUnit from "./components/selectcountryandunit";
 
 
 import { cookies } from "next/headers";
-import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
+import { getToken, getRootSite, getSubSite, getAllListItems } from "@/lib/officegraph"
 import { Countries, Units } from "@/services/sharepoint/nexiintra-home/sharepoint"
 import { z } from "zod"
 import { Country, Unit } from "./schema"
@@ -23,7 +23,7 @@ async function getGraphItems() {
 
 
   async function getCountries() {
-    const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, Countries.listName);
+    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, Countries.listName);
     if (hasError) {
       console.log(errorMessage);
     }
@@ -47,7 +47,7 @@ async function getGraphItems() {
 
 
   async function getUnits() {
-    const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, Units.listName);
+    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, Units.listName);
     if (hasError) {
       console.log(errorMessage);
     }

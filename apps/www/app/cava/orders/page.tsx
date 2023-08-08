@@ -2,7 +2,7 @@
 
 import React from "react"
 import { GenericTable } from "../components/table"
-import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
+import { getToken, getRootSite, getSubSite, getAllListItems } from "@/lib/officegraph"
 import { CateringOrders } from "@/services/sharepoint/cava3/sharepoint"
 import {schema} from "../components/table/data/schema"
 import { z } from "zod"
@@ -18,7 +18,7 @@ async function getGraphItems() {
   const rootSiteResponse = await getRootSite(token)
   const subSiteResponse = await getSubSite(token, rootSiteResponse.data?.siteCollection.hostname as string, "sites/cava3")
 
-  const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, CateringOrders.listName)
+  const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, CateringOrders.listName)
   if (hasError) {
 
     console.log(errorMessage)

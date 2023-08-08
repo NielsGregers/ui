@@ -11,14 +11,14 @@ import ToSmall from "@/components/tosmall"
 import { connect } from "@/lib/mongodb"
 import { use } from "react"
 
-import { getToken, getRootSite, getSubSite, getAllItems } from "@/lib/officegraph"
+import { getToken, getRootSite, getSubSite, getAllListItems } from "@/lib/officegraph"
 
 async function getGraphItems() {
   const token = await getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string)
   const rootSiteResponse = await getRootSite(token)
   const subSiteResponse = await getSubSite(token, rootSiteResponse.data?.siteCollection.hostname as string, "sites/cava3")
 
-  const { data, hasError, errorMessage } = await getAllItems(token, subSiteResponse.data?.id as string, "Rooms")
+  const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, "Rooms")
   if (hasError) {
 
     console.log(errorMessage)

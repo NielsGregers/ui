@@ -26,10 +26,12 @@ export function MainNav() {
 
           <NavigationRootLink name="Exchange" href="/powershell/exchange" />
         </ForRole>
-        {/* <ForRole role="Admin" module="PowerShellSharePoint">
+         <ForRole role="Admin" module="PowerShellSharePoint">
           <NavigationRootLink name="SharePoint" href="/powershell/sharepoint" />
 
         </ForRole>
+
+        {/*
         <ForRole role="Admin" module="PowerShellPowerApps">
           <NavigationRootLink name="PowerApps" href="/powershell/powerapps" />
 

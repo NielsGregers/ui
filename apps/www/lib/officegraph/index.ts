@@ -306,7 +306,7 @@ export const getSubSite = (accessToken: string, hostname: string, subsitePath: s
     })
 }
 
-export const getAllItems = (accessToken: string, sharePointSiteId: string, listName: string): Promise<Result<any[]>> => {
+export const getAllListItems = (accessToken: string, sharePointSiteId: string, listName: string): Promise<Result<any[]>> => {
 
     return new Promise(async (resolve, reject) => {
         var url = `https://graph.microsoft.com/v1.0/sites/${sharePointSiteId}/lists/${listName}/items?expand=fields`
@@ -315,11 +315,28 @@ export const getAllItems = (accessToken: string, sharePointSiteId: string, listN
     })
 };
 
-export const getItem = (accessToken: string, sharePointSiteId: string, listName: string, field: string,value:string): Promise<Result<any>> => {
+export const getListItem = (accessToken: string, sharePointSiteId: string, listName: string, field: string,value:string): Promise<Result<any>> => {
 
     return new Promise(async (resolve, reject) => {
         var url = `https://graph.microsoft.com/v1.0/sites/${sharePointSiteId}/lists/${listName}/items?expand=fields&$filter=fields/${field} eq '${value}'`
         var result = await https<any>(accessToken, "GET", url)
+        resolve(result)
+    })
+};
+export const getSharePointPage = (accessToken: string, sharePointSiteId: string,  pageId: number): Promise<Result<any>> => {
+
+    return new Promise(async (resolve, reject) => {
+        var url = `https://graph.microsoft.com/beta/sites/${sharePointSiteId}/pages/${pageId}`
+        var result = await https<any>(accessToken, "GET", url)
+        resolve(result)
+    })
+};
+
+export const getAllSharePointPage = (accessToken: string, sharePointSiteId: string): Promise<Result<any[]>> => {
+
+    return new Promise(async (resolve, reject) => {
+        var url = `https://graph.microsoft.com/beta/sites/${sharePointSiteId}/pages/microsoft.graph.sitePage`
+        var result = await httpsGetAll<any>(accessToken,  url)
         resolve(result)
     })
 };
