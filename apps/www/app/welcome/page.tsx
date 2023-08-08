@@ -10,7 +10,7 @@ import { z } from "zod"
 import { Country,Unit } from "./schema"
 
 
-
+export const dynamic = 'force-dynamic'
 
 async function getGraphItems() {
   const token = await getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string)
