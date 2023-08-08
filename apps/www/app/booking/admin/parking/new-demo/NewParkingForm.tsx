@@ -39,7 +39,7 @@ import { toast } from "@/registry/default/ui/use-toast"
 import { User } from "./page"
 import { useContext, useState } from "react"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
-import { SearchUserForm } from "@/app/booking/components/searchuser"
+import { SearchUserForm } from "@/components/searchuser"
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),

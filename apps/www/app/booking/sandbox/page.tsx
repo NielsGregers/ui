@@ -8,7 +8,7 @@ import { toast } from '@/registry/new-york/ui/use-toast';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, useForm } from 'react-hook-form';
-import { SearchUserForm, User, UserSearchResultItem } from '../components/searchuser';
+import { SearchUserForm, User, UserSearchResultItem } from '../../../components/searchuser';
 
 
 

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils"
 import { ChevronDownIcon, EnvelopeClosedIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/registry/new-york/ui/avatar"
 import { MagicboxContext } from "@/app/magicbox-context"
+import { set } from "date-fns"
 
 const searchFormSchema = z.object({
   name: z
@@ -97,32 +98,46 @@ type UserProps = {
   onSelectUser: (user: UserSearchResultItem) => void
 
   user: UserSearchResultItem
-  accessToken: string
+ 
 };
 
-export function ShowUser({ accessToken, onSelectUser, user }: UserProps) {
+type UserAvatarProps = {
 
+ userPrincipalName: string
+};
+export function UserAvatar({  userPrincipalName }: UserAvatarProps) {
+  const magicbox=useContext(MagicboxContext);
   const [image, setimage] = useState("")
-  const [upn, setupn] = useState(user.userPrincipalName)
   useEffect(() => {
-    const load = async () => {
+    const load = async (accessToken : string) => {
 
-      let image: string = await getImage(upn, accessToken)
+      let image: string = await getImage(userPrincipalName, accessToken)
 
       setimage(image)
     }
+    if (magicbox.session?.accessToken &&  userPrincipalName){
+      load(magicbox.session.accessToken)
+    }else{
+      setimage("")
+    }
 
-    load()
 
+  }, [userPrincipalName])
+  return (<Avatar className="mr-2 h-8 w-8  ">
+  <AvatarImage src={image} alt={"Image of " + userPrincipalName} />
+  <AvatarFallback><AvatarImage src="/avatars/01.png" alt={"Image of " + userPrincipalName} /></AvatarFallback>
+</Avatar>)
+}
 
-  }, [upn])
+export function ShowUser({  onSelectUser, user }: UserProps) {
+ 
+
+  const [upn, setupn] = useState(user.userPrincipalName)
+  
   return <div className="cursor-pointer" onClick={() => { onSelectUser(user) }}>
     <div className="flex ">
     <div className="pr-2">
-      <Avatar className="mr-2 h-8 w-8  ">
-        <AvatarImage src={image} alt={"Image of " + user.displayName} />
-        <AvatarFallback><AvatarImage src="/avatars/01.png" alt={"Image of " + user.displayName} /></AvatarFallback>
-      </Avatar>
+    <UserAvatar userPrincipalName={user.userPrincipalName} />
       </div>
       <div>
         <div>
@@ -204,7 +219,7 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
        * 
        * https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0&tabs=http
        */
-      const searchRequestResult = await https<oData<UserSearchResultItem>>(accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=20`)
+      const searchRequestResult = await https<oData<UserSearchResultItem>>(accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=10`)
 
       if (searchRequestResult.hasError) {
         toast({ variant: "destructive", title: "Error", description: searchRequestResult.errorMessage })
@@ -262,7 +277,14 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
             <Input placeholder="Search for users..." onChange={(e) => setsearchFor(e.target.value)} defaultValue={searchFor} />
 
             <CommandEmpty>No users found.</CommandEmpty>
-            <CommandGroup heading="Results">
+            {/* 
+            TODO: Fix overflow issue
+            When there is more resulta than can fit on the screen, the list overflows and push away the input field
+            Looks like you have to dive into the internals of the Command component to fix this
+            
+            
+            */}
+             <CommandGroup heading="Results" >
               {foundUsers.map((user: UserSearchResultItem, key) => (
 
                 <CommandItem
@@ -277,9 +299,9 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
 
                   }}
                 >
-                  {magicbox.session?.accessToken && 
-                  <ShowUser accessToken={magicbox.session.accessToken} onSelectUser={onSelectUser} user={user} />
-                }
+                 
+                  <ShowUser  onSelectUser={onSelectUser} user={user} />
+                
                 </CommandItem>
               ))}
             </CommandGroup>
