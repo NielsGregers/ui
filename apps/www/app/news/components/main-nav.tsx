@@ -22,13 +22,13 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
-        <ForModule module="Catering">
-          <NavigationRootLink name="Orders" href="/news/orders" />
+        <ForModule module="News">
+          <NavigationRootLink name="Channels" href="/news/channels" />
         </ForModule>
         
-        <ForModule module="Catering">
-        <NavigationRootLink name="Lists" href="https://christianiabpos.sharepoint.com/sites/Cava3/_layouts/15/viewlsts.aspx?view=14" />
-        </ForModule>
+        <ForRole module="News" role="Admin">
+        <NavigationRootLink name="Lists" href="https://christianiabpos.sharepoint.com/sites/nexiintra-home/_layouts/15/viewlsts.aspx?view=14" />
+        </ForRole>
 
       </nav>
     </div>

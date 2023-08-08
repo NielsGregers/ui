@@ -1,25 +1,21 @@
 
 import Link from 'next/link';
 import React from 'react';
+import { getSharePointData } from './datasources';
+import { SelectNewsChannels } from './components/select-news-channels';
 
-
+// This is important, if not set, this page will be statically generated causing the build to fail
+// as the build process would need to have access to the database / api's
+export const dynamic = 'force-dynamic'
 export default async function Koksmat() {
 
-
-  return <div className="h-screen w-full bg-yellow-100">
+  const {channels} = await getSharePointData()
+  return <div className="h-screen w-full">
 
     <div className="grid h-screen place-items-center">
 
 
-      <div className="place-items-center">
-        <button className="rounded-full bg-[#2D32A9] from-green-400 to-blue-500 p-2 px-10 text-white hover:from-pink-500 hover:to-yellow-500">
-          {" "}
-          <Link href="/powershell/admin">Click to get started</Link>
-     
-        </button>
- 
-    
-      </div>
+      <SelectNewsChannels channels={channels} defaultChannels={[]}/>
 
     </div>
   </div>

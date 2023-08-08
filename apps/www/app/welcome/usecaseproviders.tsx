@@ -25,7 +25,7 @@ export const UsercaseProvider = ({ children }: Props) => {
       setselectedCountry(country);
       setselectedUnit(unit);
       setCookie('user', { country, unit }, { path: '/' });
-      window.open("/load")
+      window.open("/load", "_self")
     },
 
     country: selectedCountry,
