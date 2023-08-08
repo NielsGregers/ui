@@ -7,7 +7,7 @@ import { Button } from "@/registry/new-york/ui/button"
 import { Input } from "@/registry/new-york/ui/input"
 import { de } from "date-fns/locale"
 import { toast } from "@/registry/default/ui/use-toast"
-import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/registry/new-york/ui/command"
+import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/registry/new-york/ui/command"
 import { Checkbox } from "@/registry/new-york/ui/checkbox"
 import { https } from "@/lib/httphelper"
 import { cn } from "@/lib/utils"
@@ -219,7 +219,7 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
        * 
        * https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0&tabs=http
        */
-      const searchRequestResult = await https<oData<UserSearchResultItem>>(accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=10`)
+      const searchRequestResult = await https<oData<UserSearchResultItem>>(accessToken, "GET", `https://graph.microsoft.com/v1.0/me/people/?$filter=personType/subclass eq 'OrganizationUser'&$search=${searchFor}&$top=20`)
 
       if (searchRequestResult.hasError) {
         toast({ variant: "destructive", title: "Error", description: searchRequestResult.errorMessage })
@@ -277,13 +277,7 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
             <Input placeholder="Search for users..." onChange={(e) => setsearchFor(e.target.value)} defaultValue={searchFor} />
 
             <CommandEmpty>No users found.</CommandEmpty>
-            {/* 
-            TODO: Fix overflow issue
-            When there is more resulta than can fit on the screen, the list overflows and push away the input field
-            Looks like you have to dive into the internals of the Command component to fix this
-            
-            
-            */}
+           <CommandList>
              <CommandGroup heading="Results" >
               {foundUsers.map((user: UserSearchResultItem, key) => (
 
@@ -305,12 +299,12 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
                 </CommandItem>
               ))}
             </CommandGroup>
-            <CommandGroup >
+        </CommandList>
+        <CommandGroup >
               <CommandItem className="cursor-pointer" onSelect={(value) => {onSelectUser(null);setOpen(false); setdefaultuser("")}}>
                 Clear
               </CommandItem>
             </CommandGroup>
-
           </Command></CommandDialog>
       </div></div>
   )
