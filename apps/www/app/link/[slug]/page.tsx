@@ -7,7 +7,7 @@ import { Links } from "@/services/sharepoint/nexiintra-home/sharepoint"
 import { z } from "zod"
 import { de } from "date-fns/locale";
 import { getUserSession } from "@/lib/user"
-import { AnyRender } from "@tanstack/react-table";
+
 //import { Country, Unit } from "./schema"
 
 
@@ -104,7 +104,7 @@ export async function generateMetadata(
 }
 
 
-export default async function Page(p:AnyRender) { //{ params, searchParams }: Props) {
+export default async function Page(p:any) { //{ params, searchParams }: Props) {
   const session = await getUserSession()
   if (!session) {
     return <div><div>Not signed in</div>

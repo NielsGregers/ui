@@ -120,16 +120,27 @@ return data as Page[]
 
 export default async function Pages() {
   const pages = await getGraphItems()
-  const data = pages.map((item) => {
+  return <div>
+    <h1>Pages</h1>
+   {pages.map((item,key) => {
+      return <div key={key} >
+        <h2>{item.title}</h2>
+        <p>{item.description}</p>
+        <img src={item.thumbnailWebUrl}></img>
+        <p>{item.id}</p>
+      </div>
+   })}
+  </div>
+  // const data = pages.map((item) => {
     
-    return {
-      title: item.title,
-      link: item.webUrl,
-      details: item.description ?? "no description", 
-      id: item.id
-    }
-  })
+  //   return {
+  //     title: item.title,
+  //     link: item.webUrl,
+  //     details: item.description ?? "no description", 
+  //     id: item.id
+  //   }
+  // })
   
 
-  return <GenericTable data={data} />
+  // return <GenericTable data={data} />
 }
