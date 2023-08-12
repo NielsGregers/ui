@@ -2,6 +2,11 @@ import { createContentlayerPlugin } from "next-contentlayer"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  
+  compiler: {
+    removeConsole:false,
+    
+  },
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
   swcMinify: true,

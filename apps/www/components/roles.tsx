@@ -11,7 +11,8 @@ export type Modules = "PowerShell"
 | "News" 
 | "PowerShellExchange" 
 | "PowerShellPowerApps" 
-| "PowerShellSharePoint" 
+| "PowerShellSharePoint"
+| "UserProfiles" 
 
 
 export type Roles = "User" | "Admin" 

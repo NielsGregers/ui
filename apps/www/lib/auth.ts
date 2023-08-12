@@ -1,6 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import AzureADProvider from "next-auth/providers/azure-ad";
+import AzureADProvider from "./auth-azuread";
 import { MongoDBAdapter } from "./mongodb/nextauth-mongoadapter"
 import { MongoClient, ObjectId } from "mongodb";
 import { AdapterUser } from "next-auth/adapters";
