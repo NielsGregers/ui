@@ -32,7 +32,10 @@ import {
   PopoverTrigger,
 } from "@/registry/new-york/ui/popover"
 import { toast } from "@/registry/new-york/ui/use-toast"
-
+import WelcomePage from "@/app/welcome/page"
+import { useContext } from "react"
+import { ProfileContext } from "../../usecasecontext"
+import SelectCountryAndUnit from "@/app/welcome/components/selectcountryandunit-client";
 const languages = [
   { label: "English", value: "en" },
   { label: "French", value: "fr" },
@@ -71,6 +74,7 @@ const defaultValues: Partial<AccountFormValues> = {
 }
 
 export function AccountForm() {
+  const profileContext = useContext(ProfileContext);
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
@@ -90,7 +94,7 @@ export function AccountForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+        {/* <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
@@ -133,6 +137,7 @@ export function AccountForm() {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
+              
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -150,13 +155,13 @@ export function AccountForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="language"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Language</FormLabel>
+              <FormLabel>Country</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -172,12 +177,79 @@ export function AccountForm() {
                         ? languages.find(
                             (language) => language.value === field.value
                           )?.label
-                        : "Select language"}
+                        : "Select country"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
+{/*                          
+                <SelectCountryAndUnit countries={profileContext.countries} units={profileContext.units} currentCountry={""} currentUnit={""} /> */}
+
+                  <Command>
+                    <CommandInput placeholder="Search country ..." />
+                    <CommandEmpty>No language found.</CommandEmpty>
+                    <CommandGroup>
+                      {languages.map((language) => (
+                        <CommandItem
+                          value={language.value}
+                          key={language.value}
+                          onSelect={(value) => {
+                            form.setValue("language", value)
+                          }}
+                        >
+                          <CheckIcon
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              language.value === field.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {language.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                This is the language that will be used in the dashboard.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="language"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Business Unit / Group Function</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? languages.find(
+                            (language) => language.value === field.value
+                          )?.label
+                        : "Select unit"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+{/*                          
+                <SelectCountryAndUnit countries={profileContext.countries} units={profileContext.units} currentCountry={""} currentUnit={""} /> */}
+
                   <Command>
                     <CommandInput placeholder="Search language..." />
                     <CommandEmpty>No language found.</CommandEmpty>

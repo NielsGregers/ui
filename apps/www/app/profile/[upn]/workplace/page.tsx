@@ -1,7 +1,9 @@
 import { Separator } from "@/registry/new-york/ui/separator"
-import { AccountForm } from "@/app/shadcn/examples/forms/account/account-form"
+import { AccountForm } from "./account-form"
+import { getProfilingData } from "@/app/welcome/getdata";
 
-export default function SettingsAccountPage() {
+export default async function SettingsAccountPage() {
+  const { countries, units } = await getProfilingData();
   return (
     <div className="space-y-6">
       <div>

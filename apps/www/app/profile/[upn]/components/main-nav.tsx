@@ -22,13 +22,8 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium">
-        <ForModule module="UserProfiles">
-          <NavigationRootLink name="Profiles" href="/profile" />
-        </ForModule>
-        
-        <ForRole module="UserProfiles" role="Admin">
-        <NavigationRootLink name="Lists" href="https://christianiabpos.sharepoint.com/sites/nexiintra-home/_layouts/15/viewlsts.aspx?view=14" />
-        </ForRole>
+       
+       
 
       </nav>
     </div>

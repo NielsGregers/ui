@@ -18,6 +18,7 @@ export type Country = z.infer<typeof countrySchema>
 export const unitSchema = z.object({
   unitName:z.string(),
   unitCode:z.string(),
+  unitType:z.string(),
   sortOrder:z.number(),
 
 })
