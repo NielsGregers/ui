@@ -6,9 +6,9 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const { countries, units } = await getProfilingData();
+  const data  = await getProfilingData();
   return (
-    <UsecaseProvider countries={countries} units={units}>
+    <UsecaseProvider  {...data}>
       {children}
     </UsecaseProvider>
   )

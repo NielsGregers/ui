@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useFieldArray, useForm, useFormContext, useWatch } from "react-hook-form"
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
@@ -34,9 +34,10 @@ import {
 } from "@/registry/new-york/ui/popover"
 import { toast } from "@/registry/new-york/ui/use-toast"
 
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { ProfileContext } from "../usecasecontext"
 import { CommandList } from "cmdk"
+import { NewsChannel } from "@/app/news/schema"
 
 const profileFormSchema = z.object({
   country: z
@@ -64,17 +65,30 @@ const defaultValues: Partial<ProfileFormValues> = {
 
 }
 
+interface NewsChannelProps  {
+    country : string
+    unit:string
+    channels : NewsChannel[]
+}
+export function NewsChannels(props:NewsChannelProps){
+
+return <pre>
+  {JSON.stringify(props,null,2)}
+</pre>
+}
 
 
 
 export function ProfileForm() {
   const profileContext = useContext(ProfileContext)
   const {countries,units} = profileContext
-  
+  const [showCountries, setshowCountries] = useState(false)
+  const [showUnits, setshowUnits] = useState(false)
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
+
   })
 
   const { fields, append } = useFieldArray({
@@ -94,9 +108,12 @@ export function ProfileForm() {
  //   profileContext.Select(data.country,data.unit)
   }
 
+  const watchUnit = form.watch("unit", "") 
+  const watchCountry = form.watch("country", "") 
   return (
+    <div>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form   onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
         <div>
           <FormField
@@ -106,14 +123,14 @@ export function ProfileForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col pb-[30px]">
                 <FormLabel>Business Unit / Group Function</FormLabel>
-                <Popover>
+                <Popover open={showUnits} onOpenChange={setshowUnits} >
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-[400px] justify-between",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -138,6 +155,7 @@ export function ProfileForm() {
                             key={unit.unitCode}
                             onSelect={(value) => {
                               form.setValue("unit", value)
+                              setshowUnits(false)
                             }}
                           >
                             <CheckIcon
@@ -160,6 +178,7 @@ export function ProfileForm() {
                             key={unit.unitCode}
                             onSelect={(value) => {
                               form.setValue("unit", value)
+                              setshowUnits(false)
                             }}
                           >
                             <CheckIcon
@@ -191,14 +210,14 @@ export function ProfileForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col pb-[30px]">
                 <FormLabel>Country / Region</FormLabel>
-                <Popover>
+                <Popover open={showCountries} onOpenChange={setshowCountries} >
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-[400px] justify-between",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -224,6 +243,7 @@ export function ProfileForm() {
                             key={country.countryCode}
                             onSelect={(value) => {
                               form.setValue("country", value)
+                              setshowCountries(false)
                             }}
                           >
                             <CheckIcon
@@ -262,5 +282,7 @@ export function ProfileForm() {
         <Button type="submit">Update profile</Button>
       </form>
     </Form>
+    <NewsChannels country={watchCountry} unit={watchUnit} channels={profileContext.newsChannels} />
+    </div>
   )
 }

@@ -8,7 +8,7 @@ import { NewsChannel } from "../news/schema";
 export async function getProfilingData() {
   const token = await getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string);
   const rootSiteResponse = await getRootSite(token);
-  const subSiteResponse = await getSubSite(token, rootSiteResponse.data?.siteCollection.hostname as string, "sites/nexiintra-home");
+  const subSiteResponse = await getSubSite(token, rootSiteResponse.data?.siteCollection.hostname as string, "sites/nexiintra-home"); 
 
   const countries = await getCountries();
   const units = await getUnits();
@@ -69,25 +69,29 @@ export async function getProfilingData() {
   }
 
   async function getNewsChannels(): Promise<NewsChannel[]> {
-    return []
-    // const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, NewsChannels.listName);
-    // if (hasError) {
-    //   console.log(errorMessage);
-    // }
 
-    // const items = data?.map((item: any) => {
-    //   return NewsChannels.map(item);
+    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, NewsChannels.listName);
+    if (hasError) {
+      console.log(errorMessage);
+    }
 
-    // });
-    // const spItems = z.array(NewsChannels.schema).parse(items);
+    const items = data?.map((item: any) => {
+      return NewsChannels.map(item);
 
-    // const newsChannels = spItems.map((item) => {
-    //   const newsChannel: NewsChannel = {
-    //     channelName: item.Title,
-    //     category: item.NewsCategoryLookupId ?? ""
-    //   };
-    //   return newsChannel;
-    // });
-    // return newsChannels;
+    });
+    const spItems = z.array(NewsChannels.schema).parse(items);
+    
+    const newsChannels = spItems.map((item) => {
+      const newsChannel: NewsChannel = {
+        channelName: item.Title,
+        RelevantUnits: item.RelevantUnits,
+        Mandatory: item.Mandatory,
+        RelevantCountires: item.RelevantCountires,
+        Region: item.Region,
+        NewsCategory: item.NewsCategory
+      };
+      return newsChannel;
+    });
+    return newsChannels;
   }
 }

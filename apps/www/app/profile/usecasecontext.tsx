@@ -2,6 +2,7 @@
 import { createContext } from "react";
 
 import { Country, Unit } from "@/app/welcome/schema";
+import { NewsChannel } from "../news/schema";
 
 export type  ProfileUseCases= {
   Select: (country: string,unit: string) => void;
@@ -10,6 +11,7 @@ export type  ProfileUseCases= {
   unit:string
   countries: Country[];
   units: Unit[];
+  newsChannels : NewsChannel[]
 
 }
 export const ProfileContext = createContext<ProfileUseCases>({
@@ -17,7 +19,8 @@ export const ProfileContext = createContext<ProfileUseCases>({
   country: "",
   unit: "",
   countries: [],
-  units: []
+  units: [],
+  newsChannels:[]
 });
 
 

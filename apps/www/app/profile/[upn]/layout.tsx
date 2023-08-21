@@ -39,12 +39,12 @@ const sidebarNavItems = (upn:string) => [
 ]
 
 interface SettingsLayoutProps {
-  upn:string,
+
   children: React.ReactNode,
-  params: { upn: string }
+
 }
 
-export default async function SettingsLayout({ upn,children,params }: SettingsLayoutProps) {
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
 
   return (
     <>

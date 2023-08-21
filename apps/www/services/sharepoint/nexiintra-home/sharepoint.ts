@@ -5,8 +5,8 @@ import z from "zod"
 function mapLookup(item: any) {
 	if (!item) return null
 	return {
-		LookupId: item.lookupId,
-		LookupValue: item.lookupValue
+		LookupId: item.LookupId,
+		LookupValue: item.LookupValue
 	}
 }
 
@@ -14,8 +14,8 @@ function mapLookupMulti(items: any[]) {
 	if (!items) return []
 	return items.map(item => {
 		return {
-			LookupId: item.lookupId,
-			LookupValue: item.lookupValue
+			LookupId: item.LookupId,
+			LookupValue: item.LookupValue
 		}
 	})
 }

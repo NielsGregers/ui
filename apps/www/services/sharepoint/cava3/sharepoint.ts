@@ -967,6 +967,7 @@ export namespace Buildings {
 			Modified: new Date(item.lastModifiedDateTime),
 			State: item.fields.State ?? "",
 			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
+			VIP: item.fields.VIP ? true : false,
 		}
 	}
 	export const schema = z.object({
@@ -979,6 +980,7 @@ export namespace Buildings {
 
 		State: z.string().nullable(),
 		_ColorTag: z.string(),
+		VIP: z.boolean(),
 	})
 } export namespace SharedMailboxOwners {
 	export const listName = "SharedMailbox Owners"

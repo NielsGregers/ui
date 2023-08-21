@@ -31,7 +31,7 @@ export async function getSharePointData() {
     const channels = spItems.map((item) => {
       const i: NewsChannel = {
           channelName: item.Title,
-          category: item.Category as string
+          category: item.NewsCategory?.LookupValue ?? ""
       };
       return i;
     });
