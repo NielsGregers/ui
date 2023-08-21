@@ -1,23 +1,14 @@
 "use client"
 
-import Link from "next/link"
-import { redirect } from "next/navigation"
+import { useContext, useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChevronsUpDown } from "lucide-react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { roundToNearestMinutes } from "date-fns"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { connect, insert } from "@/lib/mongodb"
-import { cn } from "@/lib/utils"
+import { SearchUserForm } from "@/components/searchuser"
 import { Button } from "@/registry/default/ui/button"
-import { Checkbox } from "@/registry/default/ui/checkbox"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/registry/default/ui/command"
 import {
   Form,
   FormControl,
@@ -28,18 +19,8 @@ import {
   FormMessage,
 } from "@/registry/default/ui/form"
 import { Input } from "@/registry/default/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/registry/default/ui/popover"
 import { Switch } from "@/registry/default/ui/switch"
-import { toast } from "@/registry/default/ui/use-toast"
-
-import { User } from "./page"
-import { useContext, useState } from "react"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
-import { SearchUserForm } from "@/components/searchuser"
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -53,12 +34,12 @@ export type schema = {
   bookedBy?: string | undefined
 }
 
-type FormProps = { onSubmit: (values: schema) => void;  }
+type FormProps = { onSubmit: (values: schema) => void }
 
 export default function NewParkingForm({ onSubmit }: FormProps) {
-
-  const usecases = useContext(UsecaseContext);
+  const usecases = useContext(UsecaseContext)
   const [working, setworking] = useState(false)
+  const router = useRouter()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,16 +51,18 @@ export default function NewParkingForm({ onSubmit }: FormProps) {
 
   async function submit(data: z.infer<typeof formSchema>) {
     setworking(true)
-    await usecases.CreateParkingSlot(data.title, data.bookedBy as string, data.permanent ?? false)
+    await usecases.CreateParkingSlot(
+      data.title,
+      data.bookedBy as string,
+      data.permanent ?? false
+    )
     setworking(false)
+    router.refresh()
   }
-
-
 
   return (
     <div className="container">
-   
-      <Form {...form} >
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(submit)} className="space-y-8">
           <FormField
             control={form.control}
@@ -124,14 +107,16 @@ export default function NewParkingForm({ onSubmit }: FormProps) {
             name="bookedBy"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Booked by</FormLabel>
-                <SearchUserForm onSelectUser={(user) => {
-                  form.setValue("bookedBy", user?.userPrincipalName)
-                 
-                  }} defaultuserUserPrincipalName={field.value} />
+                <FormLabel>Reserved for</FormLabel>
+                <SearchUserForm
+                  onSelectUser={(user) => {
+                    form.setValue("bookedBy", user?.userPrincipalName)
+                  }}
+                  defaultuserUserPrincipalName={field.value}
+                />
 
                 <FormDescription>
-                  This user will permanently have this parking spot.
+                  This user will permanently have access to this parking spot.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

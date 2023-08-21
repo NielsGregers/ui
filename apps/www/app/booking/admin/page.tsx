@@ -15,13 +15,15 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/registry/new-york/ui/tabs"
-import { CalendarDateRangePicker } from "@/app/shadcn/examples/dashboard/components/date-range-picker"
 import { MainNav } from "@/app/powershell/admin/components/main-nav"
+import { CalendarDateRangePicker } from "@/app/shadcn/examples/dashboard/components/date-range-picker"
 import { Overview } from "@/app/shadcn/examples/dashboard/components/overview"
 import { RecentSales } from "@/app/shadcn/examples/dashboard/components/recent-sales"
 import { Search } from "@/app/shadcn/examples/dashboard/components/search"
 import TeamSwitcher from "@/app/shadcn/examples/dashboard/components/team-switcher"
 import { UserNav } from "@/app/shadcn/examples/dashboard/components/user-nav"
+
+import ParkingDashboard from "./parking/components/parking-dashboard"
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -48,26 +50,23 @@ export default function DashboardPage() {
         />
       </div>
       <div className="container hidden flex-col md:flex">
-  
         <div className=" flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard (Preview)</h2>
-            <div className="flex items-center space-x-2">
+            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            {/* <div className="flex items-center space-x-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
-            </div>
+            </div> */}
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
+              <TabsTrigger value="users" disabled>
+                Users
               </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
+              <TabsTrigger value="parking">Parking</TabsTrigger>
+              <TabsTrigger value="desks" disabled>
+                Desks
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
@@ -195,6 +194,9 @@ export default function DashboardPage() {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+            <TabsContent value="parking" className="space-y-4">
+              <ParkingDashboard />
             </TabsContent>
           </Tabs>
         </div>
