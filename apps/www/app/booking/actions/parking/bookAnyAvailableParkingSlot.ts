@@ -24,6 +24,8 @@ export async function bookAnyAvailableParkingSlot(
     return false
   }
   const _id = result[0]._id
+  await coll.updateOne({ _id }, { $push: { bookings:  {date:dateKey,userEmail }} })
+
   // await coll.findOneAndUpdate(
   //   { _id },
   //   { $set: user },

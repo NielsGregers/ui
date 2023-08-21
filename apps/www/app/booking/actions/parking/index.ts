@@ -59,7 +59,7 @@ export async function newBookingParking(
   const outputSchema = z.object({ data: z.boolean() })
   return UseCase(
     "POST",
-    "/api/booking/parking",
+    "/api/booking/parking/*",
     { dateKey, parkingSlot, userEmail },
     inputSchema,
     outputSchema

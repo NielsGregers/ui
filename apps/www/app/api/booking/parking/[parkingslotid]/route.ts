@@ -11,6 +11,7 @@ export async function POST(
   request: Request,
   { params }: { params: { parkingslotid: string } }
 ) {
+  
   const postBody: any = await request.json()
   const session = await getServerSession(authOptions)
   if (!session) {
@@ -19,7 +20,7 @@ export async function POST(
       { status: 401 }
     )
   }
-  debugger
+  
   const result = await bookAnyAvailableParkingSlot(
     postBody.dateKey,
     postBody.userEmail
