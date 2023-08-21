@@ -15,13 +15,21 @@ import {
   PopoverTrigger,
 } from "@/registry/default/ui/popover"
 
-export function DateRangePicker({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
+import { DateRangeSelection } from "./homescreen"
+
+interface PropTypes {
+  onDateChange: (dateRange: DateRange) => void
+}
+
+export function DateRangePicker({ onDateChange }: PropTypes) {
+  const [date, setDate] = React.useState<DateRange>({
     from: new Date(),
-    to: addDays(new Date(), 7),
+    to: addDays(new Date(), 6),
   })
+
+  React.useEffect(() => {
+    onDateChange(date)
+  }, [date])
 
   const onSelect = (pickeddate: DateRange | undefined) => {
     let from: Date = pickeddate?.from ? pickeddate.from : new Date()
@@ -43,7 +51,7 @@ export function DateRangePicker({
     if (sunday > new Date(new Date().setDate(new Date().getDate() + 7))) {
       console.log("entered 2nd if")
       sunday = new Date(new Date().setDate(new Date().getDate() + 7))
-      monday = new Date()
+      monday = new Date(new Date().setDate(new Date().getDate() + 1))
     }
 
     setDate({ from: monday, to: sunday })
@@ -53,8 +61,25 @@ export function DateRangePicker({
     }
   }
 
+  const moveWeek = (days: number) => {
+    let start = date.from ? date.from : new Date()
+    let end = date.to ? date.to : new Date()
+    if (
+      new Date(end.setDate(end.getDate() + days)) >
+      new Date(new Date().setDate(new Date().getDate() + 7))
+    ) {
+      end = new Date(new Date().setDate(new Date().getDate() + 7))
+      start = new Date(new Date().setDate(new Date().getDate() + 1))
+    }
+    setDate({
+      from: new Date(start.setDate(start.getDate() + days)),
+      to: new Date(end.setDate(end.getDate() + days)),
+    })
+  }
+
   return (
-    <div className={cn("grid gap-2", className)}>
+    // <div className={cn("grid gap-2", className)}>
+    <div className="flex-row">
       <Button
         variant="outline"
         title="Today"
@@ -63,7 +88,7 @@ export function DateRangePicker({
         onClick={() =>
           setDate({
             from: new Date(),
-            to: new Date(new Date().setDate(new Date().getDate() + 7)),
+            to: addDays(new Date(), 6) as Date,
           })
         }
       >
@@ -76,7 +101,7 @@ export function DateRangePicker({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "w-[300px] justify-start text-left font-normal pt-[1px]",
               !date && "text-muted-foreground"
             )}
           >
@@ -112,8 +137,20 @@ export function DateRangePicker({
           />
         </PopoverContent>
       </Popover>
-      <Button variant="outline">{"<"}</Button>
-      <Button variant="outline">{">"}</Button>
+      <Button onClick={() => moveWeek(-7)} variant="outline">
+        {"<"}
+      </Button>
+      <Button
+        disabled={
+          (date.to ? date.to : new Date()) >=
+          new Date(new Date().setDate(new Date().getDate() + 7))
+        }
+        onClick={() => moveWeek(7)}
+        variant="outline"
+      >
+        {">"}
+      </Button>
     </div>
+    // </div>
   )
 }

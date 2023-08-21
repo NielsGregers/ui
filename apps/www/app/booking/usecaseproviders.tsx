@@ -1,31 +1,37 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { UsecaseContext, BookingUseCases } from "./usecasecontext";
-import { Admins } from "./actions/parking";
-
+import { Admins, newBookingParking } from "./actions/parking"
+import { BookingUseCases, UsecaseContext } from "./usecasecontext"
 
 type Props = {
-  children?: React.ReactNode;
-};
+  children?: React.ReactNode
+}
 
 export const UsercaseProvider = ({ children }: Props) => {
-
-  const [provision, setprovision] = useState(false);
-  const [showDeleteComponent, setshowDeleteComponent] = useState(false);
-  const [sharepointId, setSharepointId] = useState(0);
   const usecases: BookingUseCases = {
-    CreateParkingSlot: function (title: string, bookedBy: string, permanent: boolean): void {
-      Admins.newParkingSlot(title, bookedBy, permanent);
-    }
+    CreateParkingSlot: function (
+      title: string,
+      bookedBy: string,
+      permanent: boolean
+    ): void {
+      Admins.newParkingSlot(title, bookedBy, permanent)
+    },
+    DeleteParkingSlot: function (id: string): void {
+      Admins.deleteParkingSlot(id)
+    },
+    BookParkingSlot: function (
+      dateKey: string,
+      parkingSlot: string,
+      userEmail: string
+    ) {
+      newBookingParking(dateKey, parkingSlot, userEmail)
+      return true
+    },
   }
 
-  
-  return <UsecaseContext.Provider value={usecases}>
-
-
-    {children}
-
-
-  </UsecaseContext.Provider>;
-};
+  return (
+    <UsecaseContext.Provider value={usecases}>
+      {children}
+    </UsecaseContext.Provider>
+  )
+}
