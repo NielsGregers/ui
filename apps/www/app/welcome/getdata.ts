@@ -1,97 +1,76 @@
-import { getToken, getRootSite, getSubSite, getAllListItems } from "@/lib/officegraph";
-import { Countries, NewsChannels, Units } from "@/services/sharepoint/nexiintra-home/sharepoint";
-import { z } from "zod";
-import { Country, Unit } from "./schema";
-import { NewsChannel } from "../news/schema";
 
+import { MongoClient } from "mongodb";
+import { connect } from "@/lib/mongodb";
+import { Country, Unit } from "@/app/welcome/schema";
+import { NewsChannel } from "../news/schema";
+import { Countries } from "@/services/mongocollections/countries";
+import { Units } from "@/services/mongocollections/units";
+import { NewsChannels } from "@/services/mongocollections/newschannels";
+import { channel } from "diagnostics_channel";
 
 export async function getProfilingData() {
-  const token = await getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string);
-  const rootSiteResponse = await getRootSite(token);
-  const subSiteResponse = await getSubSite(token, rootSiteResponse.data?.siteCollection.hostname as string, "sites/nexiintra-home"); 
-
-  const countries = await getCountries();
-  const units = await getUnits();
-  const newsChannels = await getNewsChannels();
-  return { countries, units,newsChannels };
-
-
-
-
-  async function getCountries(): Promise<Country[]> {
-    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, Countries.listName);
-    if (hasError) {
-      console.log(errorMessage);
+  const client = await connect()
+  
+  const countries = await getItems<Country,Countries.Root>(client, { 'countrydata': 1 }, 'countries',
+    (item: Countries.Root) => {
+      const country: Country = {
+        countryCode: item.countrydata.code,
+        countryName: item.countrydata.title,
+        sortOrder: item.countrydata.sortorder,
+      }
+      return country
     }
+  )
+  const units = await getItems<Unit,Units.Root>(client, { 'unitdata': 1 }, 'units',
+    (item: Units.Root) => {
+      const u: Unit = {
+        unitCode: item.unitdata.title,
+        unitName: item.unitdata.title,
+        unitType: item.unitdata.unittype,
+        sortOrder: item.unitdata.sortorder,
+      }
+      return u
+    })
+  const newsChannels = await getItems<NewsChannel,NewsChannels.Root>(client, { 'newschannel': 1 }, 'news_channels',
+    (item: NewsChannels.Root) => {
+      const channel: NewsChannel = {
+        sortOrder: item.newschannel.title,
+        channelName: item.newschannel.title,
+        channelType: item.newschannel.newscategory.length > 0 ? item.newschannel.newscategory[0].lookupvalue : "",
+        channelCode: item.newschannel.tag,
+        RelevantUnits: item.newschannel.relevantunits.map(unit => {
+          return {
+            LookupId: unit.lookupid,
+            LookupValue: unit.lookupvalue
+          }
+        }),
+        Mandatory: item.newschannel.mandatory,
+        RelevantCountires: item.newschannel.relevantcountires.map(country => {
+          return {
+            LookupId: country.lookupid,
+            LookupValue: country.lookupvalue
+          }
+        }),
+        Region: item.newschannel.region.length > 0 ? item.newschannel.region[0].lookupvalue :"",
+        NewsCategory: item.newschannel.newscategory.length > 0 ? item.newschannel.newscategory[0].lookupvalue : ""
+      }
+      return channel
 
-    const items = data?.map((item: any) => {
-      return Countries.map(item);
-
-    });
-    const spItems = z.array(Countries.schema).parse(items);
-
-    const countries = spItems.map((item) => {
-      const i: Country = {
-        countryName: item.Title,
-        countryCode: item.Code,
-        sortOrder: item.SortOrder,
-      };
-      return i;
-    });
-    return countries;
-  }
+    })
+  client.close()
+  
+  return { countries, units, newsChannels };
 
 
 
-
-  async function getUnits(): Promise<Unit[]> {
-    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, Units.listName);
-    if (hasError) {
-      console.log(errorMessage);
-    }
-
-    const items = data?.map((item: any) => {
-      return Units.map(item);
-
-    });
-    const spItems = z.array(Units.schema).parse(items);
-
-    const units = spItems.map((item) => {
-      const i: Unit = {
-        unitName: item.Title,
-        unitCode: item.code,
-        sortOrder: item.SortOrder,
-        unitType:item.UnitType ?? ""
-      };
-      return i;
-    });
-    return units;
-  }
-
-  async function getNewsChannels(): Promise<NewsChannel[]> {
-
-    const { data, hasError, errorMessage } = await getAllListItems(token, subSiteResponse.data?.id as string, NewsChannels.listName);
-    if (hasError) {
-      console.log(errorMessage);
-    }
-
-    const items = data?.map((item: any) => {
-      return NewsChannels.map(item);
-
-    });
-    const spItems = z.array(NewsChannels.schema).parse(items);
-    
-    const newsChannels = spItems.map((item) => {
-      const newsChannel: NewsChannel = {
-        channelName: item.Title,
-        RelevantUnits: item.RelevantUnits,
-        Mandatory: item.Mandatory,
-        RelevantCountires: item.RelevantCountires,
-        Region: item.Region,
-        NewsCategory: item.NewsCategory
-      };
-      return newsChannel;
-    });
-    return newsChannels;
-  }
 }
+
+async function getItems<T,I>(client: MongoClient, projection: object, collection: string, mapper: (item: I) => T): Promise<T[]> {
+  const filter = {};
+
+  const coll = client.db('christianiabpos').collection(collection);
+  const cursor = coll.find(filter, { projection });
+  const items = await cursor.toArray()
+  return items.map(item => mapper(item as I))
+}
+

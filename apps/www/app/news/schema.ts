@@ -3,8 +3,9 @@ import { z } from "zod"
 
 export const newsSchema = z.object({
   channelName:z.string(),
- 
-
+  channelType:z.string(),
+  channelCode:z.string(),
+  sortOrder:z.string(),
   RelevantUnits: z.object({
     LookupId: z.number(),
     LookupValue: z.string()
@@ -14,14 +15,8 @@ export const newsSchema = z.object({
     LookupId: z.number(),
     LookupValue: z.string()
   }).array().nullable(),
-  Region: z.object({
-    LookupId: z.number(),
-    LookupValue: z.string()
-  }).nullable(),
-  NewsCategory: z.object({
-    LookupId: z.number(),
-    LookupValue: z.string()
-  }).nullable(),
+  Region: z.string().nullable(),
+  NewsCategory: z.string().nullable(),
 
 })
 

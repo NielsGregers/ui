@@ -4,7 +4,8 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
-import { insert, remove } from "@/lib/mongodb"
+import { connect, insert, remove } from "@/lib/mongodb"
+import { de, fi } from "date-fns/locale"
 
 export async function POST(request: Request) {
   const postBody = await request.json()
@@ -16,17 +17,23 @@ export async function POST(request: Request) {
     )
   }
 
-  await insert("booking", "parking", postBody)
+const client = await connect()
+let result = false
+try {
+  const x = await client.db("booking").collection("parking").insertOne(postBody)
+  result = true
+} catch (error) {
 
-  //  // const {data,error} = await provisionRoomServerSide(parseInt(params.sharepointid) )
+  debugger
+    return false
+}
+finally{  
+  client.close()
+}
 
-  //   if (error){
-  //     return new Response(error, {
-  //       status: 500,
-  //     })
-  //   }
+return result
 
-  //
+  
 }
 export async function DELETE(
   request: Request,

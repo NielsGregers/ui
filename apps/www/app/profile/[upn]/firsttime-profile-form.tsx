@@ -282,6 +282,10 @@ export function ProfileForm() {
         <Button type="submit">Update profile</Button>
       </form>
     </Form>
+    <pre>
+      {JSON.stringify(units,null,2)}
+
+    </pre>
     <NewsChannels country={watchCountry} unit={watchUnit} channels={profileContext.newsChannels} />
     </div>
   )
