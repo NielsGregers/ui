@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 "use client"
 
 import React, { useEffect, useState } from "react"
@@ -53,7 +54,7 @@ function DateCards(props: PropTypes) {
   }, [props.dateRange])
 
   return (
-    <div className=" grid sm:grid-cols-2 md:grid-cols-4 grid-cols-7 gap-6">
+    <div className=" grid grid-cols-7 gap-6 sm:grid-cols-2 md:grid-cols-4">
       {dates.map((date) => {
         return (
           <Card
@@ -65,7 +66,7 @@ function DateCards(props: PropTypes) {
           >
             <CardHeader className="h-1/4">
               <CardTitle>
-                <div className=" w-full flex flex-row justify-between">
+                <div className=" flex w-full flex-row justify-between">
                   {date.toLocaleDateString("en-US", { weekday: "short" })}
                   {date.getTime() == new Date().getTime() && <div> Today</div>}
                 </div>
@@ -79,7 +80,7 @@ function DateCards(props: PropTypes) {
               </CardDescription>
             </CardHeader>
             <CardContent className="h-2/4 items-center justify-center">
-              <div className="h-full grid items-center">
+              <div className="grid h-full items-center">
                 <Button className="w-full" variant="outline" disabled={true}>
                   <Car className="mr-2 h-4 w-4" />
                   Book a desk

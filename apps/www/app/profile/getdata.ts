@@ -1,12 +1,12 @@
 
 import { MongoClient } from "mongodb";
 import { connect } from "@/lib/mongodb";
-import { Country, Unit } from "@/app/welcome/schema";
-import { NewsChannel } from "../news/schema";
-import { Countries } from "@/services/mongocollections/countries";
-import { Units } from "@/services/mongocollections/units";
-import { NewsChannels } from "@/services/mongocollections/newschannels";
-import { channel } from "diagnostics_channel";
+import { Country, Unit } from "./schemas/welcome";
+import { NewsChannel } from "./schemas/NewsChannelSchema";
+import { Countries } from "@/services/mongo/countries";
+import { Units } from "@/services/mongo/units";
+import { NewsChannels } from "@/services/mongo/newschannels";
+
 
 export async function getProfilingData() {
   const client = await connect()

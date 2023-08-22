@@ -37,7 +37,8 @@ import { toast } from "@/registry/new-york/ui/use-toast"
 import { useContext, useState } from "react"
 import { ProfileContext } from "../usecasecontext"
 import { CommandList } from "cmdk"
-import { NewsChannel } from "@/app/news/schema"
+
+import { NewsChannels } from "./NewsChannels"
 
 const profileFormSchema = z.object({
   country: z
@@ -64,19 +65,6 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 const defaultValues: Partial<ProfileFormValues> = {
 
 }
-
-interface NewsChannelProps  {
-    country : string
-    unit:string
-    channels : NewsChannel[]
-}
-export function NewsChannels(props:NewsChannelProps){
-
-return <pre>
-  {JSON.stringify(props,null,2)}
-</pre>
-}
-
 
 
 export function ProfileForm() {
@@ -136,7 +124,7 @@ export function ProfileForm() {
                       >
                         {field.value
                           ? units.find(
-                            (unit) => unit.unitCode === field.value
+                            (unit) => unit.unitName.toLowerCase() === field.value
                           )?.unitName
                           : "Select unit"}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -151,8 +139,8 @@ export function ProfileForm() {
                       <CommandGroup heading="Business Units">
                         {units.filter(unit=>unit.unitType === "Business Unit").sort((a,b)=>a.sortOrder-b.sortOrder).map((unit) => (
                           <CommandItem
-                            value={unit.unitCode}
-                            key={unit.unitCode}
+                            value={unit.unitName}
+                            key={unit.unitName}
                             onSelect={(value) => {
                               form.setValue("unit", value)
                               setshowUnits(false)
@@ -161,7 +149,7 @@ export function ProfileForm() {
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                unit.unitCode === field.value
+                                unit.unitName === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -174,8 +162,8 @@ export function ProfileForm() {
                       <CommandGroup heading="Group Functions">
                         {units.filter(unit=>unit.unitType === "Group Function").sort((a,b)=>a.sortOrder-b.sortOrder).map((unit) => (
                           <CommandItem
-                            value={unit.unitCode}
-                            key={unit.unitCode}
+                            value={unit.unitName}
+                            key={unit.unitName}
                             onSelect={(value) => {
                               form.setValue("unit", value)
                               setshowUnits(false)
@@ -184,7 +172,7 @@ export function ProfileForm() {
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                unit.unitCode === field.value
+                                unit.unitName === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -223,7 +211,7 @@ export function ProfileForm() {
                       >
                         {field.value
                           ? countries.find(
-                            (country) => country.countryCode === field.value
+                            (country) => country.countryName.toLowerCase() === field.value
                           )?.countryName
                           : "Select country"}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -239,8 +227,8 @@ export function ProfileForm() {
                       <CommandGroup>
                         {countries.sort((a,b)=>a.sortOrder-b.sortOrder).map((country) => (
                           <CommandItem
-                            value={country.countryCode}
-                            key={country.countryCode}
+                            value={country.countryName}
+                            key={country.countryName}
                             onSelect={(value) => {
                               form.setValue("country", value)
                               setshowCountries(false)
@@ -249,7 +237,7 @@ export function ProfileForm() {
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                country.countryCode === field.value
+                                country.countryName === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -282,10 +270,7 @@ export function ProfileForm() {
         <Button type="submit">Update profile</Button>
       </form>
     </Form>
-    <pre>
-      {JSON.stringify(units,null,2)}
 
-    </pre>
     <NewsChannels country={watchCountry} unit={watchUnit} channels={profileContext.newsChannels} />
     </div>
   )

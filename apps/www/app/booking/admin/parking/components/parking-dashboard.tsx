@@ -1,6 +1,6 @@
 import React from "react"
 import { WithId } from "mongodb"
-
+import { use } from "react"
 import { connect } from "@/lib/mongodb"
 import {
   Card,
@@ -25,14 +25,15 @@ export interface ParkingSpot {
   bookedBy: string
 }
 
-async function ParkingDashboard() {
+ function ParkingDashboard() {
   const filter = {}
 
-  const client = await connect()
+  const client = use(connect())
   const coll = client.db("booking").collection("parking")
   const cursor = coll.find(filter)
+
   const parkingSpotsMongo: ParkingSpotMongo[] =
-    (await cursor.toArray()) as ParkingSpotMongo[]
+    (use(cursor.toArray())) as ParkingSpotMongo[]
   const parkingSpots: ParkingSpot[] = parkingSpotsMongo?.map((spot) => {
     return {
       id: spot._id.toString(),
@@ -41,7 +42,7 @@ async function ParkingDashboard() {
       bookedBy: spot.bookedBy,
     }
   })
-  await client.close()
+  use(client.close())
 
   return (
     <div>

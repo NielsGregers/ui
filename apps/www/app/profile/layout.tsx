@@ -1,6 +1,6 @@
 import { UsecaseProvider } from "./usecaseproviders";
 
-import { getProfilingData } from "@/app/welcome/getdata"
+import { getProfilingData } from "./getdata"
 interface RootLayoutProps {
   children: React.ReactNode
 }

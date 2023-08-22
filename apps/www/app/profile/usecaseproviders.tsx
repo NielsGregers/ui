@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { ProfileContext ,ProfileUseCases} from "./usecasecontext";
 import { useCookies } from 'react-cookie';
 import { CookiesProvider } from 'react-cookie';
-import { Country, Unit } from "@/app/welcome/schema";
-import { NewsChannel } from "../news/schema";
+import { Country, Unit } from "./schemas/welcome";
+import { NewsChannel } from "./schemas/NewsChannelSchema";
 type Props = {
  
   children?: React.ReactNode;

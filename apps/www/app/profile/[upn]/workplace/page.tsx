@@ -1,9 +1,8 @@
 import { Separator } from "@/registry/new-york/ui/separator"
 import { AccountForm } from "./account-form"
-import { getProfilingData } from "@/app/welcome/getdata";
 
 export default async function SettingsAccountPage() {
-  const { countries, units } = await getProfilingData();
+
   return (
     <div className="space-y-6">
       <div>
