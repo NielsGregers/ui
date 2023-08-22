@@ -1,6 +1,6 @@
 "use client"
 import React, { useContext, useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+
 import * as z from "zod"
 import { useSession } from "next-auth/react"
 import { Button } from "@/registry/new-york/ui/button"
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { ChevronDownIcon, EnvelopeClosedIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/registry/new-york/ui/avatar"
 import { MagicboxContext } from "@/app/magicbox-context"
-import { set } from "date-fns"
+
 
 const searchFormSchema = z.object({
   name: z
@@ -236,20 +236,13 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
 
   }, [magicbox.session?.accessToken, searchFor])
 
-  const form = useForm<SearchFormValues>({
-    //  resolver: zodResolver(searchFormSchema),
-    defaultValues,
-  })
-
-  function onSubmit(data: SearchFormValues) {
-    setsearchFor(data.name)
-  }
 
   return (
     <div >
 
       <div>
         <Button
+          type="button"
           variant="outline"
           className={cn(
             "relative w-full justify-start text-sm text-muted-foreground"
