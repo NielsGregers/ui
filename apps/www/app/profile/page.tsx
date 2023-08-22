@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { ValidateEmailAccountForm } from "./components/profile-form";
 
 
-
+export const dynamic = 'force-dynamic'
 
 export default async function RedirectToLoggedinUse() {
   const session = await getUserSession()

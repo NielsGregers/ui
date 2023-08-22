@@ -1,6 +1,6 @@
 import { Separator } from "@/registry/new-york/ui/separator"
 import { AccountForm } from "./account-form"
-
+export const dynamic = 'force-dynamic'
 export default async function SettingsAccountPage() {
 
   return (
