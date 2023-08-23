@@ -15,16 +15,22 @@ export function NewsChannels(props: NewsChannelProps) {
   const [defaultSelected, setdefaultSelected] = useState<NewsChannel[]>([])
 
 
-  function hasUnit(channel:NewsChannel) : boolean {  
- 
+  function match(channel:NewsChannel) : boolean {  
+    let found = false
       channel?.RelevantUnits?.forEach((relevantUnit) => {
+        
         if (relevantUnit.LookupValue.toLowerCase() === unit) {
-          return true
+          found = true
         }
       })
-   
+      channel?.RelevantCountires?.forEach((relevantCountry) => {
+        
+        if (relevantCountry.LookupValue.toLowerCase() === country) {
+          found = true
+        }
+      })
 
-  return false
+  return found
 }
 
   useEffect(() => {
@@ -36,7 +42,7 @@ export function NewsChannels(props: NewsChannelProps) {
         return
       }
     
-      if (hasUnit(channel)) {
+      if (match(channel)) {
         defaults.push(channel)
         return
       }
@@ -45,17 +51,18 @@ export function NewsChannels(props: NewsChannelProps) {
     setdefaultSelected(defaults)
   }, [country, unit])
   
-  return <div>
+  return <div className="flex">
+    
+
     {defaultSelected.map((channel,key) => {
-      return <div key={key}>{channel.channelName}</div>
+      return <div className="pl-2" key={key}>{channel.channelName}</div>
     } )}
-<pre>
-{JSON.stringify(defaultSelected,null,2)}
-</pre>
-<br/>
-<pre>
+    <br/>
+
+{/* <br/>
+<pre className="mt-[1000px]">
 {JSON.stringify(channels,null,2)}
-</pre>
+</pre> */}
   </div>
   
   

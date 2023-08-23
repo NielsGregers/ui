@@ -52,8 +52,8 @@ const profileFormSchema = z.object({
 
   channels: z
     .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
+      z.string({
+       
       })
     )
     .optional(),
@@ -72,6 +72,7 @@ export function ProfileForm() {
   const {countries,units} = profileContext
   const [showCountries, setshowCountries] = useState(false)
   const [showUnits, setshowUnits] = useState(false)
+  const [showChannels, setshowChannels] = useState(false)
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -79,10 +80,7 @@ export function ProfileForm() {
 
   })
 
-  const { fields, append } = useFieldArray({
-    name: "channels",
-    control: form.control,
-  })
+ 
 
   function onSubmit(data: ProfileFormValues) {
     toast({
@@ -257,21 +255,74 @@ export function ProfileForm() {
               </FormItem>
             )}
           />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Change News channels
-          </Button>
+           <FormField
+            control={form.control}
+            name="channels"
+            render={({ field }) => (
+              <FormItem className="flex flex-col pb-[30px]">
+                <FormLabel>News Channels</FormLabel>
+                <Popover open={showChannels} onOpenChange={setshowChannels} >
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[400px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <NewsChannels country={watchCountry} unit={watchUnit} channels={profileContext.newsChannels} />
+               
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className=" p-0">
+                    <Command>
+                   
+                      <CommandInput placeholder="Search channels..." />
+             
+                      <CommandEmpty>No channels found.</CommandEmpty>
+                      <CommandList>
+                      <CommandGroup >
+                        {profileContext.newsChannels.sort((a,b)=>{
+    if(a.sortOrder.toLowerCase() < b.sortOrder.toLowerCase()) { return -1; }
+    if(a.sortOrder.toLowerCase() > b.sortOrder.toLowerCase()) { return 1; }
+    return 0;
+
+                        }).map((channel) => (
+                          <CommandItem
+                            value={channel.channelName}
+                            key={channel.channelCode}
+                            onSelect={(value) => {
+                            
+                              setshowChannels(false)
+                            }}
+                          >
+                            
+                            {channel.channelName}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  This is the news channels that you subscribe to.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
         </div>
         <Button type="submit">Update profile</Button>
       </form>
     </Form>
 
-    <NewsChannels country={watchCountry} unit={watchUnit} channels={profileContext.newsChannels} />
+    
     </div>
   )
 }

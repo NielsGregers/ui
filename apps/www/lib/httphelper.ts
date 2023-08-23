@@ -33,6 +33,7 @@
       var headers : any  = {
         "Content-Type": contentType ? contentType : "application/json",
         Prefer: "HonorNonIndexedQueriesWarningMayFailRandomly",
+        ConsistencyLevel:"eventual"
       };
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;

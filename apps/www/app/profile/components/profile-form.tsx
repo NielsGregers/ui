@@ -1,11 +1,11 @@
 "use client"
 
-import Link from "next/link"
+
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
+import {  useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { cn } from "@/lib/utils"
+
 import { Button } from "@/registry/new-york/ui/button"
 import {
   Form,
@@ -17,25 +17,20 @@ import {
   FormMessage,
 } from "@/registry/new-york/ui/form"
 import { Input } from "@/registry/new-york/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/registry/new-york/ui/select"
-import { Textarea } from "@/registry/new-york/ui/textarea"
+
 import { toast } from "@/registry/new-york/ui/use-toast"
-import { useContext } from "react"
-import { ProfileContext } from "../usecasecontext"
+
+import { CreateInvitationResult, createInvitation } from "./serveractions"
+import { useState } from "react"
+import { Result } from "@/lib/httphelper"
 const profileFormSchema = z.object({
- 
+
   email: z
     .string({
       required_error: "Please select an email to display.",
     })
     .email(),
-  
+
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -54,10 +49,13 @@ export function ValidateEmailAccountForm() {
     defaultValues,
     mode: "onChange",
   })
+  const [invitationStatus, setInvitationStatus] = useState<Result<CreateInvitationResult>>()
 
-const useCases = useContext(ProfileContext)
-  function onSubmit(data: ProfileFormValues) {
-   
+
+
+
+  async function onSubmit(data: ProfileFormValues) {
+    setInvitationStatus(undefined)
     toast({
       title: "You submitted the following values:",
       description: (
@@ -66,12 +64,20 @@ const useCases = useContext(ProfileContext)
         </pre>
       ),
     })
+   const x =   await createInvitation(data)
+   setInvitationStatus(x)
+
+   
+   console.log(x) 
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <Form {...form}>
+        {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+       */}
+
+
         <FormField
           control={form.control}
           name="email"
@@ -81,20 +87,24 @@ const useCases = useContext(ProfileContext)
               <FormControl>
                 <Input placeholder="Enter your email" {...field} />
               </FormControl>
-          
+
               <FormDescription className="max-w-screen-sm">
-                Your email is validated against our user database. If we cannot find yours, and 
-                if your are working for a company which have not yet been onboarded we will create and invitation 
+                Your email is validated against our user database. If we cannot find yours, and
+                if your are working for a company which have not yet been onboarded we will create and invitation
                 for your account.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-       
+
 
         <Button type="submit">Continue</Button>
-      </form>
-    </Form>
+       <pre>
+          {JSON.stringify(invitationStatus,null,2)}
+       </pre>
+
+      </Form>
+    </form>
   )
 }
