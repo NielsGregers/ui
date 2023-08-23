@@ -22,7 +22,11 @@ export function SiteFooter() {
             <Button variant="link">
               <Link href="/profile">profile</Link>
             </Button>
-       
+            <ForRole role="Admin" module="News">
+            <Button variant="link">
+              <Link href="/news">news</Link>
+            </Button>
+          </ForRole>       
           <ForRole role="Admin" module="Catering">
             <Button variant="link">
               <Link href="/cava">cava</Link>
