@@ -3,6 +3,7 @@
 import { off } from "process";
 import { useEffect, useState } from "react";
 import { NewsChannel } from "../schemas/NewsChannelSchema";
+import { Badge } from "@/registry/new-york/ui/badge";
 
 
 export interface NewsChannelProps  {
@@ -55,7 +56,7 @@ export function NewsChannels(props: NewsChannelProps) {
     
 
     {defaultSelected.map((channel,key) => {
-      return <div className="pl-2" key={key}>{channel.channelName}</div>
+      return <Badge className="ml-1" variant="secondary" key={key}>{channel.channelName}</Badge>
     } )}
     <br/>
 

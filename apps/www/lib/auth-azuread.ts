@@ -18,6 +18,7 @@ export default function AzureAD<P extends AzureADProfile>(
     tenantId?: string
   }
 ): OAuthConfig<P> {
+  
   const tenant = options.tenantId ?? "common"
   const profilePhotoSize = options.profilePhotoSize ?? 48
 
@@ -25,7 +26,7 @@ export default function AzureAD<P extends AzureADProfile>(
     id: "azure-ad",
     name: "Azure Active Directory",
     type: "oauth",
-    wellKnown: `https://login.microsoftonline.com/${tenant}/v2.0/.well-known/openid-configuration?appid=${options.clientId}&login_hint=niels@jumpto365.com`,
+    wellKnown: `https://login.microsoftonline.com/${tenant}/v2.0/.well-known/openid-configuration?appid=${options.clientId}`,
     authorization: {
       params: {
         scope: "openid profile email",

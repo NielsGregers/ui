@@ -21,8 +21,12 @@ import { Input } from "@/registry/new-york/ui/input"
 import { toast } from "@/registry/new-york/ui/use-toast"
 
 import { CreateInvitationResult, createInvitation } from "./serveractions"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Result } from "@/lib/httphelper"
+import { Badge } from "@/registry/new-york/ui/badge"
+import Link from "next/link"
+import { signIn, useSession } from "next-auth/react"
+import { tr } from "date-fns/locale"
 const profileFormSchema = z.object({
 
   email: z
@@ -35,27 +39,41 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-
-}
 
 
 
 
 export function ValidateEmailAccountForm() {
+
+  const session = useSession()
+
+const defaultValues: Partial<ProfileFormValues> = {
+ 
+  }
+  
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
+ 
   const [invitationStatus, setInvitationStatus] = useState<Result<CreateInvitationResult>>()
+  const [signinEnabled, setsigninEnabled] = useState(false)
+useEffect(() => {
+  if (session?.data?.user?.email) {
+    if (session?.data?.user?.email.indexOf("#ext#@")<0) {
+    form.setValue("email",session?.data?.user?.email)
+  }}
+
+  
+}, [session])
 
 
 
 
   async function onSubmit(data: ProfileFormValues) {
     setInvitationStatus(undefined)
+    setsigninEnabled(false)
     toast({
       title: "You submitted the following values:",
       description: (
@@ -66,6 +84,9 @@ export function ValidateEmailAccountForm() {
     })
    const x =   await createInvitation(data)
    setInvitationStatus(x)
+   if (x.data?.valid) {
+   setsigninEnabled(true)
+  }
 
    
    console.log(x) 
@@ -85,12 +106,16 @@ export function ValidateEmailAccountForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
+                <div className="flex">
                 <Input placeholder="Enter your email" {...field} />
+                <div className="w-4 flex-grow"></div>
+                <Button type="submit"  >Validate</Button>
+                </div>
               </FormControl>
 
               <FormDescription className="max-w-screen-sm">
                 Your email is validated against our user database. If we cannot find yours, and
-                if your are working for a company which have not yet been onboarded we will create and invitation
+                if your are working for a company which have not yet been onboarded we will create an invitation
                 for your account.
               </FormDescription>
               <FormMessage />
@@ -98,11 +123,49 @@ export function ValidateEmailAccountForm() {
           )}
         />
 
+<div className="flex">
+      
+        <div className="flex-grow"></div>
+        <Button variant="default" className="ml-2" type="button" disabled={!signinEnabled}
+        onClick={()=>{
+          const parms : URLSearchParams =new URLSearchParams()
+          parms.set("login_hint",form.getValues("email") as string)
+          signIn("azure-ad",{
 
-        <Button type="submit">Continue</Button>
-       <pre>
+callbackUrl: "/profile/router",
+
+          },parms)}}>Sign In</Button>
+           <div className="flex-grow"></div>
+
+        
+        <div>
+        </div>
+        {/* {invitationStatus?.data?.invitation?.invitedUserType &&
+<div>
+<Badge>{invitationStatus?.data?.invitation?.invitedUserType}</Badge>
+<Link href={invitationStatus?.data?.invitation?.inviteRedeemUrl} target="_blank">Link</Link>
+</div>
+        }
+        </div>
+        <div>
+        {invitationStatus?.data?.user && invitationStatus?.data?.user.userType==="Guest" &&
+<div>
+<Badge>Guest {invitationStatus?.data?.user.externalUserState}</Badge>
+
+</div>
+        } */}
+        </div>
+        <div>
+        {invitationStatus?.data?.user && invitationStatus?.data?.user.userType===null &&
+<div>
+<Badge>Licensed user</Badge>
+
+</div>
+        }
+        </div>
+       {/* <pre>
           {JSON.stringify(invitationStatus,null,2)}
-       </pre>
+       </pre> */}
 
       </Form>
     </form>

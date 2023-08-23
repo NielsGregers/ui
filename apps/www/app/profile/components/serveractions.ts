@@ -10,19 +10,53 @@ import { https } from "@/lib/httphelper";
  * @param data 
  * @returns 
  */
+
+export interface InvitationResult {
+    "@odata.context": string
+    id: string
+    inviteRedeemUrl: string
+    invitedUserDisplayName: any
+    invitedUserType: string
+    invitedUserEmailAddress: string
+    sendInvitationMessage: boolean
+    resetRedemption: boolean
+    inviteRedirectUrl: string
+    status: string
+    invitedUserMessageInfo: InvitedUserMessageInfo
+    invitedUser: InvitedUser
+  }
+  
+  export interface InvitedUserMessageInfo {
+    messageLanguage: any
+    customizedMessageBody: any
+    ccRecipients: CcRecipient[]
+  }
+  
+  export interface CcRecipient {
+    emailAddress: EmailAddress
+  }
+  
+  export interface EmailAddress {
+    name: any
+    address: any
+  }
+  
+  export interface InvitedUser {
+    id: string
+  }
+  
 export interface CreateInvitationResult   {
 
     user: GetAccountByEmailResult | null
 
     mongoid: string
-    invitation: any
+    invitation: InvitationResult | null
+    valid: boolean
 }
 
 export async function createInvitation(data: any): Promise<Result<CreateInvitationResult>> {
 
-    const session = await getUserSession()
-    if (!session) return { hasError: true, errorMessage: "You are not logged in" }
-
+ 
     const token = await getSpAuthToken()
 
     let user: GetAccountByEmailResult | null = null
@@ -36,14 +70,15 @@ export async function createInvitation(data: any): Promise<Result<CreateInvitati
     }
 
 
-    const invitation =  user ? null : (await inviteGuestUser(token, data.email))
+    const invitationResult =  user ? null : (await inviteGuestUser(token, data.email))
     const client = await connect()
     try {
-        const object = { data, session, graphData, invitation }
+        const object = { data, graphData, invitation: invitationResult?.data, user }
         const insertResult = await client.db("sandbox").collection("profiling").insertOne(object)
         result = { hasError: false, data : {
             user,
-            invitation,
+            valid:true,
+            invitation : invitationResult?.data ? invitationResult.data : null,
             mongoid: insertResult.insertedId.toString()
         }}
     }
@@ -85,7 +120,7 @@ export async function getAccountByEmail(accessToken: string, email: string) {
 }
 
 export async function inviteGuestUser(accessToken: string, email: string) {
-    return await https<Root<any>>(accessToken, "POST",
+    return await https<InvitationResult>(accessToken, "POST",
         `https://graph.microsoft.com/v1.0/invitations`, {
         "invitedUserEmailAddress": email,
         "inviteRedirectUrl": "https://home.nexi-intra.com/profile"

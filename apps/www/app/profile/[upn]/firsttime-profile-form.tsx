@@ -39,6 +39,7 @@ import { ProfileContext } from "../usecasecontext"
 import { CommandList } from "cmdk"
 
 import { NewsChannels } from "./NewsChannels"
+import { useSession } from "next-auth/react"
 
 const profileFormSchema = z.object({
   country: z
@@ -68,6 +69,7 @@ const defaultValues: Partial<ProfileFormValues> = {
 
 
 export function ProfileForm() {
+  const session = useSession()
   const profileContext = useContext(ProfileContext)
   const {countries,units} = profileContext
   const [showCountries, setshowCountries] = useState(false)
@@ -96,6 +98,12 @@ export function ProfileForm() {
 
   const watchUnit = form.watch("unit", "") 
   const watchCountry = form.watch("country", "") 
+
+  if (session === null) {
+    return <div>no access</div>
+  }
+
+
   return (
     <div>
     <Form {...form}>

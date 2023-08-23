@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "magicbox/profiles",
   url: "https://ui.shadcn.com",
-  root: "/news",
+  root: "/profile",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:
     "User profile management",

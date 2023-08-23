@@ -8,6 +8,9 @@ import ToSmall from "@/components/tosmall"
 import { SiteHeader } from "./components/site-header"
 import { SiteFooter as LocalSiteFooter } from "./components/site-footer"
 import { SiteFooter } from "@/components/magicbox-site-footer"
+import { getUserSession } from "@/lib/user"
+import { Button } from "@/registry/new-york/ui/button"
+import { signIn } from "next-auth/react"
 
 
 export const metadata: Metadata = {
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
   description: "Here you can find profile informations",
 }
 
-const sidebarNavItems = (upn:string) => [
+const sidebarNavItems = (upn: string) => [
   {
     title: "Profile",
     href: `/profile/${upn}`,
@@ -45,39 +48,46 @@ interface SettingsLayoutProps {
 }
 
 export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  const session = await getUserSession()
+
 
   return (
     <>
-    <ToSmall />
+      <ToSmall />
       <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
-      <div className="container relative">
-      <div className="mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
-       <div className="hidden space-y-6 p-10 pb-16 md:block">
-        <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Your profile</h2>
-          <p className="text-muted-foreground">
-            Manage your profile settings and news channel preferences.
-          </p>
-        </div>
-        <Separator className="my-6" />
-    
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          {/* <aside className="-mx-4 lg:w-1/5">
+        <SiteHeader />
+        <div className="container relative">
+          <div className="mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
+            <div className="hidden space-y-6 p-10 pb-16 md:block">
+              <div className="space-y-0.5">
+                <h2 className="text-2xl font-bold tracking-tight">Your profile</h2>
+                <p className="text-muted-foreground">
+                  Manage your profile settings and news channel preferences.
+                </p>
+              </div>
+              <Separator className="my-6" />
+
+              <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+                {/* <aside className="-mx-4 lg:w-1/5">
             <SidebarNav items={sidebarNavItems(params.upn)} />
           </aside> */}
-          
-          <div className="flex-1 lg:max-w-2xl">{children}</div>
+                {!session && <div className="flex-1 lg:max-w-2xl">
+                  You need to sign in to get access to the profile.
+                </div>
+                
+                }   
+                {session &&
+                  <div className="flex-1 lg:max-w-2xl">{children}</div>}
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
-      </div> 
       </div> <div className="container relative">
         <LocalSiteFooter />
- 
-      <SiteFooter />
+
+        <SiteFooter />
       </div>
-      </>
-     
+    </>
+
   )
 }
