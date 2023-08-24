@@ -18,10 +18,17 @@ import { Input } from "@/registry/default/ui/input"
 import { Label } from "@/registry/default/ui/label"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
 
+import { LicencePicker } from "./licenceplate-picker"
+
 function BookParkingButton(params: { date: Date }) {
   const [isopen, setisopen] = useState<boolean>(false)
+  const [plates, setPlates] = useState<string>("")
   const { date } = params
   const usecases = useContext(UsecaseContext)
+
+  const platesChanged = (plates: string) => {
+    setPlates(plates)
+  }
 
   return (
     <Dialog open={isopen} onOpenChange={() => setisopen(!isopen)}>
@@ -63,11 +70,24 @@ function BookParkingButton(params: { date: Date }) {
             <Input id="username" value="@peduarte" className="col-span-3" />
           </div>
         </div> */}
+        <LicencePicker
+          onPlatesChange={platesChanged}
+          allPlates={["ZG12345TT", "ST54321AB"]}
+        />
         <DialogFooter>
           <Button
             type="submit"
-            onClick={async () => {
-              await usecases.BookParkingSlot("20230821", "", "karlo")
+            onClick={() => {
+              usecases.BookParkingSlot(
+                date?.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                }),
+                "",
+                "karlo.mrakovcic@nexigroup.com",
+                plates
+              )
               setisopen(false)
             }}
           >

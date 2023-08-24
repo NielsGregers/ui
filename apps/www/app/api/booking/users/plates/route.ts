@@ -1,5 +1,3 @@
-// TODO: Check https://codevoweb.com/setup-and-use-nextauth-in-nextjs-13-app-directory/?utm_content=cmp-true
-
 import { NextResponse } from "next/server"
 import { de, fi } from "date-fns/locale"
 import { getServerSession } from "next-auth"
@@ -18,19 +16,21 @@ export async function POST(request: Request) {
   }
 
   const client = await connect()
-  let result = false
-  try {
-    const x = await client
-      .db("booking")
-      .collection("parking")
-      .insertOne(postBody)
-    result = true
-  } catch (error) {
-    debugger
-    return false
-  } finally {
-    client.close()
+  const coll = client.db("booking").collection("users")
+  const cursor = coll.find({ upn: postBody.email })
+  const result = await cursor.toArray()
+  if (result.length <= 0) {
+    //create a user with a new licence plate
+    await coll.insertOne({
+      upn: postBody.email,
+      licenceplates: [postBody.plates],
+    })
+  } else {
+    //add licence plate to an existing user
+    const _id = result[0]._id
+    await coll.updateOne({ _id }, { $push: { licenceplates: postBody.plates } })
   }
+  client.close()
 
-  return result
+  return true
 }

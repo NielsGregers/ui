@@ -27,7 +27,7 @@ export namespace Admins {
     const inputSchema = z.object({
       id: string(),
     })
-    const outputSchema = z.object({ data: z.string() })
+    const outputSchema = z.object({ data: z.boolean() })
     return UseCase(
       "DELETE",
       "/api/booking/parking/" + { id },
@@ -49,19 +49,37 @@ export namespace Admins {
 export async function newBookingParking(
   dateKey: string,
   parkingSlot: string,
-  userEmail: string
+  userEmail: string,
+  plates: string
 ) {
   const inputSchema = z.object({
     dateKey: string(),
     parkingSlot: string(),
     userEmail: string(),
+    plates: string(),
   })
   const outputSchema = z.object({ data: z.boolean() })
   return UseCase(
     "POST",
     "/api/booking/parking/*",
-    { dateKey, parkingSlot, userEmail },
+    { dateKey, parkingSlot, userEmail, plates },
     inputSchema,
     outputSchema
   )
 }
+
+export async function addLicencePlates(email: string, plates: string) {
+  const inputSchema = z.object({
+    email: string(),
+    plates: string(),
+  })
+  const outputSchema = z.object({ data: z.boolean() })
+  return UseCase(
+    "POST",
+    "/api/booking/users/plates",
+    { email, plates },
+    inputSchema,
+    outputSchema
+  )
+}
+

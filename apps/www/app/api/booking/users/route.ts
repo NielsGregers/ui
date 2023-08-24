@@ -1,7 +1,4 @@
-// TODO: Check https://codevoweb.com/setup-and-use-nextauth-in-nextjs-13-app-directory/?utm_content=cmp-true
-
 import { NextResponse } from "next/server"
-import { de, fi } from "date-fns/locale"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"

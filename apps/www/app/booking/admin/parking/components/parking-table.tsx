@@ -54,6 +54,7 @@ import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 import NewParkingForm, { schema } from "./new-parking-form"
 import { ParkingSpot } from "./parking-dashboard"
+import { RowActions } from "./parking-table-row-actions"
 
 function submit(values: schema) {
   // const fields = [...form]
@@ -135,34 +136,34 @@ export const columns: ColumnDef<ParkingSpot>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+      return <RowActions row={row} />
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator /> */}
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-red-600 hover:text-red-800"
-              onClick={() => Admins.deleteParkingSlot(row.id)}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+      // return (
+      //   <DropdownMenu>
+      //     <DropdownMenuTrigger asChild>
+      //       <Button variant="ghost" className="h-8 w-8 p-0">
+      //         <span className="sr-only">Open menu</span>
+      //         <MoreHorizontal className="h-4 w-4" />
+      //       </Button>
+      //     </DropdownMenuTrigger>
+      //     <DropdownMenuContent align="end">
+      //       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+      //       {/* <DropdownMenuItem
+      //         onClick={() => navigator.clipboard.writeText(payment.id)}
+      //       >
+      //         Copy payment ID
+      //       </DropdownMenuItem>
+      //       <DropdownMenuSeparator /> */}
+      //       <DropdownMenuItem>Edit</DropdownMenuItem>
+      //       <DropdownMenuItem
+      //         className="text-red-600 hover:text-red-800"
+      //         onClick={() => Admins.deleteParkingSlot(row.id)}
+      //       >
+      //         Delete
+      //       </DropdownMenuItem>
+      //     </DropdownMenuContent>
+      //   </DropdownMenu>
+      // )
     },
   },
 ]

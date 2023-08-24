@@ -15,8 +15,10 @@ export type BookingUseCases = {
   BookParkingSlot: (
     dateKey: string,
     parkingSlot: string,
-    userEmail: string
+    userEmail: string,
+    plates: string
   ) => boolean
+  AddLicencePlate: (plate: string, email: string) => boolean
 }
 export const UsecaseContext = createContext<BookingUseCases>({
   CreateParkingSlot: () => {},
@@ -26,6 +28,9 @@ export const UsecaseContext = createContext<BookingUseCases>({
     parkingSlot: string,
     userEmail: string
   ): boolean {
+    throw new Error("Function not implemented.")
+  },
+  AddLicencePlate: function (plate: string, email: string): boolean {
     throw new Error("Function not implemented.")
   },
 })

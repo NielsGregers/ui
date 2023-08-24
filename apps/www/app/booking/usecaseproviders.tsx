@@ -1,6 +1,6 @@
 "use client"
 
-import { Admins, newBookingParking } from "./actions/parking"
+import { Admins, addLicencePlates, newBookingParking } from "./actions/parking"
 import { BookingUseCases, UsecaseContext } from "./usecasecontext"
 
 type Props = {
@@ -22,9 +22,14 @@ export const UsercaseProvider = ({ children }: Props) => {
     BookParkingSlot: function (
       dateKey: string,
       parkingSlot: string,
-      userEmail: string
+      userEmail: string,
+      plates: string
     ) {
-      newBookingParking(dateKey, parkingSlot, userEmail)
+      newBookingParking(dateKey, parkingSlot, userEmail, plates)
+      return true
+    },
+    AddLicencePlate: function (plate: string, email: string): boolean {
+      addLicencePlates(email, plate)
       return true
     },
   }

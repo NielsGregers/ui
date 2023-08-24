@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/registry/default/ui/card"
 
-import { ParkingBookings } from "./parking-bookings-table"
+import { ParkingBooking, ParkingBookingsTable } from "./parking-bookings-table"
 import { ParkingTable } from "./parking-table"
 
 export interface ParkingSpotMongo extends WithId<Document> {
@@ -23,6 +23,33 @@ export interface ParkingSpot {
   title: string
   permanent: boolean
   bookedBy: string
+}
+
+async function getBookingsByDate(date: string) {
+  const agg = [
+    {
+      $unwind: "$bookings",
+    },
+    {
+      $match: {
+        "bookings.date": date,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        title: 1,
+        userEmail: "$bookings.userEmail",
+        plates: "$bookings.plates",
+      },
+    },
+  ]
+  const client = await connect()
+  const coll = client.db("booking").collection("parking")
+  const cursor = coll.aggregate(agg)
+  const result = (await cursor.toArray()) as ParkingBooking[]
+  await client.close()
+  return result
 }
 
 async function ParkingDashboard() {
@@ -152,7 +179,7 @@ async function ParkingDashboard() {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         <ParkingTable data={parkingSpots} />
-        <ParkingBookings />
+        <ParkingBookingsTable data={await getBookingsByDate("25/08/2023")} />
       </div>
     </div>
   )
