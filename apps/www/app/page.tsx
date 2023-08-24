@@ -15,7 +15,7 @@ export default function WelcomePage() {
           <div>
             <button className="rounded-full bg-[#2D32A9] px-10 text-white">
               {" "}
-              <a href="/welcome">Click to get started</a>
+              <a href="/profile">Click to get started</a>
             </button>
           </div>
         </div>

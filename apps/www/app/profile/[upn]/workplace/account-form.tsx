@@ -32,10 +32,10 @@ import {
   PopoverTrigger,
 } from "@/registry/new-york/ui/popover"
 import { toast } from "@/registry/new-york/ui/use-toast"
-import WelcomePage from "@/app/welcome/page"
+
 import { useContext } from "react"
 import { ProfileContext } from "../../usecasecontext"
-import SelectCountryAndUnit from "@/app/welcome/components/selectcountryandunit-client";
+
 const languages = [
   { label: "English", value: "en" },
   { label: "French", value: "fr" },

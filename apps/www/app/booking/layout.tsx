@@ -18,6 +18,9 @@ import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
 import { SiteHeader } from "./components/site-header"
 import { NextAuthProvider } from "./providers"
 import { UsercaseProvider } from "./usecaseproviders"
+// This is important, if not set, this page will be statically generated causing the build to fail
+// as the build process would need to have access to the database / api's
+
 
 export const metadata: Metadata = {
   title: {

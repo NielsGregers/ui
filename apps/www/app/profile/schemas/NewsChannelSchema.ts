@@ -1,11 +1,13 @@
-import { z } from "zod"
+
+import { z } from "zod";
+
 
 
 export const newsSchema = z.object({
-  channelName:z.string(),
-  channelType:z.string(),
-  channelCode:z.string(),
-  sortOrder:z.string(),
+  channelName: z.string(),
+  channelType: z.string(),
+  channelCode: z.string(),
+  sortOrder: z.string(),
   RelevantUnits: z.object({
     LookupId: z.number(),
     LookupValue: z.string()
@@ -17,10 +19,7 @@ export const newsSchema = z.object({
   }).array().nullable(),
   Region: z.string().nullable(),
   NewsCategory: z.string().nullable(),
-
-})
-
-
-export type NewsChannel = z.infer<typeof newsSchema>
+});
 
 
+export type NewsChannel = z.infer<typeof newsSchema>;

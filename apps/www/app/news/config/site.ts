@@ -4,7 +4,7 @@ export const siteConfig = {
   root: "/news",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:
-    "News channel management",
+    "",
   links: {
     twitter: "https://twitter.com/shadcn",
     github: "https://github.com/koksmat-com/ui",

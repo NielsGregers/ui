@@ -23,6 +23,7 @@ export namespace Units {
   export interface Unitdata {
     title: string
     sortorder: number
+    code: string
     unittype: string
   }
 }

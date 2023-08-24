@@ -1,22 +1,10 @@
+import { ForRole } from "@/components/roles";
 
-import Link from 'next/link';
-import React from 'react';
-import { getSharePointData } from './datasources';
-import { SelectNewsChannels } from './components/select-news-channels';
-
-// This is important, if not set, this page will be statically generated causing the build to fail
-// as the build process would need to have access to the database / api's
 export const dynamic = 'force-dynamic'
-export default async function Koksmat() {
+export default async function RedirectToLoggedinUse() {
 
-  const {channels} = await getSharePointData()
-  return <div className="h-screen w-full">
+<ForRole role="Admin" module="News">
 
-    <div className="grid h-screen place-items-center">
-
-
-      <SelectNewsChannels channels={channels} defaultChannels={[]}/>
-
-    </div>
-  </div>
+Placeholder
+</ForRole>
 }

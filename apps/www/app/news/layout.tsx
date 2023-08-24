@@ -8,7 +8,7 @@ import { SiteHeader } from "@/app/news/components/site-header"
 
 export const metadata: Metadata = {
   title: {
-    default: siteConfig.name,
+    default: "siteConfig.name",
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,

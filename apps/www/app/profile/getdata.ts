@@ -1,12 +1,14 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
+"use server"
 
 import { MongoClient } from "mongodb";
 import { connect } from "@/lib/mongodb";
-import { Country, Unit } from "@/app/welcome/schema";
-import { NewsChannel } from "../news/schema";
-import { Countries } from "@/services/mongocollections/countries";
-import { Units } from "@/services/mongocollections/units";
-import { NewsChannels } from "@/services/mongocollections/newschannels";
-import { channel } from "diagnostics_channel";
+import { Country, Unit } from "./schemas/welcome";
+import { NewsChannel } from "./schemas/NewsChannelSchema";
+import { Countries } from "@/services/mongo/countries";
+import { Units } from "@/services/mongo/units";
+import { NewsChannels } from "@/services/mongo/newschannels";
+
 
 export async function getProfilingData() {
   const client = await connect()
@@ -31,28 +33,30 @@ export async function getProfilingData() {
       }
       return u
     })
-  const newsChannels = await getItems<NewsChannel,NewsChannels.Root>(client, { 'newschannel': 1 }, 'news_channels',
-    (item: NewsChannels.Root) => {
+  const newsChannels = await getItems<NewsChannel,NewsChannels.Newschannel>(client, {  }, 'newschannels',
+  
+    (item: NewsChannels.Newschannel) => {
+      
       const channel: NewsChannel = {
-        sortOrder: item.newschannel.title,
-        channelName: item.newschannel.title,
-        channelType: item.newschannel.newscategory.length > 0 ? item.newschannel.newscategory[0].lookupvalue : "",
-        channelCode: item.newschannel.tag,
-        RelevantUnits: item.newschannel.relevantunits.map(unit => {
+        sortOrder: item.title,
+        channelName: item.title,
+        channelType: item.newscategory.length > 0 ? item.newscategory[0].lookupvalue : "",
+        channelCode: item.tag,
+        RelevantUnits: item.relevantunits.map(unit => {
           return {
             LookupId: unit.lookupid,
             LookupValue: unit.lookupvalue
           }
         }),
-        Mandatory: item.newschannel.mandatory,
-        RelevantCountires: item.newschannel.relevantcountires.map(country => {
+        Mandatory: item.mandatory,
+        RelevantCountires: item.relevantcountires.map(country => {
           return {
             LookupId: country.lookupid,
             LookupValue: country.lookupvalue
           }
         }),
-        Region: item.newschannel.region.length > 0 ? item.newschannel.region[0].lookupvalue :"",
-        NewsCategory: item.newschannel.newscategory.length > 0 ? item.newschannel.newscategory[0].lookupvalue : ""
+        Region: item.region.length > 0 ? item.region[0].lookupvalue :"",
+        NewsCategory: item.newscategory.length > 0 ? item.newscategory[0].lookupvalue : ""
       }
       return channel
 
@@ -68,7 +72,7 @@ export async function getProfilingData() {
 async function getItems<T,I>(client: MongoClient, projection: object, collection: string, mapper: (item: I) => T): Promise<T[]> {
   const filter = {};
 
-  const coll = client.db('christianiabpos').collection(collection);
+  const coll = client.db(process.env.DATABASE).collection(collection);
   const cursor = coll.find(filter, { projection });
   const items = await cursor.toArray()
   return items.map(item => mapper(item as I))

@@ -1,18 +1,12 @@
 
 import Logo from "@/components/logo";
-import { getUserSession } from "@/lib/user"
-import { redirect } from "next/navigation";
+
 import { ValidateEmailAccountForm } from "./components/profile-form";
 
 
-
+export const dynamic = 'force-dynamic'
 
 export default async function RedirectToLoggedinUse() {
-  const session = await getUserSession()
-
-  if (session?.user?.email) {
-    redirect("/profile/" + session?.user?.email)
-  }
 
   return <div>
 

@@ -1,4 +1,4 @@
-import { siteConfig } from "@/app/news/config/site";
+
 import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -10,6 +10,20 @@ import { getUserSession } from "@/lib/user"
 
 //import { Country, Unit } from "./schema"
 
+ const siteConfig = {
+  name: "magicbox/news",
+  url: "https://ui.shadcn.com",
+  root: "/news",
+  ogImage: "https://ui.shadcn.com/og.jpg",
+  description:
+    "News channel management",
+  links: {
+    twitter: "https://twitter.com/shadcn",
+    github: "https://github.com/koksmat-com/ui",
+  },
+}
+
+export type SiteConfig = typeof siteConfig
 
 async function getPage(slug: string) {
   const token = await getToken(process.env.SPAUTH_TENANTID as string, process.env.SPAUTH_CLIENTID as string, process.env.SPAUTH_CLIENTSECRET as string)
