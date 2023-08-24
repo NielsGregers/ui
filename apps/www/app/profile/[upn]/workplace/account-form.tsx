@@ -33,8 +33,8 @@ import {
 } from "@/registry/new-york/ui/popover"
 import { toast } from "@/registry/new-york/ui/use-toast"
 
-import { useContext } from "react"
-import { ProfileContext } from "../../usecasecontext"
+
+
 
 const languages = [
   { label: "English", value: "en" },
@@ -74,7 +74,7 @@ const defaultValues: Partial<AccountFormValues> = {
 }
 
 export function AccountForm() {
-  const profileContext = useContext(ProfileContext);
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
