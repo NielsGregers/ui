@@ -1,6 +1,6 @@
 import React, { use } from "react"
 import { WithId } from "mongodb"
-import { use } from "react"
+
 import { connect } from "@/lib/mongodb"
 import {
   Card,
@@ -52,15 +52,16 @@ async function getBookingsByDate(date: string) {
   return result
 }
 
- function ParkingDashboard() {
+function ParkingDashboard() {
   const filter = {}
 
   const client = use(connect())
   const coll = client.db("booking").collection("parking")
   const cursor = coll.find(filter)
 
-  const parkingSpotsMongo: ParkingSpotMongo[] =
-    (use(cursor.toArray())) as ParkingSpotMongo[]
+  const parkingSpotsMongo: ParkingSpotMongo[] = use(
+    cursor.toArray()
+  ) as ParkingSpotMongo[]
   const parkingSpots: ParkingSpot[] = parkingSpotsMongo?.map((spot) => {
     return {
       id: spot._id.toString(),
@@ -180,7 +181,7 @@ async function getBookingsByDate(date: string) {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         <ParkingTable data={parkingSpots} />
-        <ParkingBookings />
+        <ParkingBookingsTable data={use(getBookingsByDate("25/08/2023"))} />
       </div>
     </div>
   )
