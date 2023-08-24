@@ -2,7 +2,7 @@
 
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import {  useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 
@@ -20,7 +20,7 @@ import { Input } from "@/registry/new-york/ui/input"
 
 import { toast } from "@/registry/new-york/ui/use-toast"
 
-import { CreateInvitationResult, createInvitation } from "./serveractions"
+import { CreateInvitationResult, createInvitation } from "@/app/profile/actions/onboarding"
 import { useEffect, useState } from "react"
 import { Result } from "@/lib/httphelper"
 import { Badge } from "@/registry/new-york/ui/badge"
@@ -47,26 +47,27 @@ export function ValidateEmailAccountForm() {
 
   const session = useSession()
 
-const defaultValues: Partial<ProfileFormValues> = {
- 
+  const defaultValues: Partial<ProfileFormValues> = {
+
   }
-  
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
     mode: "onChange",
   })
- 
+
   const [invitationStatus, setInvitationStatus] = useState<Result<CreateInvitationResult>>()
   const [signinEnabled, setsigninEnabled] = useState(false)
-useEffect(() => {
-  if (session?.data?.user?.email) {
-    if (session?.data?.user?.email.indexOf("#ext#@")<0) {
-    form.setValue("email",session?.data?.user?.email)
-  }}
+  useEffect(() => {
+    if (session?.data?.user?.email) {
+      if (session?.data?.user?.email.indexOf("#ext#@") < 0) {
+        form.setValue("email", session?.data?.user?.email)
+      }
+    }
 
-  
-}, [session])
+
+  }, [session])
 
 
 
@@ -82,14 +83,14 @@ useEffect(() => {
         </pre>
       ),
     })
-   const x =   await createInvitation(data)
-   setInvitationStatus(x)
-   if (x.data?.valid) {
-   setsigninEnabled(true)
-  }
+    const x = await createInvitation(data)
+    setInvitationStatus(x)
+    if (x.data?.valid) {
+      setsigninEnabled(true)
+    }
 
-   
-   console.log(x) 
+
+    console.log(x)
   }
 
   return (
@@ -107,9 +108,9 @@ useEffect(() => {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <div className="flex">
-                <Input placeholder="Enter your email" {...field} />
-                <div className="w-4 flex-grow"></div>
-                <Button type="submit"  >Validate</Button>
+                  <Input placeholder="Enter your email" {...field} />
+                  <div className="w-4 flex-grow"></div>
+                  <Button type="submit"  >Validate</Button>
                 </div>
               </FormControl>
 
@@ -123,24 +124,25 @@ useEffect(() => {
           )}
         />
 
-<div className="flex">
-      
-        <div className="flex-grow"></div>
-        <Button variant="default" className="ml-2" type="button" disabled={!signinEnabled}
-        onClick={()=>{
-          const parms : URLSearchParams =new URLSearchParams()
-          parms.set("login_hint",form.getValues("email") as string)
-          signIn("azure-ad",{
+        <div className="flex">
 
-callbackUrl: "/profile/router",
+          <div className="flex-grow"></div>
+          <Button variant="default" className="ml-2" type="button" disabled={!signinEnabled}
+            onClick={() => {
+              const parms: URLSearchParams = new URLSearchParams()
+              parms.set("login_hint", form.getValues("email") as string)
+              signIn("azure-ad", {
 
-          },parms)}}>Sign In</Button>
-           <div className="flex-grow"></div>
+                callbackUrl: "/profile/router",
 
-        
-        <div>
-        </div>
-        {/* {invitationStatus?.data?.invitation?.invitedUserType &&
+              }, parms)
+            }}>Sign In</Button>
+          <div className="flex-grow"></div>
+
+
+          <div>
+          </div>
+          {/* {invitationStatus?.data?.invitation?.invitedUserType &&
 <div>
 <Badge>{invitationStatus?.data?.invitation?.invitedUserType}</Badge>
 <Link href={invitationStatus?.data?.invitation?.inviteRedeemUrl} target="_blank">Link</Link>
@@ -156,14 +158,14 @@ callbackUrl: "/profile/router",
         } */}
         </div>
         <div>
-        {invitationStatus?.data?.user && invitationStatus?.data?.user.userType===null &&
-<div>
-<Badge>Licensed user</Badge>
+          {invitationStatus?.data?.user && invitationStatus?.data?.user.userType === null &&
+            <div>
+              <Badge>Licensed user</Badge>
 
-</div>
-        }
+            </div>
+          }
         </div>
-       {/* <pre>
+        {/* <pre>
           {JSON.stringify(invitationStatus,null,2)}
        </pre> */}
 
