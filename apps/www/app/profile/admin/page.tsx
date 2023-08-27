@@ -20,14 +20,14 @@ import {
 import { Me, NewsChannel } from "../data/schemas"
 import { getNewsChannels } from "../data/sharepoint"
 
-export const schema = z.object({
-  title: z.string(),
-  link: z.string().nullable(),
-  details: z.string().nullable(),
-  id: z.string(),
-  // created_at:z.date().nullable(),
-  // updated_at:z.date().nullable(),
-})
+// export const schema = z.object({
+//   title: z.string(),
+//   link: z.string().nullable(),
+//   details: z.string().nullable(),
+//   id: z.string(),
+//   // created_at:z.date().nullable(),
+//   // updated_at:z.date().nullable(),
+// })
 
 
 
