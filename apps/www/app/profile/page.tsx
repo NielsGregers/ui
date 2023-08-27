@@ -1,7 +1,7 @@
 
 import Logo from "@/components/logo";
 
-import { ValidateEmailAccountForm } from "./components/profile-form";
+import { ValidateEmailAccountForm } from "./components/onboarding-form";
 
 
 export const dynamic = 'force-dynamic'

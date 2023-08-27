@@ -1,7 +1,7 @@
 "use client"
 
 import { Cross2Icon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+import { Row, Table } from "@tanstack/react-table"
 
 import { Button } from "@/registry/new-york/ui/button"
 import { Input } from "@/registry/new-york/ui/input"
@@ -9,13 +9,15 @@ import { DataTableViewOptions } from "@/app/shadcn/examples/tasks/components/dat
 
 import { priorities, statuses } from "../data/data"
 import { DataTableFacetedFilter } from "@/app/powershell/components/data-table-faceted-filter"
-
+import { GenericTableActions, ISelectedItemsActionsComponent } from "./GenericTableActions"
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>
+  table: Table<TData>,
+  SelectedItemsActionsComponent?: ISelectedItemsActionsComponent<Row<TData>>
 }
 
 export function DataTableToolbar<TData>({
   table,
+  SelectedItemsActionsComponent
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const {rowSelection} = table.getState()
@@ -30,7 +32,9 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {Object.keys(rowSelection).length > 0 && <div>{Object.keys(rowSelection).length}</div>
+        {SelectedItemsActionsComponent 
+        && Object.keys(rowSelection).length > 0 
+        && <SelectedItemsActionsComponent rows={table.getSelectedRowModel().flatRows } />
         }
        
         {isFiltered && (

@@ -2,7 +2,7 @@
 
 import { off } from "process";
 import { useEffect, useState } from "react";
-import { NewsChannel } from "../schemas/NewsChannelSchema";
+import { NewsChannel } from "../../data/schemas";
 import { Badge } from "@/registry/new-york/ui/badge";
 
 

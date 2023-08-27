@@ -9,6 +9,7 @@ import { MobileNav } from "./mobile-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { buttonVariants } from "@/registry/new-york/ui/button"
 import { UserNav } from "./user-nav"
+import { ForRole } from "@/components/roles"
 
 export function SiteHeader() {
   return (
@@ -18,7 +19,7 @@ export function SiteHeader() {
         <MobileNav />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-          
+   
           </div>
           <nav className="flex items-center">
             <Link

@@ -58,7 +58,8 @@
           .catch(async (error: AxiosError) => {
             if (
               error?.response?.status === 404 ||
-              error?.response?.status === 401
+              error?.response?.status === 401 ||
+              error?.response?.status === 400
             ) {
               resolve({
                 hasError: true,
