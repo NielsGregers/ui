@@ -53,6 +53,7 @@ export async function getMemberOfs(accessToken: string) {
         const membership: Membership = {
             groupDisplayName: item.displayName ?? "",
             mailNickname: item.mailNickname ?? "",
+            groupId: item.id,
             
         };
         return membership;

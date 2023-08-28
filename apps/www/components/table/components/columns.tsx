@@ -63,7 +63,7 @@ export const columns: ColumnDef<GenericItem>[] = [
 
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions linkPrefix={row.original.link as string} row={row} />,
+    cell: ({ row }) => <DataTableRowActions link={row.original.link as string} row={row} />,
   },
 
 

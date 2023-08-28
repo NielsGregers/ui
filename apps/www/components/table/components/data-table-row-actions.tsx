@@ -23,12 +23,12 @@ import { schema } from "../data/schema"
 import Link from "next/link"
 
 interface DataTableRowActionsProps<TData> {
-  linkPrefix:string,
+  link:string,
   row: Row<TData>
 }
 
 export function DataTableRowActions<TData>({
-  linkPrefix,
+  link,
   row,
 }: DataTableRowActionsProps<TData>) {
   const logentry = schema.parse(row.original)
@@ -51,7 +51,7 @@ export function DataTableRowActions<TData>({
 
      
         <DropdownMenuItem >
-          <Link href={`${linkPrefix}${logentry.id}`}>
+          <Link target="_blank" href={`${link}`}>
           View Details
           </Link>
           <DropdownMenuShortcut>⌘v</DropdownMenuShortcut>

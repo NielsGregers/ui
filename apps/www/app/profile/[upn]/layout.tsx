@@ -5,8 +5,8 @@ import { Separator } from "@/registry/new-york/ui/separator"
 import { SidebarNav } from "./components/sidebar-nav"
 
 import ToSmall from "@/components/tosmall"
-import { SiteHeader } from "./components/site-header"
-import { SiteFooter as LocalSiteFooter } from "./components/site-footer"
+import { SiteHeader } from "../components/site-header"
+import { SiteFooter as LocalSiteFooter } from "../components/site-footer"
 import { SiteFooter } from "@/components/magicbox-site-footer"
 import { getUserSession } from "@/lib/user"
 import { Button } from "@/registry/new-york/ui/button"
@@ -54,10 +54,9 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
   return (
     <>
       <ToSmall />
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader />
-        <div className="container relative">
-          <div className="mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
+      <div className="flex  h-screen w-screen ">
+        <div className="flex-grow " />
+          <div className="container mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
             <div className="hidden space-y-6 p-10 pb-16 md:block">
               <div className="space-y-0.5">
                 <h2 className="text-2xl font-bold tracking-tight">Your profile</h2>
@@ -80,13 +79,12 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
                   <div className="flex-1 lg:max-w-2xl">{children}</div>}
               </div>
             </div>
-          </div>
-        </div>
-      </div> <div className="container relative">
-        <LocalSiteFooter />
-
-        <SiteFooter />
-      </div>
+            </div>
+            <div className="flex-grow" />
+            </div>
+     
+  
+ 
     </>
 
   )

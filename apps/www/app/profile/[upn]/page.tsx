@@ -17,7 +17,7 @@ export default async function SettingsProfilePage() {
   return (
     <div className="space-y-6">
       <ProfileForm  currentUnit={unit} currentCountry={country} />
-      <MyMemberships />
+  
     </div>
   )
   

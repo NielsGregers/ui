@@ -95,7 +95,7 @@ export type NewsCategory = z.infer<typeof newscategorySchema>
 export const membershipSchema = z.object({
   groupDisplayName:z.string(),
   mailNickname:z.string(),
-
+  groupId:z.string(), 
 })
 
 

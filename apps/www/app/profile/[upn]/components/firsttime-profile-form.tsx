@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
+import { https } from "@/lib/httphelper"
 import { LogToMongo } from "@/lib/trace"
 import { getUserSession } from "@/lib/user"
 import { cn } from "@/lib/utils"
@@ -43,11 +44,13 @@ import { saveProfile } from "@/app/profile/actions/profiling"
 import {
   Country,
   Me,
+  Membership,
   NewsCategory,
   NewsChannel,
   Unit,
 } from "@/app/profile/data/schemas"
 
+import { getMemberOfs } from "../../data/me"
 import {
   getCountries,
   getNewsCategories,
@@ -55,7 +58,8 @@ import {
   getUnits,
 } from "../../data/sharepoint"
 import { NewsChannels } from "./channel-picker"
-import { https } from "@/lib/httphelper"
+import { GenericTable } from "@/components/table"
+import { GenericItem } from "@/components/table/data/schema"
 
 const profileFormSchema = z.object({
   country: z.string({ required_error: "Please select a country." }),
@@ -102,9 +106,16 @@ export function ProfileForm(props: {
   const [processTitle, setProcessTitle] = useState("")
   const [processDescription, setProcessDescription] = useState("")
   const [lastResult, setlastResult] = useState<any>()
-  
+
   const accessToken = magicbox.session?.accessToken ?? ""
-  
+
+  const [memberships, setmemberships] = useState<Membership[]>()
+  useEffect(() => {
+    const load = async () => {
+      setmemberships(await getMemberOfs(magicbox.session?.accessToken ?? ""))
+    }
+    if (magicbox.session?.accessToken) load()
+  }, [magicbox.session?.accessToken])
   useEffect(() => {
     const load = async () => {
       setNewsChannels((await getNewsChannels(accessToken)) ?? [])
@@ -132,7 +143,6 @@ export function ProfileForm(props: {
     setProcessPercentage(0)
     setProcessing(true)
 
-   
     const meResponse = await https<Me>(
       magicbox.session?.accessToken ?? "",
       "GET",
@@ -213,9 +223,7 @@ export function ProfileForm(props: {
   useEffect(() => {
     form.setValue(
       "channels",
-      getDefultChannels(watchCountry ,watchUnit).map(
-        (i) => i.channelName
-      )
+      getDefultChannels(watchCountry, watchUnit).map((i) => i.channelName)
     )
   }, [watchCountry, watchUnit])
 
@@ -224,7 +232,7 @@ export function ProfileForm(props: {
   }
 
   return (
-    <div>
+    <div className="flex">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div>
@@ -426,7 +434,7 @@ export function ProfileForm(props: {
                         <CommandInput placeholder="Search channels..." />
 
                         <CommandEmpty>No channels found.</CommandEmpty>
-                        <CommandList>
+                        <CommandList className="max-h-[400px] overflow-scroll">
                           {newsCategories
                             .sort((a, b) => a.sortOrder - b.sortOrder)
                             .map((category, key) => {
@@ -461,9 +469,13 @@ export function ProfileForm(props: {
                                         key={channel.channelCode}
                                         onSelect={(value) => {
                                           if (channel.Mandatory) return
-                                          
+
                                           let newvalue = []
-                                          if (field.value?.includes(channel.channelName)) {
+                                          if (
+                                            field.value?.includes(
+                                              channel.channelName
+                                            )
+                                          ) {
                                             newvalue = field.value?.filter(
                                               (i) => i !== channel.channelName
                                             )
@@ -520,6 +532,33 @@ export function ProfileForm(props: {
         description={processDescription}
         progress={processPercentage}
       />
+      {memberships && (
+        <div className="ml-5">
+          <div className="text-xl">Current Office 365 Group memberships</div>
+
+          <GenericTable data={memberships
+            .filter((a) => {
+              return a.mailNickname?.startsWith("nexiintra-newschannel-")
+            })
+            .sort((a, b) => {
+              if (a.groupDisplayName > b.groupDisplayName) return 1
+              if (a.groupDisplayName < b.groupDisplayName) return -1
+              return 0
+            })
+            .map((membership, key) => {
+            
+                const item: GenericItem = {
+                  link: "https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Members/groupId/" + membership.groupId,
+                  id:  membership.groupId,
+                  details: membership.mailNickname + " " + membership.groupId,
+                  title: membership.groupDisplayName,
+                }
+                return item
+              
+            })}  />
+          
+        </div>
+      )}
       {/* <div>
         <pre>{JSON.stringify({ watchUnit, watchCountry,lastResult },null,2)}</pre>
       </div> */}

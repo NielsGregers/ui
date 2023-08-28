@@ -4,8 +4,8 @@ import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { CommandMenu } from "@/components/command-menu"
 import { Icons } from "@/components/icons"
-import { MainNav } from "./main-nav"
-import { MobileNav } from "./mobile-nav"
+import { MainNav } from "../[upn]/components/main-nav"
+import { MobileNav } from "../[upn]/components/mobile-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { buttonVariants } from "@/registry/new-york/ui/button"
 import { UserNav } from "./user-nav"
@@ -22,23 +22,7 @@ export function SiteHeader() {
    
           </div>
           <nav className="flex items-center">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  buttonVariants({
-                    variant: "ghost",
-                  }),
-                  "w-9 px-0"
-                )}
-              >
-                <Icons.gitHub className="h-4 w-4" />
-              
-              </div>
-            </Link>
+ 
 
             <ModeToggle />
             <UserNav />
