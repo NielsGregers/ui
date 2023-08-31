@@ -11,7 +11,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["avatars.githubusercontent.com", "images.unsplash.com"],
+    domains: ["avatars.githubusercontent.com", "images.unsplash.com","media.akamai.odsp.cdn.office.net"],
   },
   experimental : {  
     serverActions: true,

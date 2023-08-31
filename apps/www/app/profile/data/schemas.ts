@@ -46,7 +46,7 @@ export type NewsChannel = z.infer<typeof newsSchema>;
 export const countrySchema = z.object({
   countryName:z.string(),
   countryCode:z.string(),
-  sortOrder:z.number(),
+
 
 })
 

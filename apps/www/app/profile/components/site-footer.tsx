@@ -17,12 +17,12 @@ export function SiteFooter() {
                 Admin:
               </div>
               <Button variant="link">
-                <Link href="/profile/admin" >Admin</Link>
+                <Link href="/profile/admin" >Channel Office 365 Groups</Link>
               </Button>
             </div>
             <div>
               <div>
-                Profile  lists:
+               SharePoint lists:
               </div>
               <Button variant="link">
                 <Link href="https://christianiabpos.sharepoint.com/sites/nexiintra-home/Lists/News%20Channels" target="_blank">News Channels</Link>
@@ -39,9 +39,7 @@ export function SiteFooter() {
               <Button variant="link">
                 <Link href="https://christianiabpos.sharepoint.com/sites/nexiintra-home/Lists/Units" target="_blank">Units</Link>
               </Button>
-              <Button variant="link">
-                <Link href="https://christianiabpos.sharepoint.com/sites/nexiintra-home/Lists/Profiles" target="_blank">Profiles</Link>
-              </Button>
+
             </div>
           </ForRole>
 

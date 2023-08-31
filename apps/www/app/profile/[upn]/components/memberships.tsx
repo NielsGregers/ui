@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { Membership, NewsChannel } from "../../data/schemas";
 import { Badge } from "@/registry/new-york/ui/badge";
 import { Skeleton } from "@/registry/new-york/ui/skeleton";
-import { TransitiveMemberOf, getMemberOfs } from "../../data/me";
+import { TransitiveMemberOf, getMemberOfs } from "../../data/officegraph";
 import { MagicboxContext } from "@/app/magicbox-context";
 
 

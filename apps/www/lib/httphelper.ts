@@ -93,13 +93,14 @@
       var data: T[] = [];
       const next = async (nexturl: string) => {
         var response = await https<any>(token, "GET", nexturl);
-        
+      
         if (response.hasError) {
           resolve({ hasError: true, errorMessage: response.errorMessage });
   
           return;
         }
         data.push(...response.data.value);
+        console.log("data",data.length)
         if (response.data["@odata.nextLink"]) {
           next(response.data["@odata.nextLink"]);
         } else {

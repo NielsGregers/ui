@@ -46,7 +46,7 @@ export default function SettingsProfilePage() {
         .map((channel) => {
           return {
             title: channel.channelName,
-            link: channel.GroupId,
+            link: "https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Overview/groupId/" + channel.GroupId,
             details: channel.GroupId !== "" ? channel.GroupId : "No GroupId",
             id: channel.id,
           }
@@ -73,12 +73,15 @@ export default function SettingsProfilePage() {
     const me = meResponse.data
     const items = params.rows.map((row: any) => {
       return row.original as GenericItem
-    })
+    }).filter((item: GenericItem) => {
+        return item.details !== "No GroupId"
+        })
     LogToMongo("logs-niels", "createGroups", { me, items })
     //return
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
+      
       const res = await createNewsChannelGroup(me?.id ?? "", item.title)
       if (res.hasError) {
         toast({

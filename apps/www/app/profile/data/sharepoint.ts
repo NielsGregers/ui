@@ -19,7 +19,7 @@ export interface NewsChannelFields {
   NewsCategoryLookupId: string
   GroupID?: string
   Email?: string
-  Tag: string
+ 
   id: string
   ContentType: string
   Modified: string
@@ -70,9 +70,9 @@ export interface CountryFields {
   "@odata.etag": string
   Title: string
   LinkTitle: string
-  Code: string
-  SortOrder: number
-  Region: string
+
+  Region_x0020_ItemLookupId: string
+  Region_x0020_Item_x003a_Sort_x00LookupId: string
   id: string
   ContentType: string
   Modified: string
@@ -92,7 +92,7 @@ export interface CountryFields {
   _IsRecord?: string
 }
 
-export interface newsCategoryFields {
+export interface NewsCategoryFields {
   "@odata.etag": string
   Title: string
   LinkTitle: string
@@ -138,6 +138,7 @@ export interface ValidGuestDomainFields {
   _ComplianceTagUserId: string
   _IsRecord: string
 }
+
 export interface LookupValue {
   LookupId: number
   LookupValue: string
@@ -165,7 +166,7 @@ export async function getCountries(accessToken: string) {
     const country: Country = {
       countryName: fields.Title,
       countryCode: fields.Title,
-      sortOrder: fields.SortOrder
+     
     };
     return country;
   });
@@ -173,7 +174,7 @@ export async function getCountries(accessToken: string) {
 }
 
 export async function getNewsCategories(accessToken: string) {
-  const items = await https<Root<ItemHeader<CountryFields>>>(accessToken, "GET",
+  const items = await https<Root<ItemHeader<NewsCategoryFields>>>(accessToken, "GET",
     `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/nexiintra-home:/lists/News%20Categories/items?$expand=fields`);
   const units = items.data?.value.map((item) => {
     const { fields } = item;
@@ -234,6 +235,11 @@ export async function getNewsChannels(accessToken: string) {
     return channel;
   });
   return channels;
+}
+
+
+export interface SiteCollection {
+  hostname: string;
 }
 
 export interface ItemHeader<T> {

@@ -50,7 +50,7 @@ import {
   Unit,
 } from "@/app/profile/data/schemas"
 
-import { getMemberOfs } from "../../data/me"
+import { getMemberOfs } from "../../data/officegraph"
 import {
   getCountries,
   getNewsCategories,
@@ -370,7 +370,9 @@ export function ProfileForm(props: {
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
                             {countries
-                              .sort((a, b) => a.sortOrder - b.sortOrder)
+                              .sort((a, b) =>{   if (a.countryName > b.countryName) return 1
+                                if (a.countryName < b.countryName) return -1
+                                return 0})
                               .map((country) => (
                                 <CommandItem
                                   value={country.countryName}
