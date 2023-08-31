@@ -22,27 +22,22 @@ import { Input } from "@/registry/default/ui/input"
 import { Switch } from "@/registry/default/ui/switch"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
 import { MagicboxContext } from "@/app/magicbox-context"
-import { addParkingSpot } from "@/app/booking/actions/parking/parkingSpaces"
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   permanent: z.boolean().default(false),
   bookedBy: z.string().optional(),
-  EV:z.boolean().default(false),
-  handicapped:z.boolean().default(false),
 })
 
 export type schema = {
   title: string | undefined
   permanent?: boolean | undefined
   bookedBy?: string | undefined
-  EV:boolean,
-  handicapped:boolean,
 }
 
 type FormProps = { onClose: () => void }
 
-export default function NewParkingForm({ onClose }: FormProps) {
+export default function EditParkingForm({ onClose }: FormProps) {
   const usecases = useContext(UsecaseContext)
   const magicbox = useContext(MagicboxContext)
   const [working, setworking] = useState(false)
@@ -53,24 +48,20 @@ export default function NewParkingForm({ onClose }: FormProps) {
     defaultValues: {
       title: "",
       bookedBy: "",
-      EV:false,
-      handicapped:false,
     },
   })
 
   async function submit(data: z.infer<typeof formSchema>) {
     setworking(true)
-    let result=await addParkingSpot(
+    await usecases.CreateParkingSlot(
       data.title,
       data.bookedBy as string,
-      data.permanent ?? false,
-      data.EV,
-      data.handicapped
+      data.permanent ?? false
     )
     setworking(false);
     //delay 1 sekcound to let the magicbox refresh
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    router.refresh()
+    magicbox.refresh()
     onClose()	
   }
 

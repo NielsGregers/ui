@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { use, useEffect, useState } from "react"
 import { addDays } from "date-fns"
 import { Car } from "lucide-react"
 import { DateRange } from "react-day-picker"
@@ -18,13 +18,18 @@ import {
 } from "@/registry/default/ui/card"
 
 import BookParkingButton from "./bookparkingbutton"
+import { UserParkingBooking, getBookingsByUser } from "../actions/parking/parkingBookings"
+
 
 interface PropTypes {
   dateRange: DateRange
+  userEmail:string|undefined|null
 }
 
 function DateCards(props: PropTypes) {
   const [dates, setdates] = useState<Date[]>([])
+  const [userbookings, setuserbookings] = useState<UserParkingBooking[]>([])
+
 
   useEffect(() => {
     let datesSelected: Date[] = []
@@ -52,6 +57,16 @@ function DateCards(props: PropTypes) {
     console.log(datesSelected)
     setdates(datesSelected)
   }, [props.dateRange])
+
+useEffect(() => {
+  async function load(){
+    const bookings= await getBookingsByUser(props.userEmail??"", dates)
+    setuserbookings(bookings)
+  }
+  if(dates.length>0){
+    load()}
+}, [dates, props.userEmail])
+
 
   return (
     <div className=" grid grid-cols-7 gap-6 sm:grid-cols-2 md:grid-cols-4">
@@ -85,10 +100,13 @@ function DateCards(props: PropTypes) {
                   <Car className="mr-2 h-4 w-4" />
                   Book a desk
                 </Button>
-                <BookParkingButton date={date} />
+                <BookParkingButton userEmail={props.userEmail} date={date} booking={userbookings.filter((data)=>
+                {
+                  if(data.date===date.toLocaleDateString("en-GB", {day: "2-digit", month: "2-digit", year: "numeric",})) return data
+                })[0] } />
               </div>
             </CardContent>
-            <CardFooter className="h-1/4">Footer</CardFooter>
+            <CardFooter className="h-1/4"></CardFooter>
           </Card>
         )
       })}

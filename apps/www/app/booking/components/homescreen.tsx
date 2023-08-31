@@ -13,7 +13,11 @@ export interface DateRangeSelection {
   to: Date
 }
 
-function HomeScreen() {
+interface PropTypes {
+  userEmail:string|undefined|null
+}
+
+function HomeScreen(props:PropTypes) {
   const [date, setdate] = useState<DateRange>({
     from: new Date() as Date,
     to: addDays(new Date(), 7) as Date,
@@ -24,9 +28,9 @@ function HomeScreen() {
   }
 
   return (
-    <div className="container flex flex-col gap-2 mt-7">
+    <div className="container flex flex-col gap-2 pt-7">
       <DateRangePicker onDateChange={onDateChange} />
-      <DateCards dateRange={date} />
+      <DateCards dateRange={date} userEmail={props.userEmail} />
     </div>
   )
 }
