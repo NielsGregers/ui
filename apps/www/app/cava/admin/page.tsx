@@ -1,3 +1,4 @@
+"use client"
 import { Metadata } from "next"
 import Image from "next/image"
 
@@ -22,39 +23,28 @@ import { RecentSales } from "@/app/shadcn/examples/dashboard/components/recent-s
 import { Search } from "@/app/shadcn/examples/dashboard/components/search"
 import TeamSwitcher from "@/app/shadcn/examples/dashboard/components/team-switcher"
 import { UserNav } from "@/app/shadcn/examples/dashboard/components/user-nav"
+import { useContext } from "react"
+import { CavaContext } from "../cavacontext"
+import ToSmall from "@/components/tosmall"
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app using the components.",
-}
 
 export default function DashboardPage() {
+
+  const cava = useContext(CavaContext)
+  const totalRevenue = cava.orders.reduce((a, b) => a + (b.items.reduce((a, b) => a + (b.price * b.quantity), 0)), 0)
+ 
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/shadcn/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/shadcn/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
+      
+    <ToSmall/>
       <div className="container hidden flex-col md:flex">
   
         <div className=" flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard (Preview)</h2>
+            <h2 className="text-3xl font-bold tracking-tight">CAVA Orders</h2>
             <div className="flex items-center space-x-2">
               <CalendarDateRangePicker />
-              <Button>Download</Button>
+              {/* <Button>Download</Button> */}
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -75,7 +65,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total Revenue
+                      Total Sales
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -91,16 +81,17 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <div className="text-2xl font-bold">
+                    DKK {totalRevenue}</div>
                     <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
+                      {/* +20.1% from last month */}
                     </p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Subscriptions
+                      Orders
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -118,13 +109,13 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
+                    <div className="text-2xl font-bold">{cava.orders.length}</div>
                     <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
+                      {/* +180.1% from last month */}
                     </p>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="hidden">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Sales</CardTitle>
                     <svg
@@ -148,7 +139,7 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card className="hidden">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                       Active Now
@@ -187,7 +178,7 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Recent Sales</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      There is {cava.orders.length} orders in the book.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

@@ -38,7 +38,11 @@ export function SiteFooter() {
             </Button>
             <Button variant="link">
               <Link href="https://christianiabpos.sharepoint.com/sites/cava3/Lists/ItemGroups" target="_blank">Item Groups</Link>
-            </Button>          <Button variant="link">
+            </Button>    
+            <Button variant="link">
+              <Link href="https://christianiabpos.sharepoint.com/sites/cava3/Lists/Items" target="_blank">Items</Link>
+            </Button>         
+             <Button variant="link">
               <Link href="https://christianiabpos.sharepoint.com/sites/cava3/Lists/Catering%20Orders%20Work%20Orders" target="_blank">Work Orders</Link>
             </Button>
             <Button variant="link">
