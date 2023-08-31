@@ -14,18 +14,20 @@ import {
 } from "@/components/ui/popover"
 
 interface PropTypes {
-  onDateChanged: (date: Date | undefined) => void
+  currentDate: Date
+  onDateChanged: (date: Date) => void
 }
 
 export function DatePicker(props: PropTypes) {
-  const [date, setDate] = React.useState<Date>()
+  const [date, setDate] = React.useState<Date>(props.currentDate)
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     props.onDateChanged(date)
   }, [date])
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -41,8 +43,11 @@ export function DatePicker(props: PropTypes) {
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
+          required
           selected={date}
-          onSelect={setDate}
+          onSelect={(selected) => {
+            setDate(selected ? selected : date); setIsOpen(false)
+          }}
           initialFocus
         />
       </PopoverContent>

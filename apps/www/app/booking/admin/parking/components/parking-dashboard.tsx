@@ -1,7 +1,6 @@
 import React, { use } from "react"
 import { WithId } from "mongodb"
 
-import { connect } from "@/lib/mongodb"
 import {
   Card,
   CardContent,
@@ -9,8 +8,9 @@ import {
   CardTitle,
 } from "@/registry/default/ui/card"
 
-import { ParkingBooking, ParkingBookingsTable } from "./parking-bookings-table"
+import { ParkingBookingsTable } from "./parking-bookings-table"
 import { ParkingTable } from "./parking-table"
+import { getParkingSpaces } from "@/app/booking/actions/parking/parkingSpaces"
 
 export interface ParkingSpotMongo extends WithId<Document> {
   title: string
@@ -25,52 +25,22 @@ export interface ParkingSpot {
   bookedBy: string
 }
 
-async function getBookingsByDate(date: string) {
-  const agg = [
-    {
-      $unwind: "$bookings",
-    },
-    {
-      $match: {
-        "bookings.date": date,
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        title: 1,
-        userEmail: "$bookings.userEmail",
-        plates: "$bookings.plates",
-      },
-    },
-  ]
-  const client = await connect()
-  const coll = client.db("booking").collection("parking")
-  const cursor = coll.aggregate(agg)
-  const result = (await cursor.toArray()) as ParkingBooking[]
-  await client.close()
-  return result
-}
-
 function ParkingDashboard() {
-  const filter = {}
+  // const [parkingSpots, setparkingSpots] = React.useState<ParkingSpot[]>([])
+  // const magicbox = useContext(MagicboxContext)
 
-  const client = use(connect())
-  const coll = client.db("booking").collection("parking")
-  const cursor = coll.find(filter)
+  // useEffect(() => {
+    
+  //   async function load(){
+  //     const spots= await getParkingSpaces()
+  //     setparkingSpots(spots)
+  //   }
+  //   load()
 
-  const parkingSpotsMongo: ParkingSpotMongo[] = use(
-    cursor.toArray()
-  ) as ParkingSpotMongo[]
-  const parkingSpots: ParkingSpot[] = parkingSpotsMongo?.map((spot) => {
-    return {
-      id: spot._id.toString(),
-      title: spot.title,
-      permanent: spot.permanent,
-      bookedBy: spot.bookedBy,
-    }
-  })
-  use(client.close())
+  // }, [magicbox.version])
+  
+  const parkingSpots=use(getParkingSpaces())
+
 
   return (
     <div>
@@ -181,7 +151,7 @@ function ParkingDashboard() {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         <ParkingTable data={parkingSpots} />
-        <ParkingBookingsTable data={use(getBookingsByDate("25/08/2023"))} />
+        <ParkingBookingsTable />
       </div>
     </div>
   )

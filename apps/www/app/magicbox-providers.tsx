@@ -13,6 +13,8 @@ export const MagicboxProvider = ({ children }: Props) => {
 
   const { data, status } = useSession()
   const [session, setsession] = useState<Session>()
+  const [version, setversion] = useState(0)
+
   useEffect(() => {
     setsession(data as Session)
   
@@ -20,7 +22,9 @@ export const MagicboxProvider = ({ children }: Props) => {
   }, [session,status])
   
   const magicbox: MagicboxContextType = {
-    session 
+    session, version, refresh: () => {
+      setversion(version + 1)
+    } 
   }
   return <MagicboxContext.Provider value={magicbox}>
 

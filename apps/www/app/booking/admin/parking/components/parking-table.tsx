@@ -56,20 +56,7 @@ import NewParkingForm, { schema } from "./new-parking-form"
 import { ParkingSpot } from "./parking-dashboard"
 import { RowActions } from "./parking-table-row-actions"
 
-function submit(values: schema) {
-  // const fields = [...form]
-  // const item: any = {}
-  // fields.map((pair: any) => {
-  //   item[pair[0]] = pair[1]
-  // })
 
-  // item.sessionId = randomUUID().toString()
-  // var user = User.parse(item)
-
-  // await insert("booking", "parking", values)
-
-  console.log(values)
-}
 
 export const columns: ColumnDef<ParkingSpot>[] = [
   {
@@ -182,6 +169,7 @@ export function DataTable<TData, TValue>({
     []
   )
   const [rowSelection, setRowSelection] = React.useState({})
+  const [dialog1Open, setdialog1Open] = React.useState<boolean>(false)
 
   const table = useReactTable({
     data,
@@ -199,6 +187,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   })
+
 
   return (
     <div>
@@ -223,10 +212,10 @@ export function DataTable<TData, TValue>({
                 account and remove your data from our servers.
               </DialogDescription> */}
               </DialogHeader>
-              <NewParkingForm onSubmit={submit} />
+              
             </DialogContent>
           </Dialog>
-          <Dialog>
+          <Dialog open={dialog1Open} onOpenChange={()=>setdialog1Open(!dialog1Open)}>
             <Button>
               <DialogTrigger>New parking</DialogTrigger>
             </Button>
@@ -238,7 +227,7 @@ export function DataTable<TData, TValue>({
                 account and remove your data from our servers.
               </DialogDescription> */}
               </DialogHeader>
-              <NewParkingForm onSubmit={submit} />
+              <NewParkingForm onClose={()=>setdialog1Open(false)} />
             </DialogContent>
           </Dialog>
         </div>

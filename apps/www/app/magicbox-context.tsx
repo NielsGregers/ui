@@ -15,9 +15,11 @@ export interface User {
 
 
 export type  MagicboxContextType= {
-  session?:Session
+  session?:Session,
+  version:number,
+  refresh:()=>void
 
 }
-export const MagicboxContext = createContext<MagicboxContextType>({session:{user:{name:"",email:"",image:""},expires:"",roles:[],accessToken:""}});
+export const MagicboxContext = createContext<MagicboxContextType>({session:{user:{name:"",email:"",image:""},expires:"",roles:[],accessToken:""}, version:0, refresh:()=>{}});
 
 

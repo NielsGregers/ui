@@ -1,5 +1,6 @@
 "use client"
 
+import { use, useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -16,6 +17,7 @@ import {
 } from "@/registry/default/ui/table"
 import { TableRow } from "@/registry/new-york/ui/table"
 
+import { getBookingsByDate } from "../../../actions/parking/parkingBookings"
 import { DatePicker } from "./datepicker"
 
 // This type is used to define the shape of our data.
@@ -58,7 +60,6 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <DatePicker onDateChanged={() => {}} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -102,7 +103,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No bookings for that day.
                 </TableCell>
               </TableRow>
             )}
@@ -114,15 +115,40 @@ export function DataTable<TData, TValue>({
 }
 
 interface PropsType {
-  data: ParkingBooking[]
+  // data: ParkingBooking[]
 }
 export function ParkingBookingsTable(props: PropsType) {
-  const { data } = props
+  // const { data } = props
+  const [date, setdate] = useState<Date>(new Date())
+  const [bookings, setbookings] = useState<ParkingBooking[]>([])
+
+  useEffect(() => {
+    async function load() {
+      const result = await getBookingsByDate(
+        date?.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      )
+      setbookings(result)
+    }
+
+    load()
+  }, [date])
+
+  // setbookings(result)
 
   return (
-    <div className="w-full">
+    <div className="w-full my-3">
+      <DatePicker
+        currentDate={new Date()}
+        onDateChanged={(date) => {
+          setdate(date)
+        }}
+      />
       <div className="flex items-center py-4">
-        <DataTable data={data} columns={columns} />
+        <DataTable data={bookings} columns={columns} />
       </div>
     </div>
   )

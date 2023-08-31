@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useContext } from "react"
+import React, { use, useContext, useState } from "react"
 import { Row } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
@@ -15,14 +15,44 @@ import {
 import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 import { ParkingSpot } from "./parking-dashboard"
+import { deleteParkingSpot } from "@/app/booking/actions/parking/parkingSpaces"
+import { RouteKind } from "next/dist/server/future/route-kind"
+import { useRouter } from "next/navigation"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/registry/default/ui/dialog"
+import { DialogHeader } from "@/registry/new-york/ui/dialog"
+import EditParkingForm from "./edit-parking-form"
 
 interface DataTableRowActionsProps {
   row: Row<ParkingSpot>
 }
 
+function deleteParking (id: string) {
+  deleteParkingSpot(id)
+}
+
+function editDialog (id: string) {
+  const [dialogOpen, setdialogOpen] = useState(true)
+
+  return(
+    <Dialog open={dialogOpen} onOpenChange={()=>setdialogOpen(!dialogOpen)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a parking spot</DialogTitle>
+                {/* <DialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </DialogDescription> */}
+              </DialogHeader>
+              <EditParkingForm onClose={()=>setdialogOpen(false)} />
+            </DialogContent>
+          </Dialog>
+  )
+}
+
 export function RowActions({ row }: DataTableRowActionsProps) {
+  const [dialogOpen, setdialogOpen] = useState(false)
   const spot = row.original
-  const usecases = useContext(UsecaseContext)
+  const router = useRouter()
 
   return (
     <DropdownMenu>
@@ -40,11 +70,10 @@ export function RowActions({ row }: DataTableRowActionsProps) {
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator /> */}
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={()=>{editDialog(spot.id)}}>Edit</DropdownMenuItem>
         <DropdownMenuItem
           className="text-red-600 hover:text-red-800"
-          onClick={() => {
-            usecases.DeleteParkingSlot(spot.id)
+          onClick={() => { deleteParkingSpot(spot.id); router.refresh()
           }}
         >
           Delete

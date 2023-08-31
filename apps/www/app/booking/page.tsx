@@ -11,7 +11,7 @@ export default async function Koksmat() {
   console.log(session)
   return (
     <div className="h-screen w-full bg-[url('/hard_blur.png')] bg-cover dark:bg-[url('/hard_blur_black.png')]">
-      <HomeScreen />
+      <HomeScreen userEmail={session?.user?.email} />
       <NexiLogo />
     </div>
   )

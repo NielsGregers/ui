@@ -1,0 +1,25 @@
+.canvas {
+    width: 1000px;
+    height: 700px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .canvas canvas {
+    width: 1000px;
+    height: 700px;
+    background: #fff;
+    cursor: crosshair;
+  }
+  
+  .canvas canvas rect {
+    cursor: pointer;
+  }
+  
+  .canvas svg text {
+    cursor: pointer;
+  }
+  
