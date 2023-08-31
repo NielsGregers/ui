@@ -7,7 +7,10 @@ export function SiteFooter() {
   return (
     <footer className="place-items-center py-6 md:px-8 md:py-0 ">
       <div className=" flex flex-col  justify-between gap-4 md:h-24 md:flex-row ">
-        <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+        <div className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+        <div>
+              Modules:
+            </div>
           <ForRole role="User" module="PowerShell">
             <Button variant="link">
               <Link href="/powershell">powershell</Link>
@@ -37,7 +40,7 @@ export function SiteFooter() {
               <Link href="/shadcn">shadcn</Link>
             </Button>
           </ForRole>
-        </p>
+        </div>
       </div>
     </footer>
   )

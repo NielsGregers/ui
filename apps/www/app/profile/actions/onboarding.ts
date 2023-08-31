@@ -74,7 +74,7 @@ export async function createInvitation(data: any): Promise<Result<CreateInvitati
     const client = await connect()
     try {
         const object = { data, graphData, invitation: invitationResult?.data, user }
-        const insertResult = await client.db("sandbox").collection("profiling").insertOne(object)
+        const insertResult = await client.db("logs-niels").collection("profiling").insertOne(object)
         result = { hasError: false, data : {
             user,
             valid:true,

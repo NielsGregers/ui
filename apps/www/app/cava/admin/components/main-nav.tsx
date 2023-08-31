@@ -12,24 +12,24 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/powershell/admin"
+        href="/cava/admin"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Overview
       </Link>
       <Link
-        href="/powershell/admin/logs/auditlog"
+        href="/cava/admin/orders"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Logs
+        Orders
       </Link>
-      
+{/*       
       <Link
-        href="/powershell/admin/accesscontrol"
+        href="/cava/admin/accesscontrol"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Access Control
-      </Link>
+        Delivery
+      </Link> */}
     </nav>
   )
 }

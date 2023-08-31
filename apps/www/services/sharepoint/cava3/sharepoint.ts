@@ -72,7 +72,8 @@ export namespace Buildings {
 			Modified: new Date(item.lastModifiedDateTime),
 			RoomEmail: item.fields.RoomEmail ? item.fields.RoomEmail : "",
 			Appointmentstart: new Date(item.fields.Appointmentstart),
-			Appointmentend: new Date(item.fields.Appointmentend),
+			
+		
 			OrderData: item.fields.OrderData ? item.fields.OrderData : "",
 			Organizer_x0020_Email: item.fields.Organizer_x0020_Email ? item.fields.Organizer_x0020_Email : "",
 			Appointmentdata: item.fields.Appointmentdata ? item.fields.Appointmentdata : "",
@@ -103,7 +104,7 @@ export namespace Buildings {
 
 		RoomEmail: z.string(),
 		Appointmentstart: z.date(),
-		Appointmentend: z.date(),
+
 		OrderData: z.string(),
 		Organizer_x0020_Email: z.string(),
 		Appointmentdata: z.string(),
