@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "./workspace-canvas.css";
-import { Color } from "@svgdotjs/svg.js";
+
 
 type Rectangle = {
   x: number;
@@ -166,9 +166,9 @@ const Canvas = () => {
       />
       </div>
       <div className="col-span-1" >
-      {rectangles.map((desk) => {
+      {rectangles.map((desk,key) => {
         return (
-          <div>
+          <div key={key}>
             <text onClick={() => setselected(desk.id)}>
               {"desk " + desk.id.toString()}
             </text>

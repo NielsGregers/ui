@@ -140,7 +140,7 @@ export function ParkingBookingsTable(props: PropsType) {
   // setbookings(result)
 
   return (
-    <div className="w-full my-3">
+    <div className="my-3 w-full">
       <DatePicker
         currentDate={new Date()}
         onDateChanged={(date) => {

@@ -30,7 +30,8 @@ function deleteParking (id: string) {
   deleteParkingSpot(id)
 }
 
-function editDialog (id: string) {
+// Functions that return JSX are called components, they need to be capitalized to be recognized as such.
+function EditDialog (props : {id:string}) {
   const [dialogOpen, setdialogOpen] = useState(true)
 
   return(
@@ -70,7 +71,7 @@ export function RowActions({ row }: DataTableRowActionsProps) {
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator /> */}
-        <DropdownMenuItem onClick={()=>{editDialog(spot.id)}}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={()=>{EditDialog({id:spot.id})}}>Edit</DropdownMenuItem>
         <DropdownMenuItem
           className="text-red-600 hover:text-red-800"
           onClick={() => { deleteParkingSpot(spot.id); router.refresh()
