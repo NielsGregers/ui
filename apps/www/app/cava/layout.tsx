@@ -17,7 +17,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
 <CavaProvider>
     <div className="relative flex min-h-screen flex-col">
-      {/* <SiteHeader /> */}
+     <SiteHeader /> 
       <div className="flex-1">{children}</div>
       <LocalSiteFooter />
       <SiteFooter />
