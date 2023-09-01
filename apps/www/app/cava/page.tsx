@@ -43,7 +43,7 @@ export default function Cava() {
         <CardDescription>CAVA is a new service that provides delicious and healthy catering for your meeting rooms</CardDescription>
       </CardHeader>
       <CardContent>
-      <Image src="/tapas.png" width={500} height={500}
+      <Image src="/tapas.png" width={500} height={500} alt="Tapas"
           className="rounded-md" />
       </CardContent>
       <CardFooter className="flex justify-between">
