@@ -250,7 +250,9 @@ export async function getItemGroups(accessToken: string) : Promise<ItemGroup[]>{
     return items.data?.value.map((item) => {
     const { fields } = item;
     const provider: ItemGroup = {
-      id: item.id
+      id: item.id,
+      name:fields.Title,
+      sortOrder:fields.Sort
     };
     return provider;
   }) ?? [];
@@ -289,7 +291,8 @@ export async function getWorkOrders(accessToken: string,itemItems: Item[]) : Pro
     return items.data?.value.map((item) => {
     const { fields } = item;
     const provider: WorkOrder = {
-      id: ""
+      id: item.id,
+      name: fields.Title
     };
     return provider;
   }) ?? [];
@@ -345,6 +348,7 @@ export interface ItemFields {
   Title: string
   Price: number
   Description?: string
+  ImageLink?:string
   Group: Group[]
   ProviderLookupId: string
   CurrencyLookupId?: string
@@ -395,7 +399,8 @@ export async function getItems(accessToken: string, providers : CateringProvider
       itemGroups,
       description: fields.Description ?? "",
       price: fields.Price,
-      comments: ""
+      comments: "",
+      imageUrl: fields.ImageLink ?? "/tapas.png",
     };
     return i;
   }) ?? [];

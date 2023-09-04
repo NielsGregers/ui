@@ -95,7 +95,12 @@
     @apply px-4;
   }
 }
-
+/* 
 body {
   background-color : transparent;
+} */
+
+html {
+  --scroll-behavior: smooth !important;
+  scroll-behavior: smooth !important;
 }

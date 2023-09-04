@@ -28,13 +28,16 @@ export type Company = z.infer<typeof companyProviderSchema>;
 
 export const itemGroupSchema = z.object({
   id:z.string(),
- 
+  name:z.string(),
+  sortOrder:z.number(),
 });
 
 export type ItemGroup = z.infer<typeof itemGroupSchema>;
 
 export const workorderSchema = z.object({
   id:z.string(),
+  name:z.string(),
+  
  
 });
 
@@ -78,6 +81,7 @@ export const itemSchema = z.object({
   description: z.string(),
   price: z.number(),
   comments:z.string(),
+  imageUrl:z.string(),
 
 
 })
@@ -101,7 +105,7 @@ export const roomSchema = z.object({
   id:z.string(),
   email:z.string().email(),
   name:z.string(),
-  
+
 
 
 })

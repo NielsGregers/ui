@@ -11,7 +11,14 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["avatars.githubusercontent.com", "images.unsplash.com","media.akamai.odsp.cdn.office.net"],
+    remotePatterns: [
+      {
+          protocol: 'https',
+          hostname: '**',
+          port: '',
+          pathname: '**',
+      },
+  ],
   },
   experimental : {  
     serverActions: true,

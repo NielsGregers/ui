@@ -5,8 +5,8 @@
 //     InteractionStatus,
 //     AccountInfo,
 //   } from "@azure/msal-browser";
-  
-  import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
+import  {  Method } from "axios";
+  //import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
   //import { logVerbose } from "./logging";
   const sleep = (ms: number) => {
     return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@
     url: string,
     data?: any,
     contentType?: string,
-    additionalAxiosConfig?: AxiosRequestConfig
+    additionalConfig?: any
   ): Promise<Result<T>> => {
     return new Promise((resolve, reject) => {
       var headers : any  = {
@@ -39,36 +39,40 @@
         headers["Authorization"] = `Bearer ${token}`;
       }
   
-      var config: AxiosRequestConfig = {
-        method,
-        data,
-        url,
-        headers,
-        ...additionalAxiosConfig,
-      };
+      // var config: AxiosRequestConfig = {
+      //   method,
+      //   data,
+      //   url,
+      //   headers,
+      //   ...additionalAxiosConfig,
+      // };
+
+
+      
       //logVerbose("https",method,url)
       const send = (retryNumber: number) => {
-        axios(config)
-          .then(function (response) {
-            
-            var data = response.data;
-  
-            resolve({ hasError: false, data ,errorMessage:""});
+        fetch(url, {  
+          method: method,
+          headers: headers,
+          body: data,
+          ...additionalConfig
           })
-          .catch(async (error: AxiosError) => {
+        //axios(config)
+          .then(async function (response : Response) {
             if (
-              error?.response?.status === 404 ||
-              error?.response?.status === 401 ||
-              error?.response?.status === 400
+              response.status === 404 ||
+              response.status === 401 ||
+              response.status === 400
             ) {
               resolve({
                 hasError: true,
               
                 errorMessage:
-                  error.message ,
+                  response.statusText,
               });
               return;
             }
+            if (response.status > 400) {
             if (retryNumber < 3) {
               await sleep(1000 * (retryNumber + 1));
               send(retryNumber + 1);
@@ -76,10 +80,23 @@
               resolve({
                 hasError: true,
                 errorMessage:
-                  error.message ,
+                response.statusText ,
               });
             }
-          });
+          }
+            var data = await response.json();
+  
+            resolve({ hasError: false, data ,errorMessage:""});
+          })
+          .catch( (error) => {
+            resolve({
+              hasError: true,
+              errorMessage:
+              JSON.stringify(error) ,
+            });
+          })
+            
+       
       };
       send(0);
     });
