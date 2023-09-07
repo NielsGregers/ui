@@ -13,6 +13,7 @@ import {
   ContextMenuTrigger,
 } from "@/registry/new-york/ui/context-menu"
 import { SitePage } from "@/app/profile/data/officegraph"
+import Link from "next/link"
 
 
 interface SitepageCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,6 +21,8 @@ interface SitepageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   aspectRatio?: "portrait" | "square"
   width?: number
   height?: number
+  siteUrl:string,
+  showDetails?: (page : SitePage) => void
 }
 
 export function SitepageCard({
@@ -28,13 +31,16 @@ export function SitepageCard({
   width,
   height,
   className,
+  siteUrl,
+  showDetails,
   ...props
 }: SitepageCardProps) {
   return (
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className="overflow-hidden rounded-md">
+          <div className="cursor-pointer overflow-hidden rounded-md" onClick={()=>{if (showDetails) showDetails(page)}}>
+          
             <img
               src={page.thumbnailWebUrl}
               alt={page.name}
@@ -45,10 +51,11 @@ export function SitepageCard({
                 aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
               )}
             />
+           
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-40">
-          <ContextMenuItem>Add to Library</ContextMenuItem>
+          <ContextMenuItem >Details</ContextMenuItem>
           <ContextMenuSub>
             <ContextMenuSubTrigger>Add to Playlist</ContextMenuSubTrigger>
             <ContextMenuSubContent className="w-48">

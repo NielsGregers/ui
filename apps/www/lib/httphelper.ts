@@ -104,7 +104,10 @@ import  {  Method } from "axios";
   
   export const httpsGetAll = <T>(
     token: string,
-    url: string
+    url: string,
+    options? : {
+      maxRows?:number
+    }
   ): Promise<Result<T[]>> => {
     return new Promise( (resolve, reject) => {
       var data: T[] = [];
@@ -118,6 +121,11 @@ import  {  Method } from "axios";
         }
         data.push(...response.data.value);
         console.log("data",data.length)
+        const maxResponseItems = options?.maxRows ?? 1000000
+        if (data.length > maxResponseItems) {
+          resolve({ hasError: false, data });
+          return;
+        }
         if (response.data["@odata.nextLink"]) {
           next(response.data["@odata.nextLink"]);
         } else {

@@ -540,3 +540,46 @@ export async function getOrders(accessToken: string,itemItems : Item[],rooms : R
   }) ?? [];
 
 }
+
+export interface List {
+  contentTypesEnabled: boolean
+  hidden: boolean
+  template: string
+}
+
+export interface NewListItem {
+  "@odata.context": string
+  "@odata.etag": string
+  createdDateTime: string
+  description: string
+  eTag: string
+  id: string
+  lastModifiedDateTime: string
+  name: string
+  webUrl: string
+  displayName: string
+  createdBy: CreatedBy
+  lastModifiedBy: LastModifiedBy
+  parentReference: ParentReference
+  list: List
+}
+
+export async function addOrder(accessToken: string, order:Order){
+  const orderData = order.items.map((item) => {
+    return `${item.item.id};${item.quantity};${item.price};${item.deliveryMinute};${item.item.name}`
+  }).join("\n");
+  const body = {
+    fields: {
+      Title:  "No title",
+      //Appointmentstart: order.deliveryDateTime.toISOString(),
+      OrderData: orderData,
+      //RoomLookupId: order.deliverTo.id,
+      //Organizer_x0020_Email: order.organizer,
+      //ConfirmationHTML: "",
+      //Comments: order.comments ?? ""
+    }
+  }
+  return await https<ItemHeader<OrderFields>>(accessToken, "POST",
+    `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Catering%20Orders/items`,JSON.stringify(body),"application/json");
+ 
+}

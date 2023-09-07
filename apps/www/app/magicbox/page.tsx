@@ -5,53 +5,74 @@ import { useContext, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
+import { https } from "@/lib/httphelper"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogContent, DialogFooter,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { https } from "@/lib/httphelper"
+import {
+  SitePage,
+  getSiteCollection,
+  getSitePages,
+} from "../profile/data/officegraph"
 import { Me } from "../profile/data/schemas"
-import { SitePage, getSiteCollection, getSitePages } from "../profile/data/officegraph"
-
-
 import { SharePointExtensionContext } from "./usecasecontext"
+import { copyPage } from "./actions/pages"
+import { setConfig } from "next/config"
 
 export default function RootPage() {
   const context = useContext(SharePointExtensionContext)
   const searchParams = useSearchParams()
-  const [token, settoken] = useState(searchParams ? searchParams.get("token") : "")
-  const [parentLocation, setparentLocation] = useState(searchParams ? searchParams.get("href") : "")
+  const [token, settoken] = useState(
+    searchParams ? searchParams.get("token") : ""
+  )
+  const [parentLocation, setparentLocation] = useState(
+    searchParams ? searchParams.get("href") : ""
+  )
   const [me, setMe] = useState<Me>()
   const [sitePath, setsitePath] = useState("")
   const [sharePointTenantName, setsharePointTenantName] = useState("")
   const [siteId, setsiteId] = useState("")
   const [sitePages, setsitePages] = useState<SitePage[]>([])
-const [resolveduser, setresolveduser] = useState()
+  const [resolveduser, setresolveduser] = useState()
+  const [sourceUrl, setsourceUrl] = useState("")
+  const [copying, setcopying] = useState(false)
+  const [newPageUrl, setnewPageUrl] = useState("")
+  const [errorMessage, seterrorMessage] = useState("")
   React.useEffect(() => {
     const load = async () => {
-      
-      const res = await https<Me>(token ?? "", "GET", "https://graph.microsoft.com/v1.0/me")
+      const res = await https<Me>(
+        token ?? "",
+        "GET",
+        "https://graph.microsoft.com/v1.0/me"
+      )
       if (!res.hasError) {
         setMe(res.data)
       }
     }
     if (token) {
       context.settoken(token)
-      context.setparentlocation(parentLocation ?? "")
+      context.setparentlocation(parentLocation?.split("?")[0] ?? "")
       load()
     }
-  }, [token,parentLocation])
+  }, [token, parentLocation])
 
   React.useEffect(() => {
     const load = async () => {
-      const res = await getSiteCollection(token || "", sharePointTenantName, sitePath)
+      const res = await getSiteCollection(
+        token || "",
+        sharePointTenantName,
+        sitePath
+      )
 
       if (!res.hasError) {
         setsiteId(res.data?.id ?? "")
@@ -75,46 +96,44 @@ const [resolveduser, setresolveduser] = useState()
     }
   }, [parentLocation])
 
-// This hook is listening an event that came from the Iframe
-React.useEffect(() => {
-  type MessageTypes = "ensureuser" | "closemagicbox" | "resolveduser"
-  interface Message {
-    type: MessageTypes
-    messageId:string
-    str1: string
-}
-  const handler = async (ev: MessageEvent<{ type: MessageTypes, data: any }>) => {
-      console.log('ev', ev)
+  // This hook is listening an event that came from the Iframe
+  React.useEffect(() => {
+    type MessageTypes = "ensureuser" | "closemagicbox" | "resolveduser"
+    interface Message {
+      type: MessageTypes
+      messageId: string
+      str1: string
+    }
+    const handler = async (
+      ev: MessageEvent<{ type: MessageTypes; data: any }>
+    ) => {
+      console.log("ev", ev)
 
       // if (typeof ev.data !== 'object') return
       // if (!ev.data.type) return
       // if (ev.data.type !== 'button-click') return
-      
-   
-      let r 
+
+      let r
       try {
-          const m = ev.data
-          switch (m.type) {
-           
-              case "resolveduser":
-                setresolveduser(m.data?.LoginName)
-                  break
-              default:
-                  break;
-          }
-          //setmessage(ev.data.message)
-         
+        const m = ev.data
+        switch (m.type) {
+          case "resolveduser":
+            setresolveduser(m.data?.LoginName)
+            break
+          default:
+            break
+        }
+        //setmessage(ev.data.message)
       } catch (error) {
-          console.log("ERROR",error)
+        console.log("ERROR", error)
       }
+    }
 
-  }
+    window.addEventListener("message", handler)
 
-  window.addEventListener('message', handler)
-
-  // Don't forget to remove addEventListener
-  return () => window.removeEventListener('message', handler)
-}, [])
+    // Don't forget to remove addEventListener
+    return () => window.removeEventListener("message", handler)
+  }, [])
   React.useEffect(() => {
     const load = async () => {
       const res = await getSitePages(token || "", siteId)
@@ -128,85 +147,93 @@ React.useEffect(() => {
     }
   }, [siteId])
 
+  const onCopyPage = async () => {
+    setcopying(true)
+    const destSiteUrl = context.parentlocation.split("/SitePages")[0]
+    const copyPageResult = await copyPage(sourceUrl,destSiteUrl)
+    setcopying(false)
+    if (copyPageResult.hasError) {
+      seterrorMessage(copyPageResult.errorMessage ?? "Unknown error")
+      return
+    }
+    setnewPageUrl(copyPageResult.data?.newpageurl ?? "")
+
+  }
 
   return (
     <div className="h-screen w-screen">
       <div className="flex h-screen flex-row">
-        <div className="flex-grow bg-transparent">
-  
-            
-
-
-        </div>
+        <div className="flex-grow bg-transparent blur-md"></div>
         <div className="w-[500px] bg-gray-200 transition-transform delay-150 ease-in-out">
           <div className="m-4 overflow-scroll ">
-          {/* <div className="p-3">
-             <Link href="/magicbox/sitepages">Pages</Link>
-            </div> */}
-            The sidebar is in a alpha state. So it is currently only providing 2 features.
+            <div className="p-3"></div>
+            The sidebar is in a alpha state, so expect bugs and missing features
             <div className="p-3">
-              <Button variant="default" onClick={() => {
-                window.parent.postMessage(
-                  {
-                    type: 'closemagicbox',
-                    data: "",
-                  },
-                  '*'
-                )
-
-              }}>Restore Standard SharePoint navigation</Button>
+              <Button
+                variant="default"
+                onClick={() => {
+                  window.parent.postMessage(
+                    {
+                      type: "closemagicbox",
+                      data: "",
+                    },
+                    "*"
+                  )
+                }}
+              >
+                Restore Standard SharePoint navigation
+              </Button>
             </div>
-        
-
             <div className="p-3">
-              <Dialog > 
+              <Button variant="default">
+                <Link href={`/magicbox/sitepages/${sitePath}`}>Pages</Link>
+              </Button>
+            </div>
+            <div className="p-3">
+              <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="default" disabled={!me}>Show Profile</Button>
+                  <Button variant="default" disabled={!me}>
+                    Copy Page
+                  </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-white sm:max-w-[425px]">
+                <DialogContent className="bg-white sm:max-w-[600px]">
                   <DialogHeader>
-                    <DialogTitle>Show profile</DialogTitle>
-                    {/* <DialogDescription>
-                    Make changes to your profile here. Click save when you are
-                    done.
-                  </DialogDescription> */}
+                    <DialogTitle>Copy Page</DialogTitle>
+                    <DialogDescription>
+                   Find the URL of the page that you like to have a copy of.
+                  </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4 ">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="name" className="text-right">
-                        Name
+                        Source URL 
                       </Label>
                       <Input
+                        value={sourceUrl}
+                        onChange={(e) => {
+                          setsourceUrl(e.target.value)
+                        }}
                         id="name"
-                        value={me?.displayName ?? ""}
                         className="col-span-3"
                       />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="username" className="text-right">
-                        Username
-                      </Label>
-                      <Input
-                        id="username"
-                        value={me?.userPrincipalName ?? ""}
-                        className="col-span-3"
-                      />
-                    </div>
+                   
                   </div>
                   <DialogFooter>
-                    <Button type="submit">Close</Button>
+                    {copying && <div>Copying... Expect 5-15 seconds delay</div>}
+                    {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+                    {newPageUrl && <div>
+                    <Button type="button" ><Link href={newPageUrl} target="_blank">Open new page</Link> </Button>
+                    </div>}
+                    {!copying && !newPageUrl && 
+                    <Button type="button" disabled={sourceUrl===""} onClick={()=>onCopyPage()}>Copy</Button>}
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
             </div>
-
-
-
           </div>{" "}
         </div>
       </div>
     </div>
   )
 }
-
-

@@ -9,15 +9,17 @@ import { DataTableViewOptions } from "@/app/shadcn/examples/tasks/components/dat
 
 import { priorities, statuses } from "../data/data"
 import { DataTableFacetedFilter } from "@/app/powershell/components/data-table-faceted-filter"
-import { GenericTableActions, ISelectedItemsActionsComponent } from "./GenericTableActions"
+import { GenericTableActions, ISelectedItemsActionsComponent ,IFilterAction} from "./GenericTableActions"
 interface DataTableToolbarProps<TData> {
   table: Table<TData>,
   SelectedItemsActionsComponent?: ISelectedItemsActionsComponent<Row<TData>>
+ FilterActions? :  IFilterAction<Row<TData>>
 }
 
 export function DataTableToolbar<TData>({
   table,
-  SelectedItemsActionsComponent
+  SelectedItemsActionsComponent,
+  FilterActions
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const {rowSelection} = table.getState()
@@ -32,6 +34,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
+        {FilterActions && <FilterActions rows={table.getSelectedRowModel().flatRows } />}
         {SelectedItemsActionsComponent 
         && Object.keys(rowSelection).length > 0 
         && <SelectedItemsActionsComponent rows={table.getSelectedRowModel().flatRows } />

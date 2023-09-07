@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} SelectedItemsActionsComponent={actions?.selectedItemsActionsComponent} />
+      <DataTableToolbar table={table} SelectedItemsActionsComponent={actions?.selectedItemsActionsComponent} FilterActions={actions?.filterComponent} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

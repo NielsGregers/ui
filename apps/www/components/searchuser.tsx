@@ -272,7 +272,7 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
             <CommandEmpty>No users found.</CommandEmpty>
            <CommandList>
              <CommandGroup heading="Results" >
-              {foundUsers.map((user: UserSearchResultItem, key) => (
+              {foundUsers?.map((user: UserSearchResultItem, key) => (
 
                 <CommandItem
                   key={key}

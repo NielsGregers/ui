@@ -1,24 +1,38 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { SharePointExtension, SharePointExtensionContext } from "./usecasecontext";
+import { useState } from "react"
 
+import {
+  SharePointExtension,
+  SharePointExtensionContext,
+} from "./usecasecontext"
 
 type Props = {
-  children?: React.ReactNode;
-};
+  children?: React.ReactNode
+}
 
 export const UsercaseProvider = ({ children }: Props) => {
-const [token, settoken] = useState("")
-const [parentlocation, setparentlocation] = useState("")
-  const usecases: SharePointExtension = {
-    token,settoken,parentlocation,setparentlocation
+  const [token, settokenlocal] = useState(sessionStorage.getItem("token") ?? "")
+  const [parentlocation, setparentlocationlocal] = useState(
+    sessionStorage.getItem("parentlocation") ?? ""
+  )
+  const settoken = (s: string) => {
+    settokenlocal(s)
+    sessionStorage.setItem("token", s)
   }
-  return <SharePointExtensionContext.Provider value={usecases}>
-
-
-    {children}
-
-
-  </SharePointExtensionContext.Provider>;
-};
+  const setparentlocation = (s: string) => {
+    setparentlocationlocal(s)
+    sessionStorage.setItem("parentlocation", s)
+  }
+  const usecases: SharePointExtension = {
+    token,
+    settoken,
+    parentlocation,
+    setparentlocation,
+  }
+  return (
+    <SharePointExtensionContext.Provider value={usecases}>
+      {children}
+    </SharePointExtensionContext.Provider>
+  )
+}

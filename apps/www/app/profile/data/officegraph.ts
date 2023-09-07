@@ -210,3 +210,5 @@ export async function getSitePages(accessToken: string, siteId: string) {
     return httpsGetAll<SitePage>(accessToken ?? "", `https://graph.microsoft.com/beta/sites/${siteId}/pages`)
 }
 
+
+

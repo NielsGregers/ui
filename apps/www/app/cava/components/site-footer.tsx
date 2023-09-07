@@ -23,7 +23,9 @@ export function SiteFooter() {
             <div>
              SharePoint lists:
             </div>
-       
+            <Button variant="link">
+              <Link href="https://christianiabpos.sharepoint.com/sites/cava3/Lists/Catering%20Orders" target="_blank">Sales Orders</Link>
+            </Button>
             <Button variant="link">
               <Link href="https://christianiabpos.sharepoint.com/sites/cava3/Lists/Catering%20Providers" target="_blank">Providers</Link>
             </Button>

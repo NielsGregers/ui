@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "magicbox/cava",
+  name: "magicbox/cava (PREVIEW)",
   url: "https://ui.shadcn.com",
   root: "/cava",
   ogImage: "https://ui.shadcn.com/og.jpg",
