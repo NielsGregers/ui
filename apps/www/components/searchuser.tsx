@@ -5,8 +5,7 @@ import * as z from "zod"
 import { useSession } from "next-auth/react"
 import { Button } from "@/registry/new-york/ui/button"
 import { Input } from "@/registry/new-york/ui/input"
-import { de } from "date-fns/locale"
-import { toast } from "@/registry/default/ui/use-toast"
+
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/registry/new-york/ui/command"
 import { Checkbox } from "@/registry/new-york/ui/checkbox"
 import { https } from "@/lib/httphelper"
@@ -14,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { ChevronDownIcon, EnvelopeClosedIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/registry/new-york/ui/avatar"
 import { MagicboxContext } from "@/app/magicbox-context"
+import { useToast } from "@/registry/new-york/ui/use-toast"
 
 
 const searchFormSchema = z.object({
@@ -132,7 +132,7 @@ export function UserAvatar({  userPrincipalName }: UserAvatarProps) {
 export function ShowUser({  onSelectUser, user }: UserProps) {
  
 
-  const [upn, setupn] = useState(user.userPrincipalName)
+
   
   return <div className="cursor-pointer" onClick={() => { onSelectUser(user) }}>
     <div className="flex ">
@@ -172,12 +172,12 @@ async function getImage(upn: string, accessToken: string) {
 
 export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: Props) {
   const magicbox=useContext(MagicboxContext);
-
+  const { toast } = useToast()
   const [searchFor, setsearchFor] = useState("")
   const [foundUser, setfoundUser] = useState<User | null>(null)
   const [open, setOpen] = React.useState(false)
   const [foundUsers, setfoundUsers] = useState<UserSearchResultItem[]>([])
-  const [defaultuser, setdefaultuser] = useState(defaultuserUserPrincipalName)
+  const [defaultuser, setdefaultuser] = useState("")
   const [image, setimage] = useState("")
 
 
@@ -189,16 +189,17 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
        * 
        * https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0&tabs=http
        */
-      const searchRequestResult = await https<User>(accessToken, "GET", `https://graph.microsoft.com/v1.0/users/${defaultuserUserPrincipalName}`)
-
+      const searchRequestResult = await https<User>(accessToken, "GET", `https://graph.microsoft.com/v1.0/users/${defaultuser}`)
+      
       if (searchRequestResult.hasError) {
+      
         toast({ variant: "destructive", title: "Error", description: searchRequestResult.errorMessage })
         return
       }
 
-
+      toast({ variant: "default", title: "Success", description: "User found " + searchRequestResult.data?.displayName })
       setfoundUser(searchRequestResult.data ?? null)
-      const i = await getImage(defaultuserUserPrincipalName as string, accessToken)
+      const i = await getImage(defaultuser as string, accessToken)
       setimage(i)
     }
 
@@ -210,6 +211,12 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
     }
 
   }, [defaultuser])
+
+  useEffect(() => {
+    
+      setdefaultuser(defaultuserUserPrincipalName ?? "")
+    
+  }, [defaultuserUserPrincipalName])
 
   useEffect(() => {
     const load = async (accessToken : string) => {
@@ -252,7 +259,7 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
         >    
         <div className="flex w-full items-center ">
           <div className="pr-2">
-        <Avatar className="h-8 w-8 ">
+        <Avatar className="h-6 w-6 ">
             <AvatarImage src={image} alt={"Image of selected user"} />
             <AvatarFallback><AvatarImage src="/avatars/01.png" alt={"Image of selected user"} /></AvatarFallback>
           </Avatar>

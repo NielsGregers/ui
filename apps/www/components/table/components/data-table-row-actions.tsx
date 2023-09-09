@@ -31,7 +31,7 @@ export function DataTableRowActions<TData>({
   link,
   row,
 }: DataTableRowActionsProps<TData>) {
-  const logentry = schema.parse(row.original)
+  //const logentry = schema.parse(row.original)
 
   return (
     <DropdownMenu>

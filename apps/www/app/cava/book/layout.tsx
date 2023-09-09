@@ -14,7 +14,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname()
   return (
     <div className="container min-h-screen ">
-      <div className="my-5 flex flex-wrap">
+      {/* <div className="my-5 flex flex-wrap">
         
         {roles
         .filter((role) => role.type !== "service")
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </Button>
             )
           })}
-      </div>
+      </div> */}
       <div>{children}</div>
     </div>
   )

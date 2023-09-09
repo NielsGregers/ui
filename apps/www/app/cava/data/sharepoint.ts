@@ -1,8 +1,10 @@
 "use client";
 
 
-import {CateringProvider, Company, Country, Currency, Item, ItemGroup, Order, OrderItem, Room, WorkOrder, WorkorderItem } from "./schemas";
+import { format, getHours,getMinutes,getDate } from "date-fns";
+import {CateringProvider, Company, Country, Currency, Item, ItemGroup, Order, OrderItem, Room, WorkOrder, WorkorderItem,Location } from "./schemas";
 import { https } from "@/lib/httphelper";
+import { get } from "http";
 
 export interface Root<T> {
     "@odata.context": string;
@@ -166,10 +168,7 @@ export interface CountryFields {
   _ComplianceTagUserId: string
 }
 
-export interface Location {
-  LookupId: number
-  LookupValue: string
-}
+
 
 export async function getCountries(accessToken: string) {
   const items = await https<Root<ItemHeader<CountryFields>>>(accessToken, "GET",
@@ -292,7 +291,10 @@ export async function getWorkOrders(accessToken: string,itemItems: Item[]) : Pro
     const { fields } = item;
     const provider: WorkOrder = {
       id: item.id,
-      name: fields.Title
+      name: fields.Title,
+      deliveryDateTime: new Date(),
+      hour: 0,
+      minute: 0
     };
     return provider;
   }) ?? [];
@@ -311,9 +313,10 @@ export interface WorkOrderItemFields {
   Quantity: number
   Pricepritem: number
   Catering_x0020_OrderLookupId?: string
-  Status: string
-  DeliverTo: string
+  Status?: string
+  DeliverTo?: string
   RoomLookupId?: string
+  CostCentre?: string
   id: string
   ContentType: string
   Modified: string
@@ -329,20 +332,56 @@ export interface WorkOrderItemFields {
   _ComplianceTag: string
   _ComplianceTagWrittenTime: string
   _ComplianceTagUserId: string
+  AppAuthorLookupId: string
+  AppEditorLookupId?: string
 }
-export async function getWorkOrderItems(accessToken: string) {
+export async function getWorkOrderItems(accessToken: string,itemItems: Item[],orders: Order[]) {
   const items = await https<Root<ItemHeader<WorkOrderItemFields>>>(accessToken, "GET",
     `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Catering%20Orders%20Items/items?$expand=fields`);
     return items.data?.value.map((item) => {
     const { fields } = item;
-    const provider: WorkorderItem = {
-      id: ""
+    const  date =  fields.DeliveryDateandTime ? new Date(fields.DeliveryDateandTime) : new Date()
+    const workOrderItem: WorkorderItem = {
+      id: item.id,
+      price: fields.Pricepritem,
+      dateToDeliver:date,
+      role: "",
+      item: itemItems.find((p) => p.id === fields.ItemLookupId) ?? {} as Item,
+      order: orders.find((p) => p.id === fields.Catering_x0020_OrderLookupId) ?? {} as Order,
+      quantity: fields.Quantity,
+      deliveryHour: getHours(date),
+      deliveryMinute: getMinutes(date),
     };
-    return provider;
+    return workOrderItem;
   });
 
 }
 
+
+export async function createWorkOrderItems(accessToken: string, order:Order){
+for (let index = 0; index < order.items.length; index++) {
+  const orderItem = order.items[index];
+  const fields  = {
+ 
+    Title: orderItem.item.name,
+    ItemLookupId: orderItem.item.id,
+    DeliveryDateandTime: order.deliveryDateTime.toISOString(),
+    ProviderLookupId: orderItem.item.providerId,
+    Catering_x0020_OrderLookupId:order.id,
+    Quantity: orderItem.quantity,
+    Pricepritem: orderItem.price,
+    Status: "Pending",
+    DeliverTo: "Meeting Room",
+
+  }
+  const body = {
+    fields
+  }
+await https<ItemHeader<OrderFields>>(accessToken, "POST",
+    `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Catering%20Orders%20Items/items`,JSON.stringify(body),"application/json");
+}
+await updateOrderStatus(accessToken,order.id,"Pending")
+}
 export interface ItemFields {
   "@odata.etag": string
   Title: string
@@ -422,6 +461,7 @@ export interface OrderFields {
   LinkTitle: string
   Appointmentstart: string
   OrderData?: string
+  Status?: string
   Organizer_x0020_Email: string
   Comments?: string
   ConfirmationHTML: string
@@ -513,6 +553,7 @@ export async function getOrders(accessToken: string,itemItems : Item[],rooms : R
         const itemName = parts[4];
         const item = itemItems.find((p) => p.id === itemId) ?? {} as Item
         const lineItem : OrderItem = {
+
           id: index.toString(),
           price: item.price,
           item,
@@ -531,16 +572,27 @@ export async function getOrders(accessToken: string,itemItems : Item[],rooms : R
     const order: Order = {
       id: item.id,
       items: itemLines ?? [],
+      stage: fields.Status ?? "New",
       deliverTo: room,
       deliveryDateTime: new Date(fields.Appointmentstart),
       organizer: fields.Organizer_x0020_Email,
       orderData: fields.OrderData ?? "",
+      hour: 0,
+      minute: 0
     };
     return order;
   }) ?? [];
 
 }
+export async function updateOrderStatus(accessToken: string,id : string,newStatus : string) {
+  const items = await https<Root<ItemHeader<OrderFields>>>(accessToken, "PATCH",
+    `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Catering%20Orders/items/${id}`,
+    JSON.stringify({fields:{Status:newStatus}}));
+ debugger
 
+     
+
+}
 export interface List {
   contentTypesEnabled: boolean
   hidden: boolean
@@ -582,4 +634,184 @@ export async function addOrder(accessToken: string, order:Order){
   return await https<ItemHeader<OrderFields>>(accessToken, "POST",
     `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Catering%20Orders/items`,JSON.stringify(body),"application/json");
  
+}
+
+
+export interface RoomFields {
+  "@odata.etag": string
+  id: string
+  ContentType: string
+  Title: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+  Provisioning_x0020_Status: string
+  Email?: string
+  Capacity: number
+  Price_x0020_ListLookupId?: string
+  RestrictedTo?: string
+  TeamsMeetingRoom?: boolean
+  AppEditorLookupId?: string
+  _IsRecord?: string
+}
+export interface DeskFields {
+  "@odata.etag": string
+  Title: string
+  Email: string
+  ProvisioningStatus: string
+  LocationonWorkspace: string
+  RestrictedTo?: string
+  id: string
+  ContentType: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+}
+export interface WorkspaceFields {
+  "@odata.etag": string
+  Title: string
+  LocationonFloor: string
+  FloorMapZoom: string
+  Desks: LookupValue[]
+ 
+  id: string
+  ContentType: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+}
+export interface FloorFields {
+  "@odata.etag": string
+  Title: string
+  HasWorkspaces: boolean
+  Workspaces: LookupValue[]
+  Rooms: LookupValue[]
+
+  ProvisioningStatus: string
+  id: string
+  ContentType: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+  FloorNumber?: number
+  FloorPlan?: string
+}
+export interface BuildingFields {
+  "@odata.etag": string
+  Title: string
+  Wheelchair: boolean
+  Floors: LookupValue[]
+  id: string
+  ContentType: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+  Image?: string
+  HasWorkspaces?: boolean
+}
+export interface LocationFields {
+  "@odata.etag": string
+  Title: string
+  Buildings: LookupValue[]
+ 
+  id: string
+  ContentType: string
+  Modified: string
+  Created: string
+  AuthorLookupId: string
+  EditorLookupId: string
+  _UIVersionString: string
+  Attachments: boolean
+  Edit: string
+  LinkTitleNoMenu: string
+  LinkTitle: string
+  ItemChildCount: string
+  FolderChildCount: string
+  _ComplianceFlags: string
+  _ComplianceTag: string
+  _ComplianceTagWrittenTime: string
+  _ComplianceTagUserId: string
+  Latitude?: string
+  Longitude?: string
+  Street?: string
+  City?: string
+  PostalCode?: string
+  CountryOrRegion?: string 
+}
+
+
+
+export async function getLocations(accessToken: string) : Promise<Location[]> {
+  const items = await https<Root<ItemHeader<LocationFields>>>(accessToken, "GET",
+    `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/cava3:/lists/Locations/items?$expand=fields`);
+    return items.data?.value.map((item) => {
+    const { fields } = item;
+    const location: Location = {
+      id: item.id,
+      name: fields.Title,
+     
+    };
+    return location ;
+  }) ?? [];
+
 }

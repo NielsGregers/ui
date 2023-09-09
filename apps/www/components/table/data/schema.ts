@@ -7,6 +7,9 @@ export const schema = z.object({
   link:z.string().nullable(),
   details:z.string().nullable(),
   id:z.string(),
+  string1:z.string().nullable(),  
+  string2:z.string().nullable(),
+  string3:z.string().nullable(),
   // created_at:z.date().nullable(),
   // updated_at:z.date().nullable(),
 

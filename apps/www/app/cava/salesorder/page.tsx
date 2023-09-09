@@ -1,6 +1,7 @@
 "use client"
 
-import { useContext, useState } from "react"
+import { debug } from "console"
+import { useContext, useEffect, useState } from "react"
 import * as React from "react"
 import Link from "next/link"
 import { redirect, useRouter } from "next/navigation"
@@ -46,12 +47,39 @@ import { ItemCard } from "./ItemCard"
 export default function Cava() {
   const cava = useContext(CavaContext)
   const magicbox = useContext(MagicboxContext)
-  const [order, setorder] = useState<Order>()
+  const [order, setorder] = useState<Order>({
+    items: [],
+    id: "",
+    deliverTo: {
+      id: "",
+      name: "",
+      email: "",
+    },
+    deliveryDateTime: new Date(),
+    hour:9,
+    minute:30,
+    organizer: "",
+  })
   const [quantity, setquantity] = useState(0)
   const [searchfor, setsearchfor] = useState("")
   const { toast } = useToast()
   const router = useRouter()
   const [date, setDate] = React.useState<Date>()
+const [hour, sethour] = useState(0)
+const [minute, setminute] = useState(0)
+  useEffect(() => {
+    if (!order.organizer && magicbox.session?.user) {
+      setorder({ ...order, organizer: magicbox.session.user.email })
+    }
+    if (!date) {
+      setDate(new Date())
+      sethour(9)
+      setminute(30)
+    }
+  
+
+  }, [magicbox.session])
+
   const sendOrder = async (order: Order) => {
     const newItem = await addOrder(magicbox.session?.accessToken ?? "", order)
     if (newItem.hasError) {
@@ -80,6 +108,8 @@ export default function Cava() {
       },
       deliveryDateTime: new Date(),
       organizer: "",
+      hour: 0,
+      minute: 0
     }
     const o = order ?? newOrder
 
@@ -113,7 +143,7 @@ export default function Cava() {
 
   return (
     <div className="minh-screen container">
-      <div className="sticky top-14 z-10 bg-white">
+      <div className="sticky top-[5px] z-10 bg-white">
         <div className="flex justify-between">
           <div>
             <div className="text-sm">Delivery to</div>
@@ -162,27 +192,38 @@ export default function Cava() {
           </div>
           <div className="ml-4">
             <div className="text-sm">Time</div>
-            <div>
+            <div className="flex">
               {" "}
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select time of day" />
+              <Select defaultValue={hour.toString()}>
+                <SelectTrigger className="w-[70px]">
+                  <SelectValue placeholder="Hour" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Hours</SelectLabel>
+                    <SelectLabel>Hour</SelectLabel>
                     {Array.apply(null, Array(24)).map((hour, hourKey) => {
-                      return Array.apply(null, Array(4)).map(
-                        (minute, minKey) => {
-                         const value=(hourKey * 60 + minKey * 15).toString()
-                          return (
-                            <SelectItem key={value}
-                              value={value}
-                            >
-                              {hourKey}:{minKey * 15}
-                            </SelectItem>
-                          )
-                        }
+                      return (
+                        <SelectItem key={hourKey} value={hourKey.toString()}>
+                          {hourKey.toString().padStart(2, "0")}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-[70px]">
+                  <SelectValue placeholder="Minute" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Minute</SelectLabel>
+                    {Array.apply(null, Array(12)).map((minute, minKey) => {
+                      const value = (minKey * 5).toString()
+                      return (
+                        <SelectItem key={value} value={value}>
+                          {(minKey * 5).toString().padStart(2, "0")}
+                        </SelectItem>
                       )
                     })}
                   </SelectGroup>
@@ -196,14 +237,14 @@ export default function Cava() {
             <div>
               {" "}
               <SearchUserForm
-                onSelectUser={(user) => {
+                onSelectUser={(selecteduser) => {
                   debugger
                   if (order) {
-                    order.organizer = user?.userPrincipalName ?? ""
+                    order.organizer = selecteduser?.userPrincipalName ?? ""
                   }
                   setorder(order)
                 }}
-                defaultuserUserPrincipalName={order?.organizer}
+                defaultuserUserPrincipalName={order.organizer}
               />
             </div>
           </div>

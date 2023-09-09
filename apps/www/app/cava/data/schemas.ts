@@ -37,18 +37,13 @@ export type ItemGroup = z.infer<typeof itemGroupSchema>;
 export const workorderSchema = z.object({
   id:z.string(),
   name:z.string(),
-  
+  deliveryDateTime : z.date(),
+  hour: z.number(),
+  minute:z.number(),
  
 });
 
 export type WorkOrder = z.infer<typeof workorderSchema>;
-
-export const workorderItemSchema = z.object({
-  id:z.string(),
- 
-});
-
-export type WorkorderItem = z.infer<typeof workorderItemSchema>;
 
 
 
@@ -88,6 +83,7 @@ export const itemSchema = z.object({
 export type Item = z.infer<typeof itemSchema>;
 
 
+
 export const orderItem = z.object({
   id:z.string(),
   item : itemSchema,
@@ -116,8 +112,11 @@ export type OrderItem = z.infer<typeof orderItem>;
 export const orderSchema = z.object({
   id:z.string(),
   items : orderItem.array(),
+  stage: z.string().optional(),
   deliverTo : roomSchema,
   deliveryDateTime : z.date(),
+  hour: z.number(),
+  minute:z.number(),
   organizer : z.string().email(),
   comments : z.string().optional(),
   costCentre: z.string().optional(),  
@@ -126,6 +125,30 @@ export const orderSchema = z.object({
 
 
 export type Order = z.infer<typeof orderSchema>;
+export const workorderItemSchema = z.object({
+  id:z.string(),
+  dateToDeliver : z.date(),
+  role:z.string(),
+  order:orderSchema,
+  item : itemSchema,
+  quantity : z.number(),
+  price : z.number(),
+  comments : z.string().optional(),
+  deliveryHour: z.number(),
+  deliveryMinute: z.number(),
+ 
+});
+
+export type WorkorderItem = z.infer<typeof workorderItemSchema>;
 
 
 
+export const locationSchema = z.object({
+  id:z.string(),
+  
+  name:z.string(),
+
+
+
+})
+export type Location = z.infer<typeof locationSchema>;

@@ -35,30 +35,39 @@ export default function Cava() {
   return (
     <div className="minh-screen w-full">
       <div className="container ">
-      <Card className="m-5 w-[350px]">
+        <div className="flex flex-wrap">
+          {roles
+            .filter((r) => r.type === "service")
+            .map((service) => {
+              return (
+                <Card className="m-5 w-[350px]" key={service.key}>
                   <CardHeader>
-                    <CardTitle>CAVA</CardTitle>
+                    <CardTitle>{service.name}</CardTitle>
                     <CardDescription className="h-[40px]">
-                      Handling everything related to meeting, physical, virtual, hybrid, and more.
-
+                      {service.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="center">
                     <Image
-                      src="/cava/cava-dark.svg"
+                      src={service.image}
                       width={500}
                       height={500}
-                      alt="CAVA"
+                      alt={service.name}
                       className="rounded-md"
                     />
                   </CardContent>
                   <CardFooter className="flex justify-between">
                     <div className="flex-grow"></div>
-                    {/* <Button disabled={role.version === "draft"}>
-                      <Link href={role.link}>{role.name} role</Link>
-                    </Button> */}
+                    <Button disabled={service.version === "draft"}>
+                      <Link href={service.link}>
+                        {service.linkname ?? "Start"}
+                      </Link>
+                    </Button>
                   </CardFooter>
                 </Card>
+              )
+            })}
+        </div>
         <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
           Meeting Participant Roles
         </h2>
@@ -70,7 +79,9 @@ export default function Cava() {
                 <Card className="m-5 w-[350px]" key={role.key}>
                   <CardHeader>
                     <CardTitle>{role.name}</CardTitle>
-                    <CardDescription className="h-[40px]">{role.description}</CardDescription>
+                    <CardDescription className="h-[40px]">
+                      {role.description}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="center">
                     <Image
@@ -103,7 +114,9 @@ export default function Cava() {
                 <Card className="m-5 w-[250px]" key={role.key}>
                   <CardHeader>
                     <CardTitle>{role.name}</CardTitle>
-                    <CardDescription className="h-[40px]">{role.description}</CardDescription>
+                    <CardDescription className="h-[40px]">
+                      {role.description}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Image
@@ -116,7 +129,7 @@ export default function Cava() {
                   </CardContent>
                   <CardFooter className="flex justify-between">
                     <div className="flex-grow"></div>
-                    <Button   disabled={role.version === "draft"}>
+                    <Button disabled={role.version === "draft"}>
                       <Link href={role.link}>{role.name} role</Link>
                     </Button>
                   </CardFooter>

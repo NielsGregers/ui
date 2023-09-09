@@ -534,11 +534,11 @@ export function ProfileForm(props: {
         description={processDescription}
         progress={processPercentage}
       />
-      {memberships && (
+      {false && memberships && (
         <div className="ml-5">
           <div className="text-xl">Current Office 365 Group memberships</div>
 
-          <GenericTable data={memberships
+          <GenericTable data={(memberships ?? [])
             .filter((a) => {
               return a.mailNickname?.startsWith("nexiintra-newschannel-")
             })

@@ -13,10 +13,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/registry/new-york/ui/
 import { cn } from "@/lib/utils"
 import {  CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
-import { format,parseISO,addDays } from "date-fns"
+import { format,parseISO,addDays,compareAsc } from "date-fns"
+import { CavaContext } from "../../cavacontext"
+import { IconLeft, IconRight } from "react-day-picker"
+import { getWorkOrderItems, getWorkOrders } from "../../data/sharepoint"
+import { GenericItem } from "@/components/table/data/schema"
+import { DataTableColumnHeader } from "@/components/table/components/data-table-column-header"
+import { ColumnDef } from "@tanstack/react-table"
 
 export default function OrganizerRole() {
   const magicbox = useContext(MagicboxContext)
+  const cava = useContext(CavaContext)
   //const [appointments, setappointments] = useState<Appointment[]>()
   const [tableView, settableView] = useState<any[]>([])
   const { toast } = useToast()
@@ -28,52 +35,83 @@ export default function OrganizerRole() {
 
   useEffect(() => {
     const load = async () => {
-      const token: string = magicbox.session?.accessToken ?? ""
+
       settableView([])
-     if (!date) return
-      
-      const { data, hasError, errorMessage } = await getAppointments(token,date,7,100)
-      if (hasError) {
-        toast({
-          title: `Error getting appointments`,
-          description: errorMessage,
-        })
-        return
-      }
-      if (data) {
+     const workOrders =  await  getWorkOrderItems(magicbox.session?.accessToken ?? "",cava.items,cava.orders)
+   
+
+      if (workOrders) {
        // setappointments(data)
-        const table: any[] = data
-            .filter((a) => {
-                return a.isOrganizer
-            })
-          .sort((a, b) => {
-            if (a.start.dateTime > b.start.dateTime) return 1
-            if (a.start.dateTime < b.start.dateTime) return -1
-            return 0
-          })
+        const table: any[] = 
+        workOrders
+          //.filter((a) => {return >=(date??new Date())})
+          //.sort((a, b) =>compareAsc(a.deliveryDateTime, b.deliveryDateTime))
           .map((a) => {
-            const d = parseISO(a.start.dateTime)
+         
             return {
               id: a.id,
-              title: d.toLocaleString() + " " + a.subject,
-              link: a.webLink,
-              details: a.isOrganizer  ? "Organizer" : ""//  a.bodyPreview,
+              title: a.item.name ,
+              link: "",
+              details: a.quantity + " pcs",
+              string3: a.order.organizer,
+              string2: a.item.provider.name,
+              string1: format(a.dateToDeliver,"yyyy-MM-dd") + " " + a.deliveryHour.toString().padStart(2,"0")+":"+a.deliveryMinute.toString().padStart(2,"0"),
             }
           })
         settableView(table)
       }
     }
     if (magicbox.session?.accessToken && date) load()
-  }, [magicbox.session?.accessToken,date])
-
+  }, [magicbox.session?.accessToken,date,cava.orders])
+  const col1: ColumnDef<GenericItem> = {
+    id: "string1",
+    accessorKey: "string1",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Delivery Time" />
+    ),
+    cell: ({ row }) => <div>{row.original.string1}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  } 
+  const col2: ColumnDef<GenericItem> = {
+    id: "string2",
+    accessorKey: "string2",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Provider" />
+    ),
+    cell: ({ row }) => <div>{row.original.string2}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  }
+  const col3: ColumnDef<GenericItem> = {
+    id: "string3",
+    accessorKey: "string3",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Organizer" />
+    ),
+    cell: ({ row }) => <div>{row.original.string3}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  }
   return (
    
-        <GenericTable caption="Meetings I'm organizing" data={tableView}         actions={{
+        <GenericTable caption="Items ordred" data={tableView}  
+        
+        addtionalColumns={[col3,col2,col1]}
+            
+        actions={{
             filterComponent: (params) => {
                 if (params) {let x=1}
                 return (
                     
                     <div>
+                          <Button variant="outline" onClick={()=>{
+                  setDate(addDays(date ?? new Date(),-1))
+
+              }}>
+              
+                <IconLeft/>
+                </Button>
                             <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -97,9 +135,9 @@ export default function OrganizerRole() {
                 </PopoverContent>
               </Popover>{" "}
               <Button variant="outline" onClick={()=>{
-                  setDate(addDays(date ?? new Date(),7))
+                  setDate(addDays(date ?? new Date(),1))
 
-              }}> Next Week</Button>
+              }}> <IconRight /></Button>
                     </div>
                    
                     )
