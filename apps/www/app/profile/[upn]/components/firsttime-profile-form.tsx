@@ -551,9 +551,12 @@ export function ProfileForm(props: {
             
                 const item: GenericItem = {
                   link: "https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Members/groupId/" + membership.groupId,
-                  id:  membership.groupId,
+                  id: membership.groupId,
                   details: membership.mailNickname + " " + membership.groupId,
                   title: membership.groupDisplayName,
+                  string1: null,
+                  string2: null,
+                  string3: null
                 }
                 return item
               
