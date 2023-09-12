@@ -9,59 +9,81 @@ import { DataTableColumnHeader } from "@/components/table/components/data-table-
 import { GenericItem } from "@/components/table/data/schema"
 import { Button } from "@/registry/new-york/ui/button"
 
-import { UserWithProductInfo, readLicense } from "."
+import { UserWithProductInfo, readLicenses, snapshotLicenses } from "."
 import { MagicboxContext } from "../magicbox-context"
 
+const status: {
+  loading: boolean
+} = {
+  loading: false,
+}
 export default function Licenses() {
   const magicbox = useContext(MagicboxContext)
   const [data, setdata] = useState<GenericItem[]>([])
+  const [numberOfItemsRead, setnumberOfItemsRead] = useState(0)
+  const [isWorking, setisWorking] = useState(false)
   const [isloaded, setisloaded] = useState(false)
   const [errormessage, seterrormessage] = useState("")
+
+  const refresh = async () => {
+    if (status.loading) {
+      console.log("Already working")
+      return
+    }
+    status.loading = true
+    var more: boolean = true
+    var nextUrl: string = ""
+    var token: string = ""
+    const newSet: GenericItem[] = []
+    let countOfItemsRead = 0
+    const snapshotToken = ""
+    while (more) {
+      const response = await snapshotLicenses(snapshotToken, token, nextUrl)
+      if (response.hasError) {
+        seterrormessage(response.errorMessage ?? "Unknown error")
+        more = false
+        return
+      }
+      countOfItemsRead += response.countOfItemsRead
+      setnumberOfItemsRead(countOfItemsRead)
+
+      if (response.nextLink) {
+        nextUrl = response.nextLink
+        token = response.accessToken ?? ""
+      } else {
+        more = false
+        setisloaded(true)
+        status.loading = false
+      }
+    }
+  }
+
   useEffect(() => {
     const load = async () => {
-      var more: boolean = true
-      var nextUrl: string = ""
-      var token: string = ""
-      const newSet: GenericItem[] = []
-      while (more) {
-        const response = await readLicense(token, nextUrl)
-        if (response.hasError) {
-          seterrormessage(response.errorMessage ?? "Unknown error")
-          more = false
-          return
-        }
-        const s =
-          (response?.items ?? []).map((user) => {
-            const g: GenericItem = {
-              id: user.user.userPrincipalName,
-              title:
-                user.user.displayName +
-                " (" +
-                user.user.userPrincipalName +
-                ") ",
-              details: user.licenses
-                .map((license) => license.Product_Display_Name)
-                .join(","),
-              link: `https://portal.azure.com/#view/Microsoft_AAD_UsersAndTenants/UserProfileMenuBlade/~/overview/userId/${user.user.id}/hidePreviewBanner~/true`,
-              string1:
-                user.user.signInActivity?.lastSignInDateTime ?? "Unknown",
-              string2: null,
-              string3: null,
-            }
-            return g
-          }) ?? []
+    
+      //return await refresh()
+      const snapshotToken = ""
 
-        newSet.push(...s)
+      const licenses = await readLicenses(snapshotToken)
 
-        setdata(newSet.sort((a, b) => a.title.localeCompare(b.title)))
-        if (response.nextLink) {
-          nextUrl = response.nextLink
-          token = response.accessToken ?? ""
-        } else {
-          more = false
-          setisloaded(true)
-        }
-      }
+      const users =
+        licenses.map((user) => {
+          const g: GenericItem = {
+            id: user.userPrincipalName,
+            title: user.displayName + " (" + user.userPrincipalName + ") ",
+            details: user.licenses
+              .map((license) => license.Product_Display_Name)
+              .join(","),
+            link: `https://portal.azure.com/#view/Microsoft_AAD_UsersAndTenants/UserProfileMenuBlade/~/overview/userId/${user.id}/hidePreviewBanner~/true`,
+            string1: user.lastSignInDateTime ?? "Unknown",
+            string2: null,
+            string3: null,
+          }
+          return g
+        }) ?? []
+
+      setdata(users.sort((a, b) => a.title.localeCompare(b.title)))
+      setisloaded(true)
     }
     load()
   }, [])
@@ -82,20 +104,14 @@ export default function Licenses() {
       <div className="container ">
         <div className="flex flex-wrap">
           <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
-            Licenses  {data.length} users
+            Licenses
           </h2>
         </div>
         <div className="">
           {errormessage && <div className="text-red-600">{errormessage}</div>}
-          {!isloaded && <div>Loaded {data.length} items</div>}
-          <div className="flex">
+          {!isloaded && <div>Loading ...</div>}
 
-            <div className="p-2">
-          {data.filter((d) => d.string1 === "Unknown").length} never signed in
-          </div>
-         
-          </div>
-          <GenericTable data={data} addtionalColumns={[col1]} />
+          {isloaded && <GenericTable data={data} addtionalColumns={[col1]} />}
         </div>
       </div>
     </div>
