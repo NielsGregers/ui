@@ -7,4 +7,5 @@ export type IFilterAction<T> = (params : {rows:T[]}) => JSX.Element;
 export interface GenericTableActions<T> {
   selectedItemsActionsComponent?: ISelectedItemsActionsComponent<Row<T>>;
   filterComponent?: IFilterAction<Row<T>>;
+  generalActionsComponent?: () => JSX.Element;
 }

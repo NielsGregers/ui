@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Magicbox/Profiles",
-  url: "https://ui.shadcn.com",
+  name: "intra365/profiles",
+  url: "https://intra365.com",
   root: "/profile",
   ogImage: "https://ui.shadcn.com/og.jpg",
   description:

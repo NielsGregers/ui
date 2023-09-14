@@ -14,11 +14,13 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>,
   SelectedItemsActionsComponent?: ISelectedItemsActionsComponent<Row<TData>>
  FilterActions? :  IFilterAction<Row<TData>>
+ GeneralActionsComponent?: () => JSX.Element;
 }
 
 export function DataTableToolbar<TData>({
   table,
   SelectedItemsActionsComponent,
+  GeneralActionsComponent,
   FilterActions
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
@@ -34,6 +36,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
+         {GeneralActionsComponent && <GeneralActionsComponent  />}
         {FilterActions && <FilterActions rows={table.getSelectedRowModel().flatRows } />}
         {SelectedItemsActionsComponent 
         && Object.keys(rowSelection).length > 0 
