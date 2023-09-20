@@ -43,7 +43,7 @@ export async function getParkingSpaces(){
   return parkingSpots
 }
 
-export async function addParkingSpot(title: string, bookedBy: string, permanent: boolean, EV:boolean, handicapped:boolean) {
+export async function addParkingSpot(title: string, bookedBy: string, permanent: boolean, EV:boolean, handicapped:boolean, licence:string) {
   const client = await connect()
   const coll = client.db("booking").collection("parking")
   const result = await coll.insertOne({
@@ -52,6 +52,7 @@ export async function addParkingSpot(title: string, bookedBy: string, permanent:
     permanent,
     EV,
     handicapped,
+    licence
   })
   client.close()
   return result.insertedId

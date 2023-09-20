@@ -56,8 +56,6 @@ import NewParkingForm, { schema } from "./new-parking-form"
 import { ParkingSpot } from "./parking-dashboard"
 import { RowActions } from "./parking-table-row-actions"
 
-
-
 export const columns: ColumnDef<ParkingSpot>[] = [
   {
     id: "select",
@@ -188,7 +186,6 @@ export function DataTable<TData, TValue>({
     },
   })
 
-
   return (
     <div>
       <div className="flex justify-between">
@@ -212,14 +209,16 @@ export function DataTable<TData, TValue>({
                 account and remove your data from our servers.
               </DialogDescription> */}
               </DialogHeader>
-              
             </DialogContent>
           </Dialog>
-          <Dialog open={dialog1Open} onOpenChange={()=>setdialog1Open(!dialog1Open)}>
+          <Dialog
+            open={dialog1Open}
+            onOpenChange={() => setdialog1Open(!dialog1Open)}
+          >
             <Button>
               <DialogTrigger>New parking</DialogTrigger>
             </Button>
-            <DialogContent>
+            <DialogContent className=" bg-white dark:bg-black">
               <DialogHeader>
                 <DialogTitle>Create a parking spot</DialogTitle>
                 {/* <DialogDescription>
@@ -227,7 +226,7 @@ export function DataTable<TData, TValue>({
                 account and remove your data from our servers.
               </DialogDescription> */}
               </DialogHeader>
-              <NewParkingForm onClose={()=>setdialog1Open(false)} />
+              <NewParkingForm onClose={() => setdialog1Open(false)} />
             </DialogContent>
           </Dialog>
         </div>

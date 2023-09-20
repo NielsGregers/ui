@@ -6,6 +6,8 @@ import { Car, ChevronDown, MoreHorizontal } from "lucide-react"
 import { boolean } from "zod"
 
 import { Button } from "@/registry/default/ui/button"
+import { Input } from "@/registry/default/ui/input"
+import { Label } from "@/registry/default/ui/label"
 import {
   Dialog,
   DialogContent,
@@ -14,16 +16,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/registry/default/ui/dialog"
+} from "@/registry/new-york/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/registry/default/ui/dropdown-menu"
-import { Input } from "@/registry/default/ui/input"
-import { Label } from "@/registry/default/ui/label"
-import { Switch } from "@/registry/default/ui/switch"
+} from "@/registry/new-york/ui/dropdown-menu"
+import { Switch } from "@/registry/new-york/ui/switch"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 import {
@@ -92,7 +92,7 @@ function BookParkingButton(params: {
               Reserve parking
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] bg-white dark:bg-black">
             <DialogHeader>
               <DialogTitle>
                 Reserve parking for{" "}
@@ -119,6 +119,7 @@ function BookParkingButton(params: {
                   </div>
                   <div className="flex flex-row space-x-2 text-sm">
                     <Switch
+                      className="bg-white dark:bg-black"
                       checked={handicapped}
                       onCheckedChange={() => sethandicapped(!handicapped)}
                     />

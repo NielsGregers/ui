@@ -20,7 +20,7 @@ export interface UserParkingBooking{
 }
 
 export async function getBookingsByDate(date: string) {
-  const agg = [
+  let agg = [
     {
       $unwind: "$bookings",
     },
@@ -37,11 +37,28 @@ export async function getBookingsByDate(date: string) {
         plates: "$bookings.plates",
       },
     },
+
   ]
   const client = await connect()
   const coll = client.db("booking").collection("parking")
   const cursor = coll.aggregate(agg)
-  const result = (await cursor.toArray()) as ParkingBooking[]
+  let result = (await cursor.toArray()) as ParkingBooking[]
+  let agg2=[ {
+    $match: {
+      permanent: true,
+    },
+  },
+  {
+    $project: {
+      _id: 1,
+      title: 1,
+      userEmail: "$bookedBy",
+      plates: "$licence",
+    },
+  },]
+  const cursor2 = coll.aggregate(agg2)
+  const result2 = (await cursor2.toArray()) as ParkingBooking[]
+  result = result.concat(result2)
   client.close()
   return result
 }
@@ -277,5 +294,5 @@ export async function newBooking(date:string, userEmail:string, plates:string, E
 }
 
 export async function deleteBooking(date:string, userEmail:string, plates:string){
-  
+
 }
