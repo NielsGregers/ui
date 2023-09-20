@@ -92,7 +92,7 @@ function BookParkingButton(params: {
               Reserve parking
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] bg-white dark:bg-black">
+          <DialogContent className="bg-white dark:bg-black sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>
                 Reserve parking for{" "}
