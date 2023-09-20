@@ -46,12 +46,12 @@ export const roles: Role[] = [
   {
     sortOrder: 80,
     key: "waiter",
-    name: "Waiter",
+    name: "Runner",
     image: "/cava/waiter.svg",
     link: "/cava/role/waiter",
     type: "supporting",
     version: "draft",
-    description: "Waiter is responsible for serving food and drinks",
+    description: "Runner is responsible for serving food and drinks",
   },
   {
     sortOrder: 10,

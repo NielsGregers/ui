@@ -3,6 +3,7 @@
 import { https, httpsGetAll, httpsGetPage } from "@/lib/httphelper";
 import { connect } from "@/lib/mongodb";
 import { getSpAuthToken } from "@/lib/officegraph"
+import { differenceInCalendarDays } from "date-fns";
 import { User } from "lucide-react";
 import { Db, FindOptions, MongoClient } from 'mongodb';
 
@@ -92,27 +93,25 @@ interface Snapshot {
 
 export async function readDevices(snapShotToken: string): Promise<Device[]> {
     const filter = {
-        '$and': [
-            {
-                'licenses': {
-                    '$ne': []
-                }
-            }, {
-                'signInActivity': {
-                    '$exists': false
-                }
-            }
-        ]
-    };
+        'approximatelastsignindatetime': {
+          '$gte': new Date('2023-08-01T00:00:00.000Z')
+        }
+      };
+      
     const client = await connect();
+    
     const coll = client.db('sandbox').collection<Device>('devices');
    // const cursor = coll.find(filter);
     const cursor = coll.find();
-    const result = await cursor.toArray();
-    
-
+    const result = await cursor.toArray()
     await client.close();
-    return result
+    
+    return result.filter(device=> {
+      if (differenceInCalendarDays(new Date(), new Date(device.approximateLastSignInDateTime)) > 45) return false
+      return true
+    
+    })
+ 
     
 
 

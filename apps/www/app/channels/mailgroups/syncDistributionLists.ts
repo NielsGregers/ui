@@ -1,5 +1,7 @@
+export const TODO = true
 import path from "path"
 import fs from "fs"
+/*
 import { addMailGroup, MailSegments } from "./";
 import { https, Result } from "helpers";
 import { MagicStrings } from "../../consts";
@@ -29,12 +31,7 @@ export module AddressBook {
 type GroupMap = Map<string, AddressBook.GroupLookupProps>
 
 const token = process.env.NEXT_PUBLIC_TESTTOKEN
-/**
- * 
- *  This is an expensive function to call , so we cache the result on the server making the dataset up to 1 hour old
- * 
- * @returns a map of all the groups in the exchange server
- */
+
 export function loadGroupAliasMap(): Promise<GroupMap> {
     return new Promise(async (resolve, reject) => {
 
@@ -200,21 +197,7 @@ export function syncMembers(segments: MailSegments.Parsed, testing: boolean, seg
 export function syncDistributionLists(segmentDataFilePath: string, testing: boolean, segment: string,prefix:string,statusWriter?:SessionStatus.Writer): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
         logInfo("Check if current batch processing")
-        /*
-        var status = await PowerShellService.getBatchStatus(token, MagicStrings.BatchPrefixSyncDL)
-        if (status.hasError) {
-            logError("Check if current batch processing " + status.errorMessage)
-            resolve(false)
-            return
-        }
-        if (!status.data.done) {
-            var pendingJobs = status.data.jobs.filter(job => { return !job.Processed }).map(job => job.Title).join(" \n ")
-            logInfo("Found pending jobs")
-            logInfo("Job pending >> ", pendingJobs)
-            resolve(false)
-            return
-        }
-        */
+ 
         statusWriter.addStep("Preparing")
         statusWriter.addJob("Group Map")
         statusWriter.startStopWatch()
@@ -263,4 +246,4 @@ export function syncDistributionLists(segmentDataFilePath: string, testing: bool
 
         resolve(true)
     })
-}
+}*/

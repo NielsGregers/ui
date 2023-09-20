@@ -1,14 +1,15 @@
-import { jest } from '@jest/globals';
+export const TODO = true
+// import { jest } from '@jest/globals';
 
-import { loadGroupAliasMap,AddressBook } from "./syncDistributionLists";
-import {Result} from "helpers"
+// import { loadGroupAliasMap,AddressBook } from "./syncDistributionLists";
+// import {Result} from "helpers"
 
-jest.setTimeout(2100000000)
+// jest.setTimeout(2100000000)
 
-it("Test Load Groups", async () => {
+// it("Test Load Groups", async () => {
 
-  var groupAddresses  = await loadGroupAliasMap()
-  expect(groupAddresses.size).toBeGreaterThan(0)
-  // await countryDL()
-});
+//   var groupAddresses  = await loadGroupAliasMap()
+//   expect(groupAddresses.size).toBeGreaterThan(0)
+//   // await countryDL()
+// });
 

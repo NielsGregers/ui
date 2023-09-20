@@ -18,7 +18,7 @@ import { MagicboxProvider } from "./magicbox-providers";
 
 import { NextAuthProvider } from "./providers"
 
-
+import Script from 'next/script'
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -82,7 +82,20 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <head />
+        <head>
+          <Script id="magicpot-clarity">
+            {`
+            
+          (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ixwytyo6af");
+    `}
+          </Script>
+
+
+        </head>
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
@@ -92,14 +105,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextAuthProvider>
               <MagicboxProvider>
-              {children}
+                {children}
               </MagicboxProvider>
             </NextAuthProvider>
           </ThemeProvider>
-         
+
           <NewYorkToaster />
           <DefaultToaster />
-          <TailwindIndicator/>
+          <TailwindIndicator />
         </body>
       </html>
     </>

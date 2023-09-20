@@ -1,5 +1,5 @@
-import { https, httpsGetAll, Result } from "helpers";
-import { getToken } from "helpers/getToken";
+import { https, httpsGetAll, Result } from "@/lib/httphelper";
+import { getSpAuthToken as getToken} from "@/lib/officegraph"
 import { resolve } from "path";
 
 interface GetGroupProps {
@@ -34,10 +34,10 @@ export function union(addresses: string[]): Promise<any> {
 
         results.forEach(result => {
             if (!result.requestResult.hasError) {
-                result.requestResult.data.forEach(groupAddress => {
+                result.requestResult?.data?.forEach(groupAddress => {
                     if (!groupAddress.mailEnabled) return
                     if (matches.has(groupAddress.mail)) {
-                        matches.get(groupAddress.mail).push(result.memberAddress)
+                        matches.get(groupAddress.mail)?.push(result.memberAddress)
                     }else{
                         matches.set(groupAddress.mail,[result.memberAddress])
                     }
