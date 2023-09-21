@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "intra365/profiles",
+  name: "Profile",
   url: "https://intra365.com",
   root: "/profile",
   ogImage: "https://ui.shadcn.com/og.jpg",

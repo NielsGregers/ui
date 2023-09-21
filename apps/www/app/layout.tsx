@@ -102,7 +102,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="system" >
             <NextAuthProvider>
               <MagicboxProvider>
                 {children}

@@ -26,6 +26,7 @@ import {
   CreateInvitationResult,
   createInvitation,
 } from "@/app/profile/actions/onboarding"
+import { set } from "date-fns"
 
 const profileFormSchema = z.object({
   email: z
@@ -51,6 +52,7 @@ export function ValidateEmailAccountForm() {
   const [invitationStatus, setInvitationStatus] =
     useState<Result<CreateInvitationResult>>()
   const [signinEnabled, setsigninEnabled] = useState(false)
+  const [processing, setProcessing] = useState(false)
   useEffect(() => {
     if (session?.data?.user?.email) {
       if (session?.data?.user?.email.indexOf("#ext#@") < 0) {
@@ -60,6 +62,7 @@ export function ValidateEmailAccountForm() {
   }, [session])
 
   async function onSubmit(data: ProfileFormValues) {
+    setProcessing(true)
     setInvitationStatus(undefined)
     setsigninEnabled(false)
     // toast({
@@ -70,6 +73,7 @@ export function ValidateEmailAccountForm() {
     //     </pre>
     //   ),
     // })
+    setInvitationStatus(undefined)
     const x = await createInvitation(data)
     setInvitationStatus(x)
     if (x.data?.valid) {
@@ -84,15 +88,14 @@ export function ValidateEmailAccountForm() {
         parms
       )
     }
-
+setProcessing(false)
     console.log(x)
   }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <Form {...form}>
-        {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-         */}
+      
         <FormField
           control={form.control}
           name="email"
@@ -101,9 +104,9 @@ export function ValidateEmailAccountForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <div className="flex">
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input placeholder="Enter your email" {...field} autoFocus={true} />
                   <div className="w-4 flex-grow"></div>
-                  <Button type="submit">Login</Button>
+                  <Button type="submit" disabled={processing}>Login</Button>
                 </div>
               </FormControl>
 
@@ -113,37 +116,16 @@ export function ValidateEmailAccountForm() {
                 yet been onboarded we will create an invitation for your
                 account.
               </FormDescription>
+              {invitationStatus && invitationStatus.hasError && <div className="rounded-lg bg-red-600 p-5 font-bold text-white">
+                {invitationStatus.errorMessage}
+               
+                </div>}
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* <div className="flex">
-          <div className="flex-grow"></div>
-          <Button
-            variant="default"
-            className="ml-2"
-            type="button"
-            disabled={!signinEnabled}
-            onClick={() => {
-              const parms: URLSearchParams = new URLSearchParams()
-              parms.set("login_hint", form.getValues("email") as string)
-              signIn(
-                "azure-ad",
-                {
-                  callbackUrl: "/profile/router",
-                },
-                parms
-              )
-            }}
-          >
-            Sign In
-          </Button>
 
 
-          <div></div>
-        </div> */}
-
-        
       </Form>
     </form>
   )

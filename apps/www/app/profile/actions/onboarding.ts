@@ -5,6 +5,7 @@ import { connect } from "@/lib/mongodb";
 import { getSpAuthToken } from "@/lib/officegraph";
 import { getUserSession } from "@/lib/user";
 import { https } from "@/lib/httphelper";
+import { logMagicpot } from "@/lib/magicpot";
 /**
  * Sample server side action
  * @param data 
@@ -24,41 +25,41 @@ export interface InvitationResult {
     status: string
     invitedUserMessageInfo: InvitedUserMessageInfo
     invitedUser: InvitedUser
-  }
-  
-  export interface InvitedUserMessageInfo {
+}
+
+export interface InvitedUserMessageInfo {
     messageLanguage: any
     customizedMessageBody: any
     ccRecipients: CcRecipient[]
-  }
-  
-  export interface CcRecipient {
+}
+
+export interface CcRecipient {
     emailAddress: EmailAddress
-  }
-  
-  export interface EmailAddress {
+}
+
+export interface EmailAddress {
     name: any
     address: any
-  }
-  
-  export interface InvitedUser {
+}
+
+export interface InvitedUser {
     id: string
-  }
-  
-export interface CreateInvitationResult   {
+}
+
+export interface CreateInvitationResult {
 
     user: GetAccountByEmailResult | null
 
-    mongoid: string
+    //mongoid: string
     invitation: InvitationResult | null
     valid: boolean
 }
 
 export async function createInvitation(data: any): Promise<Result<CreateInvitationResult>> {
 
- 
-    const token = await getSpAuthToken()
 
+    const token = await getSpAuthToken()
+    
     let user: GetAccountByEmailResult | null = null
     let result: Result<CreateInvitationResult> = { hasError: true, errorMessage: "unknown error" }
     const graphData = await getAccountByEmail(token, data.email)
@@ -67,32 +68,37 @@ export async function createInvitation(data: any): Promise<Result<CreateInvitati
             user = graphData.data.value[0]
 
         }
+    } else {
+        await logMagicpot("Profile", "createInvitation", { status: "Cannot get user from graph", data, graphData, user })
+        result = { hasError: true, errorMessage: graphData.errorMessage }
+        return result
     }
 
 
-    const invitationResult =  user ? null : (await inviteGuestUser(token, data.email))
-    const client = await connect()
-    try {
-        const object = { data, graphData, invitation: invitationResult?.data, user }
-        const insertResult = await client.db("logs-niels").collection("profiling").insertOne(object)
-        result = { hasError: false, data : {
+    let invitationResult = null
+
+
+    if (!user) {
+        invitationResult = await inviteGuestUser(token, data.email)
+        if (invitationResult.hasError) {
+            await logMagicpot("Profile", "createInvitation", { status: "Cannot create guest invitation", data, graphData, invitationResult, user })
+            result = { hasError: true, errorMessage: invitationResult.errorMessage }
+            return result
+        }
+    }
+
+
+    result = {
+        hasError: false, data: {
             user,
-            valid:true,
-            invitation : invitationResult?.data ? invitationResult.data : null,
-            mongoid: insertResult.insertedId.toString()
-        }}
-    }
+            valid: true,
+            invitation: invitationResult?.data ? invitationResult.data : null
 
-    catch (error) {
-        let message = "unknown error"
-        if (error instanceof Error) message = error.message
-        result.hasError = true
-        result.errorMessage = message
+        }
+    }
+    await logMagicpot("Profile", "createInvitation", { status: "OK", data, graphData, invitationResult, user })
 
-    }
-    finally {
-        client.close()
-    }
+
     return result
 }
 export interface Root<T> {
