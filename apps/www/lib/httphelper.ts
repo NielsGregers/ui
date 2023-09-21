@@ -56,8 +56,8 @@ export const https = <T>(
     //   headers,
     //   ...additionalAxiosConfig,
     // };
-
-const dataText = data ? JSON.stringify(data) : null
+    const dataType = typeof data;
+const dataText =  data ? (dataType === "string" ? data :  JSON.stringify(data)) : null
     //logVerbose("https",method,url)
     const send = (retryNumber: number) => {
       fetch(url, {
