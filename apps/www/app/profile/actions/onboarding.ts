@@ -6,60 +6,23 @@ import { getSpAuthToken } from "@/lib/officegraph";
 import { getUserSession } from "@/lib/user";
 import { https } from "@/lib/httphelper";
 import { logMagicpot } from "@/lib/magicpot";
-/**
- * Sample server side action
- * @param data 
- * @returns 
- */
-
-export interface InvitationResult {
-    "@odata.context": string
-    id: string
-    inviteRedeemUrl: string
-    invitedUserDisplayName: any
-    invitedUserType: string
-    invitedUserEmailAddress: string
-    sendInvitationMessage: boolean
-    resetRedemption: boolean
-    inviteRedirectUrl: string
-    status: string
-    invitedUserMessageInfo: InvitedUserMessageInfo
-    invitedUser: InvitedUser
-}
-
-export interface InvitedUserMessageInfo {
-    messageLanguage: any
-    customizedMessageBody: any
-    ccRecipients: CcRecipient[]
-}
-
-export interface CcRecipient {
-    emailAddress: EmailAddress
-}
-
-export interface EmailAddress {
-    name: any
-    address: any
-}
-
-export interface InvitedUser {
-    id: string
-}
-
+import { InvitationResult } from "./InvitationResult";
+import { ItemHeader } from "../data/sharepoint";
 export interface CreateInvitationResult {
 
     user: GetAccountByEmailResult | null
-
+    isNew: boolean
     //mongoid: string
     invitation: InvitationResult | null
     valid: boolean
+    guideHTML?: string
 }
 
 export async function createInvitation(data: any): Promise<Result<CreateInvitationResult>> {
 
 
     const token = await getSpAuthToken()
-    
+
     let user: GetAccountByEmailResult | null = null
     let result: Result<CreateInvitationResult> = { hasError: true, errorMessage: "unknown error" }
     const graphData = await getAccountByEmail(token, data.email)
@@ -79,23 +42,46 @@ export async function createInvitation(data: any): Promise<Result<CreateInvitati
 
 
     if (!user) {
+        const validGuestDomains = (await getValidGuestDomains(token)) ?? []
+
+        const domain = data.email.split("@")[1]?.toLowerCase()
+
+        const validGuestDomain = validGuestDomains.find((domainItem) => domainItem.Title.toLowerCase() === domain)
+        if (!validGuestDomain) {
+            result = { hasError: true, errorMessage: `You cannot login with that email address (domain @${domain})` }
+            return result
+        }
+
         invitationResult = await inviteGuestUser(token, data.email)
+
         if (invitationResult.hasError) {
             await logMagicpot("Profile", "createInvitation", { status: "Cannot create guest invitation", data, graphData, invitationResult, user })
             result = { hasError: true, errorMessage: invitationResult.errorMessage }
             return result
         }
-    }
+        result = {
+            hasError: false, data: {
+                guideHTML: validGuestDomain.SigninGuide,
+                user,
+                valid: false,
+                isNew:  true ,
+                invitation: invitationResult?.data ? invitationResult.data : null
+
+            }
+        }
+    }else{
 
 
     result = {
         hasError: false, data: {
             user,
+            isNew: false,
             valid: true,
-            invitation: invitationResult?.data ? invitationResult.data : null
+            invitation: null
+
 
         }
-    }
+    }}
     await logMagicpot("Profile", "createInvitation", { status: "OK", data, graphData, invitationResult, user })
 
 
@@ -132,4 +118,89 @@ export async function inviteGuestUser(accessToken: string, email: string) {
         "inviteRedirectUrl": "https://home.nexi-intra.com/profile"
     });
 
+}
+//SigninGuide
+
+
+export interface ValidGuestDomainItem {
+    "@odata.etag": string
+    createdDateTime: string
+    eTag: string
+    id: string
+    lastModifiedDateTime: string
+    webUrl: string
+    createdBy: CreatedBy
+    lastModifiedBy: LastModifiedBy
+    parentReference: ParentReference
+    contentType: ContentType
+    "fields@odata.context": string
+    fields: ValidGuestDomainFields
+}
+
+export interface CreatedBy {
+    user: User
+}
+
+export interface User {
+    email: string
+    id: string
+    displayName: string
+}
+
+export interface LastModifiedBy {
+    user: User2
+}
+
+export interface User2 {
+    email: string
+    id: string
+    displayName: string
+}
+
+export interface ParentReference {
+    id: string
+    siteId: string
+}
+
+export interface ContentType {
+    id: string
+    name: string
+}
+
+export interface ValidGuestDomainFields {
+    "@odata.etag": string
+    Title: string
+    LinkTitle: string
+    RedirectTo: string
+    SigninGuide?: string
+    id: string
+    ContentType: string
+    Modified: string
+    Created: string
+    AuthorLookupId: string
+    EditorLookupId: string
+    _UIVersionString: string
+    Attachments: boolean
+    Edit: string
+    LinkTitleNoMenu: string
+    ItemChildCount: string
+    FolderChildCount: string
+    _ComplianceFlags: string
+    _ComplianceTag: string
+    _ComplianceTagWrittenTime: string
+    _ComplianceTagUserId: string
+    _IsRecord: string
+}
+
+
+export async function getValidGuestDomains(accessToken: string) {
+    const items = await https<Root<ItemHeader<ValidGuestDomainFields>>>(accessToken, "GET",
+        `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/nexiintra-home:/lists/Valid Guest Domains/items?$expand=fields`);
+    const guestDomains = items.data?.value.map((item) => {
+        const { fields } = item;
+
+
+        return fields;
+    })
+    return guestDomains
 }

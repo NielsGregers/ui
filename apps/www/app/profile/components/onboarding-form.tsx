@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { tr } from "date-fns/locale"
+import { is, tr } from "date-fns/locale"
 import { signIn, useSession } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -27,6 +27,7 @@ import {
   createInvitation,
 } from "@/app/profile/actions/onboarding"
 import { set } from "date-fns"
+import { NewGuest } from "./NewGuest"
 
 const profileFormSchema = z.object({
   email: z
@@ -53,6 +54,9 @@ export function ValidateEmailAccountForm() {
     useState<Result<CreateInvitationResult>>()
   const [signinEnabled, setsigninEnabled] = useState(false)
   const [processing, setProcessing] = useState(false)
+  const [isNewGuest, setisNewGuest] = useState(false)
+  const [isUnknownDomain, setisUnknownDomain] = useState(false)
+  const [guideHTML, setguideHTML] = useState("")
   useEffect(() => {
     if (session?.data?.user?.email) {
       if (session?.data?.user?.email.indexOf("#ext#@") < 0) {
@@ -76,6 +80,9 @@ export function ValidateEmailAccountForm() {
     setInvitationStatus(undefined)
     const x = await createInvitation(data)
     setInvitationStatus(x)
+
+    setisNewGuest(x.data?.isNew ?? false)
+    setguideHTML(x.data?.guideHTML ?? "")
     if (x.data?.valid) {
       setsigninEnabled(true)
       const parms: URLSearchParams = new URLSearchParams()
@@ -88,45 +95,61 @@ export function ValidateEmailAccountForm() {
         parms
       )
     }
-setProcessing(false)
+    setProcessing(false)
     console.log(x)
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <Form {...form}>
-      
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <div className="flex">
-                  <Input placeholder="Enter your email" {...field} autoFocus={true} />
-                  <div className="w-4 flex-grow"></div>
-                  <Button type="submit" disabled={processing}>Login</Button>
-                </div>
-              </FormControl>
+    <div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Form {...form}>
 
-              <FormDescription className="max-w-screen-sm">
-                Your email is validated against our user database. If we cannot
-                find yours, and if your are working for a company which have not
-                yet been onboarded we will create an invitation for your
-                account.
-              </FormDescription>
-              {invitationStatus && invitationStatus.hasError && <div className="rounded-lg bg-red-600 p-5 font-bold text-white">
-                {invitationStatus.errorMessage}
-               
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <div className="flex">
+                    <Input placeholder="Enter your email" {...field} autoFocus={true} />
+                    <div className="w-4 flex-grow"></div>
+                    <Button type="submit" disabled={processing}>Login</Button>
+                  </div>
+                </FormControl>
+
+                <FormDescription className="max-w-screen-sm">
+                  Your email is validated against our user database. If we cannot
+                  find yours, and if your are working for a company which have not
+                  yet been onboarded we will create an invitation for your
+                  account.
+                </FormDescription>
+                {invitationStatus && invitationStatus.hasError && <div className="rounded-lg bg-red-600 p-5 font-bold text-white">
+                  {invitationStatus.errorMessage}
+
                 </div>}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
 
-      </Form>
-    </form>
+        </Form>
+      </form>
+      {isNewGuest && <NewGuest continueToSignin={function (): void {
+        setsigninEnabled(true)
+        const parms: URLSearchParams = new URLSearchParams()
+        parms.set("login_hint", form.getValues("email") as string)
+        signIn(
+          "azure-ad",
+          {
+            callbackUrl: "/profile/router",
+          },
+          parms
+        )
+      } } cancel={function (): void {
+        setisNewGuest(false)
+      } } SigninGuideHTML={guideHTML} />}
+    </div>
   )
 }

@@ -26,16 +26,18 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    "Next.js",
-    "React",
-    "Tailwind CSS",
-    "Server Components",
-    "Radix UI",
+    "nexi",
+    "intra"
+   
   ],
   authors: [
     {
       name: "shadcn",
       url: "https://shadcn.com",
+    },
+    {
+      name: "nielsgregers",
+      url: "https://www.linkedin.com/in/niels-gregers-johansen/",
     },
   ],
   creator: "shadcn",
@@ -64,12 +66,12 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: "@shadcn",
+    creator: "@niegrejoh",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+   
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
 }

@@ -942,7 +942,7 @@ Site owner options
                 </DialogContent>
               </Dialog>
               </div>
-              <div className="p-3">
+              <div className="hidden p-3">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="link"  className="">
@@ -984,6 +984,14 @@ Site owner options
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+              </div>
+              <div className="hidden p-3">
+<Link href="https://clarity.microsoft.com/projects/view/iwgs4fzf64/dashboard?date=Last%203%20days" target="_blank">
+<Button>
+  Insights
+</Button>
+</Link>
+
               </div>
             </div>
             
