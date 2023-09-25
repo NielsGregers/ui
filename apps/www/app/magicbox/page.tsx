@@ -845,7 +845,7 @@ export default function RootPage() {
   return (
     <div className="h-screen w-screen">
       <div className="flex h-screen flex-row">
-        <div className="flex-grow bg-transparent blur-md"></div>
+        <div className="grow bg-transparent blur-md"></div>
         <div className="w-[500px] bg-gray-200 transition-transform delay-150 ease-in-out">
           <div className="m-4 overflow-scroll ">
             <div className="p-3"></div>

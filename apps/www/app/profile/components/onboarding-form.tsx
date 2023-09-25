@@ -102,7 +102,7 @@ export function ValidateEmailAccountForm() {
               <FormControl>
                 <div className="flex">
                   <Input placeholder="Enter your email" {...field} />
-                  <div className="w-4 flex-grow"></div>
+                  <div className="w-4 grow"></div>
                   <Button type="submit">Login</Button>
                 </div>
               </FormControl>

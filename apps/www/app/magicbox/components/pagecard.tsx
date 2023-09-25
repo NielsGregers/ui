@@ -47,7 +47,7 @@ export function SitepageCard({
               style={{width,height}}
            
               className={cn(
-                "h-auto w-auto overflow-clip object-cover transition-all hover:scale-105",
+                "h-auto w-auto text-clip object-cover transition-all hover:scale-105",
                 aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
               )}
             />

@@ -322,7 +322,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Pages
         </h3>
-        <div className="flex-grow  bg-white">
+        <div className="grow  bg-white">
           <div className="m-8 flex flex-wrap">
             {sitePages
               .sort((a, b) => {

@@ -115,7 +115,7 @@ function DateCards(props: PropTypes) {
                 })}
               </CardDescription>
             </CardHeader>
-            <CardContent className="h-2/4 items-center justify-center mt-5">
+            <CardContent className="mt-5 h-2/4 items-center justify-center">
               <div className="grid h-full items-center">
                 <Button
                   className="w-full rounded-full"
@@ -153,7 +153,7 @@ function DateCards(props: PropTypes) {
         )
       })}
 
-      <Card className={`bg-black bg-opacity-5 border-none h-72 `}>
+      <Card className={`h-72 border-none bg-black bg-opacity-5 `}>
         <CardHeader className="h-1/4">
           <CardTitle>
             <div className=" flex w-full flex-row justify-between text-lg">
