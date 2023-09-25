@@ -82,6 +82,7 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
     // <div className={cn("grid gap-2", className)}>
     <div className="flex-row">
       <Button
+        className="bg-white dark:bg-black shadow-md"
         variant="outline"
         title="Today"
         color="white"
@@ -102,8 +103,8 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal pt-[1px]",
-              !date && "text-muted-foreground"
+              "bg-white dark:bg-black shadow-md w-[300px] justify-start text-left font-normal pt-[1px]",
+              !date && "text-muted-foreground "
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -138,7 +139,11 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
           />
         </PopoverContent>
       </Popover>
-      <Button onClick={() => moveWeek(-7)} variant="outline">
+      <Button
+        onClick={() => moveWeek(-7)}
+        variant="outline"
+        className="bg-white dark:bg-black shadow-md"
+      >
         {"<"}
       </Button>
       <Button
@@ -147,6 +152,7 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
           new Date(new Date().setDate(new Date().getDate() + 7))
         }
         onClick={() => moveWeek(7)}
+        className="bg-white dark:bg-black shadow-md"
         variant="outline"
       >
         {">"}

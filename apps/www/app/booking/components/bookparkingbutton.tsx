@@ -2,12 +2,26 @@
 
 import React, { use, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Car, ChevronDown, MoreHorizontal } from "lucide-react"
-import { boolean } from "zod"
+import { ChevronDown, MoreHorizontal } from "lucide-react"
+import { BiHandicap } from "react-icons/bi"
+import { BsFillEvStationFill } from "react-icons/bs"
+import { FaParking } from "react-icons/fa"
 
 import { Button } from "@/registry/default/ui/button"
+import {
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/registry/default/ui/dropdown-menu"
 import { Input } from "@/registry/default/ui/input"
 import { Label } from "@/registry/default/ui/label"
+import { Switch } from "@/registry/default/ui/switch"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/registry/default/ui/tooltip"
+import { useToast } from "@/registry/default/ui/use-toast"
 import {
   Dialog,
   DialogContent,
@@ -23,7 +37,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
-import { Switch } from "@/registry/new-york/ui/switch"
 import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 import {
@@ -38,6 +51,7 @@ function BookParkingButton(params: {
   date: Date
   booking?: UserParkingBooking
   userEmail: string | undefined | null
+  onDone: () => void
 }) {
   const [isopen, setisopen] = useState<boolean>(false)
   const [plates, setPlates] = useState<string>("")
@@ -49,6 +63,7 @@ function BookParkingButton(params: {
 
   const { date, userEmail } = params
   const usecases = useContext(UsecaseContext)
+  const { toast } = useToast()
 
   const platesChanged = (plates: string) => {
     setPlates(plates)
@@ -72,7 +87,17 @@ function BookParkingButton(params: {
     if (response.success) {
       router.refresh()
       setisopen(false)
-      router.refresh()
+      toast({ 
+        title: "Success",
+        description:
+          "You reserved a parking spot for " +
+          date?.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }),
+      })
+      params.onDone()
     } else {
       setresult(response)
     }
@@ -84,11 +109,15 @@ function BookParkingButton(params: {
         <Dialog open={isopen} onOpenChange={() => setisopen(!isopen)}>
           <DialogTrigger asChild>
             <Button
-              className="w-full"
+              disabled={
+                new Date(params.date.setHours(12, 0, 0, 0)) < new Date()
+              }
+              className="w-full rounded-full"
               variant="outline"
               //   onClick={() => setisopen(true)}
             >
-              <Car className="mr-2 h-4 w-4" />
+              <FaParking className="mr-2 h-5 w-5" style={{ color: "blue" }} />
+              {/* <Car className="mr-2 h-4 w-4" /> */}
               Reserve parking
             </Button>
           </DialogTrigger>
@@ -113,17 +142,29 @@ function BookParkingButton(params: {
                     onPlatesChange={platesChanged}
                     userEmail={params.userEmail}
                   />
-                  <div className="flex flex-row space-x-2 text-sm">
-                    <Switch checked={EV} onCheckedChange={() => setEV(!EV)} />
-                    <div>I want to charge my EV</div>
-                  </div>
-                  <div className="flex flex-row space-x-2 text-sm">
-                    <Switch
-                      className="bg-white dark:bg-black"
-                      checked={handicapped}
-                      onCheckedChange={() => sethandicapped(!handicapped)}
-                    />
-                    <div>I need a handicapped parking space</div>
+                  <div className=" flex flex-row space-x-6 text-sm">
+                    <div className="flex flex-row space-x-2 text-sm">
+                      <Switch
+                        className="checked:bg-green-700"
+                        checked={EV}
+                        onCheckedChange={() => setEV(!EV)}
+                      />
+                      <BsFillEvStationFill
+                        className=" h-5 w-5 cursor-help"
+                        style={{ color: "green" }}
+                      />
+                    </div>
+                    <div className="flex flex-row space-x-2 text-sm">
+                      <Switch
+                        className="bg-white dark:bg-black"
+                        checked={handicapped}
+                        onCheckedChange={() => sethandicapped(!handicapped)}
+                      />
+                      <BiHandicap
+                        className="h-5 w-5 cursor-help"
+                        style={{ color: "blue" }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -219,6 +260,7 @@ function BookParkingButton(params: {
             <DialogFooter>
               {result === undefined && (
                 <Button
+                  disabled={plates === ""}
                   type="submit"
                   onClick={() => {
                     handleBooking()
@@ -234,15 +276,60 @@ function BookParkingButton(params: {
       {params.booking && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" className="w-full">
-              <Car className="mr-2 h-4 w-4" />
+            <Button variant="secondary" className="w-full rounded-full">
+              <FaParking className="mr-2 h-4 w-4" style={{ color: "blue" }} />
               {"Reserved: " + params.booking.parkingTitle}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Cancel</DropdownMenuItem>
-            <DropdownMenuItem>Book another space</DropdownMenuItem>
+            <DropdownMenuLabel>
+              <div className="flex flex-row justify-between">
+                {params.booking?.plates.toUpperCase()}
+                {params.booking?.EV && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <BsFillEvStationFill
+                          className=" h-5 w-5 cursor-help"
+                          style={{ color: "green" }}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          This parking spot has access to EV charger you can use
+                          free of charge
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+                {params.booking?.handicapped && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <BiHandicap
+                          className="h-5 w-5 cursor-help"
+                          style={{ color: "blue" }}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>This parking spot is handicapped accessible.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={
+                new Date(params.date.setHours(12, 0, 0, 0)) < new Date()
+              }
+              className="text-red-700"
+            >
+              Cancel
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}

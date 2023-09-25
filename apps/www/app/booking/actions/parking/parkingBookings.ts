@@ -9,6 +9,8 @@ export interface UserParkingBookingMongo extends WithId<Document> {
   title: string
   plates: string
   date: string
+  EV:boolean
+  handicapped:boolean
 }
 
 export interface UserParkingBooking{
@@ -16,6 +18,8 @@ export interface UserParkingBooking{
   parkingTitle: string
   plates: string
   date: string,
+  EV:boolean,
+  handicapped:boolean,
   type:"permanent"|"booked"
 }
 
@@ -33,6 +37,8 @@ export async function getBookingsByDate(date: string) {
       $project: {
         _id: 0,
         title: 1,
+        EV:1,
+        handicapped:1,
         userEmail: "$bookings.userEmail",
         plates: "$bookings.plates",
       },
@@ -52,6 +58,8 @@ export async function getBookingsByDate(date: string) {
     $project: {
       _id: 1,
       title: 1,
+      EV:1,
+        handicapped:1,
       userEmail: "$bookedBy",
       plates: "$licence",
     },
@@ -132,6 +140,8 @@ export async function getBookingsByUser(userEmail: string, dates?:Date[]) {
         $project: {
           _id: 1,
           title: 1,
+          EV:1,
+          handicapped:1,
           userEmail: "$bookings.userEmail",
           plates: "$bookings.plates",
           date: "$bookings.date",
@@ -153,6 +163,8 @@ export async function getBookingsByUser(userEmail: string, dates?:Date[]) {
       $project: {
         _id: 1,
         title: 1,
+        EV:1,
+        handicapped:1,
         userEmail: "$bookings.userEmail",
         plates: "$bookings.plates",
         date: "$bookings.date",
@@ -168,6 +180,8 @@ export async function getBookingsByUser(userEmail: string, dates?:Date[]) {
     return {
       parkingId: booking._id.toString(),
       parkingTitle: booking.title,
+      EV:booking.EV,
+      handicapped:booking.handicapped,
       date: booking.date,
       plates: booking.plates,
       type:"booked"
