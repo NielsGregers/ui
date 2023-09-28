@@ -1,7 +1,14 @@
 import Logo from "@/components/logo"
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import "./home-animations.css"
 export default function WelcomePage() {
 
+  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string) : {}
+  
+  if (data.country && data.unit) {
+    redirect("https://christianiabpos.sharepoint.com/sites/nexiintra-home?country=" + data.country + "&unit=" + data.unit)
+  } 
   return (
 
     <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">

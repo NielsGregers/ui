@@ -28,7 +28,7 @@ import { Me } from "../profile/data/schemas"
 import { SharePointExtensionContext } from "./usecasecontext"
 import { copyPage } from "./actions/pages"
 import { setConfig } from "next/config"
-import { ArchiveRestoreIcon, CopyIcon,EditIcon, PenToolIcon } from "lucide-react"
+import { ArchiveRestoreIcon, CopyIcon,EditIcon, GridIcon, HeartPulseIcon, PenToolIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { LegacyPageContext } from "./data/sharepoint-extention"
 
@@ -220,6 +220,15 @@ Options
                 Restore Standard SharePoint navigation
               </Button>
             </div>
+            {sitePath &&
+            <div className=" px-3">
+<Link href={`/channels/sharepoint/${sitePath}/pages/`} target="_blank">
+<Button variant={"link"}>
+  <GridIcon />&nbsp;News Channels
+</Button>
+</Link>
+
+              </div>}
             {/* <div className="p-3">
               <Button variant="default">
                 <Link href={`/magicbox/sitepages${legacyPageContext?.siteServerRelativeUrl}`}>Pages</Link>
@@ -253,7 +262,7 @@ Site owner options
                 <PenToolIcon/>&nbsp;Edit
               </Button>
             </div> */}
-            <div className="p-3">
+            <div className="px-3 pt-3">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="link"  className="">
@@ -339,10 +348,11 @@ Site owner options
                 </DialogContent>
               </Dialog>
               </div>
-              <div className="hidden p-3">
+             
+              <div className=" px-3">
 <Link href="https://clarity.microsoft.com/projects/view/iwgs4fzf64/dashboard?date=Last%203%20days" target="_blank">
-<Button>
-  Insights
+<Button variant={"link"}>
+  <HeartPulseIcon />&nbsp; Health &amp; Performance
 </Button>
 </Link>
 
