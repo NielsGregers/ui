@@ -87,7 +87,7 @@ function BookParkingButton(params: {
     if (response.success) {
       router.refresh()
       setisopen(false)
-      toast({ 
+      toast({
         title: "Success",
         description:
           "You reserved a parking spot for " +
@@ -110,7 +110,7 @@ function BookParkingButton(params: {
           <DialogTrigger asChild>
             <Button
               disabled={
-                new Date(params.date.setHours(12, 0, 0, 0)) < new Date()
+                new Date(params.date.setHours(16, 0, 0, 0)) < new Date()
               }
               className="w-full rounded-full"
               variant="outline"

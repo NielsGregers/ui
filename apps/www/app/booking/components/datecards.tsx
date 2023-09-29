@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { addDays } from "date-fns"
 import { Car } from "lucide-react"
 import { DateRange } from "react-day-picker"
+import { BsFillMapFill } from "react-icons/bs"
 import { FaQuestion } from "react-icons/fa"
 import { GiDesk } from "react-icons/gi"
 import { HiMail } from "react-icons/hi"
@@ -26,6 +27,7 @@ import {
   getBookingsByUser,
 } from "../actions/parking/parkingBookings"
 import BookParkingButton from "./bookparkingbutton"
+import PieGraph from "./piegraph"
 
 const delay = async (ms: number) => new Promise((res) => setTimeout(res, ms))
 
@@ -54,7 +56,8 @@ function DateCards(props: PropTypes) {
     } else {
       datesSelected = [...datesSelected, props.dateRange.from]
       num =
-        (props.dateRange.to?.getTime() - props.dateRange.from?.getTime()) /
+        (new Date(props.dateRange.to?.setHours(12)).getTime() -
+          new Date(props.dateRange.from?.setHours(12)).getTime()) /
         (1000 * 3600 * 24)
       console.log(num)
     }
@@ -90,11 +93,11 @@ function DateCards(props: PropTypes) {
   }, [refresh])
 
   return (
-    <div className=" grid grid-cols-4  gap-8 2xl:mt-10">
+    <div className="grid max-h-[75vh] min-h-[50vh] grid-cols-4 gap-8 2xl:mt-10">
       {dates.map((date) => {
         return (
           <Card
-            className={`h-72 border-none shadow-md ${
+            className={`max-h-[50vh] min-h-[35vh] border-none shadow-md ${
               date.getTime() === new Date().getTime()
                 ? "col-span-2"
                 : "col-span-1"
@@ -153,10 +156,12 @@ function DateCards(props: PropTypes) {
         )
       })}
 
-      <Card className={`h-72 border-none bg-black bg-opacity-5 `}>
+      <Card
+        className={`max-h-[50vh] min-h-[35vh] border-none bg-black bg-opacity-5 `}
+      >
         <CardHeader className="h-1/4">
           <CardTitle>
-            <div className=" flex w-full flex-row justify-between text-lg">
+            <div className=" flex w-full flex-row justify-between text-lg text-white">
               Useful links
             </div>
           </CardTitle>
@@ -170,16 +175,22 @@ function DateCards(props: PropTypes) {
         </CardHeader>
         <CardContent className="h-2/4 items-center justify-center">
           <div className="grid h-full items-center">
-            <a href="How to use the Nexi booking app.pdf" target="_blank">
+            <a href="garage_plan.pdf" target="_blank">
               <Button className="w-full" variant="outline">
-                <FaQuestion className="mr-2 h-4 w-4" />
-                How to use the app
+                <BsFillMapFill className="mr-2 h-4 w-4" />
+                Garage floor plan
               </Button>
             </a>
             <a href="mailto:desktopbooking@nexigroup.com" target="_blank">
               <Button className="w-full" variant="outline">
                 <HiMail className="mr-2 h-4 w-4" />
                 Have a question?
+              </Button>
+            </a>
+            <a href="How to use the Nexi booking app.pdf" target="_blank">
+              <Button className="w-full" variant="outline">
+                <FaQuestion className="mr-2 h-4 w-4" />
+                How to use the app
               </Button>
             </a>
           </div>

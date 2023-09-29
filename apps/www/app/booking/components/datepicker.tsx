@@ -19,13 +19,14 @@ import {
 import { DateRangeSelection } from "./homescreen"
 
 interface PropTypes {
+  numberOfDays: number
   onDateChange: (dateRange: DateRange) => void
 }
 
-export function DateRangePicker({ onDateChange }: PropTypes) {
+export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
   const [date, setDate] = React.useState<DateRange>({
     from: new Date(),
-    to: addDays(new Date(), 6),
+    to: addDays(new Date(), numberOfDays - 1),
   })
 
   React.useEffect(() => {
@@ -39,48 +40,66 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
       console.log("entered 1st if")
       from = pickeddate?.to ? pickeddate.to : new Date()
     }
-    let monday = new Date(
-      from.setDate(from.getDate() - ((from.getDay() + 6) % 7))
-    )
+    if (numberOfDays === 7) {
+      let monday = new Date(
+        from.setDate(from.getDate() - ((from.getDay() + 6) % 7))
+      )
 
-    let sunday = new Date(
-      monday.getFullYear(),
-      monday.getMonth(),
-      monday.getDate() + 6
-    )
+      let sunday = new Date(
+        monday.getFullYear(),
+        monday.getMonth(),
+        monday.getDate() + 6
+      )
 
-    if (sunday > new Date(new Date().setDate(new Date().getDate() + 7))) {
-      console.log("entered 2nd if")
-      sunday = new Date(new Date().setDate(new Date().getDate() + 7))
-      monday = new Date(new Date().setDate(new Date().getDate() + 1))
-    }
+      if (sunday > new Date(new Date().setDate(new Date().getDate() + 7))) {
+        console.log("entered 2nd if")
+        sunday = new Date(new Date().setDate(new Date().getDate() + 7))
+        monday = new Date(new Date().setDate(new Date().getDate() + 1))
+      }
 
-    setDate({ from: monday, to: sunday })
-    if (monday.getTime() > sunday.getTime()) {
-      console.log("entered 3rd if")
-      setDate({ from: undefined, to: undefined })
+      setDate({ from: monday, to: sunday })
+      if (monday.getTime() > sunday.getTime()) {
+        console.log("entered 3rd if")
+        setDate({ from: undefined, to: undefined })
+      }
+    } else {
+      //number of days after the selected date
+      let endDate = new Date(addDays(from, numberOfDays - 1))
+      let fromDate = from
+      if (endDate > new Date(addDays(new Date(), numberOfDays - 1))) {
+        endDate = new Date(addDays(new Date(), numberOfDays - 1))
+        fromDate = new Date()
+      }
+      setDate({ from: fromDate, to: endDate })
     }
   }
 
-  const moveWeek = (days: number) => {
+  const moveForward = (days: number) => {
     let start = date.from ? date.from : new Date()
     let end = date.to ? date.to : new Date()
-    if (
-      new Date(end.setDate(end.getDate() + days)) >
-      new Date(new Date().setDate(new Date().getDate() + 7))
-    ) {
-      end = new Date(new Date().setDate(new Date().getDate() + 7))
-      start = new Date(new Date().setDate(new Date().getDate() + 1))
+
+    let endDate = new Date(addDays(end, days))
+    let fromDate = new Date(addDays(start, days))
+
+    if (endDate > new Date(addDays(new Date(), numberOfDays - 1))) {
+      endDate = new Date(addDays(new Date(), numberOfDays - 1))
+      fromDate = new Date()
     }
-    setDate({
-      from: new Date(start.setDate(start.getDate() + days)),
-      to: new Date(end.setDate(end.getDate() + days)),
-    })
+    setDate({ from: fromDate, to: endDate })
+  }
+  const moveBackward = (days: number) => {
+    let start = date.from ? date.from : new Date()
+    let end = date.to ? date.to : new Date()
+
+    let endDate = new Date(addDays(end, -1 * days))
+    let fromDate = new Date(addDays(start, -1 * days))
+
+    setDate({ from: fromDate, to: endDate })
   }
 
   return (
     // <div className={cn("grid gap-2", className)}>
-    <div className="flex-row">
+    <div className="flex-row pb-3">
       <Button
         className="bg-white dark:bg-black shadow-md"
         variant="outline"
@@ -90,7 +109,7 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
         onClick={() =>
           setDate({
             from: new Date(),
-            to: addDays(new Date(), 6) as Date,
+            to: addDays(new Date(), numberOfDays - 1) as Date,
           })
         }
       >
@@ -125,8 +144,10 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             disabled={(date) =>
-              date > new Date(new Date().setDate(new Date().getDate() + 7)) ||
-              date < new Date("2023-07-01")
+              date >
+                new Date(
+                  new Date().setDate(new Date().getDate() + numberOfDays - 1)
+                ) || date < new Date("2023-07-01")
             }
             initialFocus
             mode="range"
@@ -140,7 +161,7 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
         </PopoverContent>
       </Popover>
       <Button
-        onClick={() => moveWeek(-7)}
+        onClick={() => moveBackward(numberOfDays)}
         variant="outline"
         className="bg-white dark:bg-black shadow-md"
       >
@@ -148,10 +169,10 @@ export function DateRangePicker({ onDateChange }: PropTypes) {
       </Button>
       <Button
         disabled={
-          (date.to ? date.to : new Date()) >=
-          new Date(new Date().setDate(new Date().getDate() + 7))
+          new Date(addDays(new Date(), numberOfDays - 1)).setHours(12) ===
+          date?.to?.setHours(12)
         }
-        onClick={() => moveWeek(7)}
+        onClick={() => moveForward(numberOfDays)}
         className="bg-white dark:bg-black shadow-md"
         variant="outline"
       >

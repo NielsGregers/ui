@@ -191,6 +191,21 @@ export async function getBookingsByUser(userEmail: string, dates?:Date[]) {
   return bookings
 }
 
+export async function getParkingAvailability(dates?:Date[]) {
+  let datesString:string[] = []
+
+  if(dates && dates.length > 0){
+    datesString = dates.map((date) => {
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    })
+  }
+
+  
+}
 export interface BookingConfirmationType{
   success:boolean,
   cause: "No available parking slots"|"No available parking slots for EV"|"No available parking slots for handicapped"|"No available parking slots for EV and handicapped"|"Success"|"Unknown"
