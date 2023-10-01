@@ -1,6 +1,7 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import Script from "next/script"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -14,11 +15,10 @@ import { ForModule } from "@/components/roles"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
 import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
-import { MagicboxProvider } from "./magicbox-providers";
 
+import { MagicboxProvider } from "./magicbox-providers"
 import { NextAuthProvider } from "./providers"
 
-import Script from 'next/script'
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -93,8 +93,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     })(window, document, "clarity", "script", "ixwytyo6af");
     `}
           </Script>
-
-
         </head>
         <body
           className={cn(
@@ -104,15 +102,13 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextAuthProvider>
-              <MagicboxProvider>
-                {children}
-              </MagicboxProvider>
+              <MagicboxProvider>{children}</MagicboxProvider>
             </NextAuthProvider>
           </ThemeProvider>
 
           <NewYorkToaster />
           <DefaultToaster />
-          <TailwindIndicator />
+          {/* <TailwindIndicator /> */}
         </body>
       </html>
     </>

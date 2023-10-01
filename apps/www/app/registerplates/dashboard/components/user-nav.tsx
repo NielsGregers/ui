@@ -1,4 +1,5 @@
 import React, { use } from "react"
+import { FiUserX } from "react-icons/fi"
 
 import { getUserSession } from "@/lib/user"
 import { LoginButton, LogoutButton } from "@/components/login"
@@ -31,8 +32,9 @@ export function UserNav() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarImage />
+
+              <AvatarFallback>?</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

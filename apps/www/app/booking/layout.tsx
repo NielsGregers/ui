@@ -18,9 +18,9 @@ import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
 import { SiteHeader } from "./components/site-header"
 import { NextAuthProvider } from "./providers"
 import { UsercaseProvider } from "./usecaseproviders"
+
 // This is important, if not set, this page will be statically generated causing the build to fail
 // as the build process would need to have access to the database / api's
-
 
 export const metadata: Metadata = {
   title: {
@@ -83,17 +83,14 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-
     <UsercaseProvider>
       <div className="relative flex min-h-screen flex-col">
         <SiteHeader />
-        <ForModule module="Booking">
-          <div className="flex-1">{children}</div>
-        </ForModule>
+        {/* <ForModule module="Booking"> */}
+        <div className="flex-1">{children}</div>
+        {/* </ForModule> */}
         <SiteFooter />
       </div>
-
     </UsercaseProvider>
-
   )
 }

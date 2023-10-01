@@ -84,6 +84,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.2",
     "react-icons": "^4.11.0",
+    "react-loader-spinner": "^5.4.5",
     "react-wrap-balancer": "^0.4.1",
     "recharts": "^2.6.2",
     "sharp": "^0.31.3",

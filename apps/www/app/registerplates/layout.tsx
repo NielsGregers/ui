@@ -84,9 +84,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <div className="relative m-0 flex h-screen flex-col p-0">
       <SiteHeader />
-      <ForModule module="Booking">
-        <div className="flex-1">{children}</div>
-      </ForModule>
+      <div className="flex-1">{children}</div>
     </div>
   )
 }
