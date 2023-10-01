@@ -78,6 +78,12 @@ export async function getProfileCache() {
         .collection<ProfileCache>("cache")
         .findOne({ key: KEY })
     }
+  }else{
+    await refreshProfileCache()
+    cache = await client
+      .db(process.env.DATABASE)
+      .collection<ProfileCache>("cache")
+      .findOne({ key: KEY })
   }
 
   await client.close()

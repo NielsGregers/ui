@@ -42,6 +42,12 @@ import { GenericItem } from "@/components/table/data/schema"
 import { DataTableColumnHeader } from "@/components/table/components/data-table-column-header"
 import { ColumnDef } from "@tanstack/react-table"
 import { MagicboxContext } from "@/app/magicbox-context"
+import { ProfileCache } from "@/app/profile/data/cache"
+import { getProfileData } from "."
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/registry/new-york/ui/command"
+import { cn } from "@/lib/utils"
+import { LockClosedIcon } from "@radix-ui/react-icons"
+import { CheckIcon } from "lucide-react"
 
 export interface Root {
   "@odata.context": string
@@ -152,16 +158,19 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
   const [sharePointTenantName, setsharePointTenantName] = useState("")
   const [siteId, setsiteId] = useState("")
   const [sitePages, setsitePages] = useState<SitePage[]>([])
-
+  const [profileData, setprofileData] = useState<ProfileCache>()
 
   const [showSidepanel, setshowSidepanel] = useState(false)
   const [pageItems, setpageItems] = useState<GenericItem[]>([])
-
+  const [selectedChannels, setselectedChannels] = useState<string[]>([])
 
   React.useEffect(() => {
 
     const load = async () => {
-
+      const pd = await getProfileData()
+      if (pd) {
+        setprofileData(pd)
+      }
       const token = magicbox.session?.accessToken ?? ""
       if (token) {
         const searchResponse = await httpsGetAll<Value>(token, `https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/${sitename}:/lists/Site Pages/items?$expand=fields`)
@@ -173,12 +182,26 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
 
           let string1 = ""
           if (item.fields._ModernAudienceAadObjectIds) {
-            string1 += item.fields._ModernAudienceAadObjectIds.map((a) => a.LookupValue).join(", ")
+            string1 += item.fields._ModernAudienceAadObjectIds.map((a) => {
+            const groupId = a.LookupValue.replace("{","").replace("}","").toLowerCase()
+             const channel = pd?.channels.find(channel=>channel.GroupId===groupId)
+             
+              return channel?.channelName ?? ("Unknown channel " + groupId)
+            }).join(", ")
           }
+          let translatedTo = ""
+          const s1 = item.webUrl.toLowerCase().split("/sitepages/")
+          if (s1.length>1) {
+            const s2 = s1[1].split("/")
+            if (s2.length>1) {
+              translatedTo = s2[0]+ ": "
+            }
+          }
+          
 
 
           const genericItem: GenericItem = {
-            title: (item.fields.Title ?? "Missing title"),
+            title: translatedTo + (item.fields.Title ?? "Missing title"),
             link: item.webUrl,
             details: item.fields.Description ?? "",
             id: item.id,
@@ -188,7 +211,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
           }
           return genericItem
         }))
-
+      
       }
     }
     load()
@@ -233,56 +256,56 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
         </h3>
         {error && <div className="text-red-500">{error}</div>}
         <div className="flex-grow  bg-white">
-          <GenericTable data={pageItems} addtionalColumns={[col3, col2, col1]} 
-                actions={{
-                  filterComponent: (params) => {
-                    if (params) {
-                      let x = 1
-                    }
-                    return (
-                      <div className="flex">
-                      <div className="grow"></div>
-                      <div>
-                      
-                       
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setshowSidepanel(true)
-                          }}
-                        >
+          <GenericTable data={pageItems} addtionalColumns={[col3, col2, col1]}
+            actions={{
+              filterComponent: (params) => {
+                if (params) {
+                  let x = 1
+                }
+                return (
+                  <div className="flex">
+                    <div className="grow"></div>
+                    <div>
+
+
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setshowSidepanel(true)
+                        }}
+                      >
                         General Options
-                  
-                        </Button>
-                      </div>
-                      </div>
-                    )
-                  },
-                  selectedItemsActionsComponent: (params) => {
-                    return (
-                      <div>
-                        {/* <Button variant="destructive"> Delete</Button> */}
-                        {params.rows.length === 1 &&
-                          params.rows[0].original.string1 === "New" && (<div></div>
-                        
-                          )}
-                        {params.rows.length > 1 && (
-                          <Button
-                          variant={"destructive"}
-                            onClick={() => {
-                              const items = params.rows.map((r) => {
-                                return r.original
-                              })
-                              debugger
-                            }}
-                          >
-                            Actions on many pages
-                          </Button>
-                        )}
-                      </div>
-                    )
-                  },
-                }}
+
+                      </Button>
+                    </div>
+                  </div>
+                )
+              },
+              selectedItemsActionsComponent: (params) => {
+                return (
+                  <div>
+                    {/* <Button variant="destructive"> Delete</Button> */}
+                    {params.rows.length === 1 &&
+                      params.rows[0].original.string1 === "New" && (<div></div>
+
+                      )}
+                    {params.rows.length > 1 && (
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => {
+                          const items = params.rows.map((r) => {
+                            return r.original
+                          })
+                          debugger
+                        }}
+                      >
+                        Actions on many pages
+                      </Button>
+                    )}
+                  </div>
+                )
+              },
+            }}
           />
 
 
@@ -290,15 +313,101 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
         <Sheet open={showSidepanel} onOpenChange={setshowSidepanel} >
           <SheetContent>
             <div className="h-screen  bg-white ">
-            <SheetHeader>
-              <SheetTitle>Page Options</SheetTitle>
-              <SheetDescription>
-               Different things that you can do with all pages
-              </SheetDescription>
-            </SheetHeader>
-            <div >
+              <SheetHeader>
+                <SheetTitle>Page Options</SheetTitle>
+                <SheetDescription>
+                 
+                  <Command>
+                        <CommandInput placeholder="Search channels..." />
 
-            </div>
+                        <CommandEmpty>No channels found.</CommandEmpty>
+                        {/* <CommandList className="h-vh "> */}
+                        <div className="h-[500px] overflow-scroll" >
+                          {profileData?.categories
+                            .sort((a, b) => a.sortOrder - b.sortOrder)
+                            .map((category, key) => {
+                              return (
+                                <CommandGroup
+                                  key={key}
+                                  heading={category.categoryName}
+                                >
+                                  {profileData?.channels
+                                    .filter(
+                                      (i) =>
+                                        i.NewsCategoryId === category.categoryId
+                                    )
+                                    .sort((a, b) => {
+                                      if (
+                                        a.sortOrder.toLowerCase() <
+                                        b.sortOrder.toLowerCase()
+                                      ) {
+                                        return -1
+                                      }
+                                      if (
+                                        a.sortOrder.toLowerCase() >
+                                        b.sortOrder.toLowerCase()
+                                      ) {
+                                        return 1
+                                      }
+                                      return 0
+                                    })
+                                    .map((channel) => (
+                                      <CommandItem
+                                        value={channel.channelName}
+                                        key={channel.channelCode}
+                                        onSelect={(value) => {
+                                          if (channel.Mandatory) return
+
+                                          let newvalue = []
+                                          if (
+                                            selectedChannels.includes(
+                                              channel.channelName
+                                            )
+                                          ) {
+                                            newvalue =  selectedChannels.filter(
+                                              (i) => i !== channel.channelName
+                                            )
+                                          } else {
+                                            newvalue = [
+                                              ...( selectedChannels ?? []),
+                                              channel.channelName,
+                                            ]
+                                          }
+                                          setselectedChannels(newvalue)
+                                        }}
+                                      >
+                                        {channel.Mandatory && (
+                                          <LockClosedIcon
+                                            className={"mr-2 h-4"}
+                                          />
+                                        )}
+                                        {!channel.Mandatory && (
+                                          <CheckIcon
+                                            className={cn(
+                                              "mr-2 h-4 w-4",
+                                              selectedChannels.includes(
+                                                channel.channelName
+                                              )
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            )}
+                                          />
+                                        )}
+                                        {channel.channelName}
+                                      </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                              )
+                            })}
+                            </div>
+                            <Button className="mt-5">Update</Button>
+                        {/* </CommandList> */}
+                      </Command>
+                </SheetDescription>
+              </SheetHeader>
+              <div >
+
+              </div>
             </div>
           </SheetContent>
         </Sheet>

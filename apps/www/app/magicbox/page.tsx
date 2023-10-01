@@ -31,6 +31,9 @@ import { setConfig } from "next/config"
 import { ArchiveRestoreIcon, CopyIcon,EditIcon, GridIcon, HeartPulseIcon, PenToolIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { LegacyPageContext } from "./data/sharepoint-extention"
+import { Select } from "@/registry/new-york/ui/select"
+import { Switch } from "@/registry/new-york/ui/switch"
+import { Checkbox } from "@/registry/new-york/ui/checkbox"
 
 export default function RootPage() {
   const context = useContext(SharePointExtensionContext)
@@ -53,6 +56,8 @@ export default function RootPage() {
   const [errorMessage, seterrorMessage] = useState("")
   const [legacyPageContext, setlegacyPageContext] = useState<LegacyPageContext>()
 
+const [keepStandardOn, setkeepStandardOn] = useState(false)
+const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
   const { setTheme } = useTheme()
   React.useEffect(() => {
     setTheme("transparent")
@@ -104,7 +109,7 @@ export default function RootPage() {
       const s = parentLocation.split(".sharepoint.com/")
       if (s.length > 1) {
         const tenant = s[0].replace("https://", "")
-        const site = s[1].split("?")[0]
+        const site = s[1].split("?")[0].split("/")[0]
         setsitePath(site)
         setsharePointTenantName(tenant)
       }
@@ -113,7 +118,7 @@ export default function RootPage() {
 
   // This hook is listening an event that came from the Iframe
   React.useEffect(() => {
-    type MessageTypes = "ensureuser" | "closemagicbox" | "resolveduser" | "context"
+    type MessageTypes = "ensureuser" | "closemagicbox" | "resolveduser" | "context" | "capabilities"
     interface Message {
       type: MessageTypes
       messageId: string
@@ -142,7 +147,10 @@ export default function RootPage() {
               setlegacyPageContext(context)
               break
               
-
+              case "capabilities":
+              
+             setcanSetKeepStandardOn(true)
+              break
             
 
           default:
@@ -200,10 +208,10 @@ export default function RootPage() {
           <div className="m-4 overflow-scroll ">
    
             <div>
-Options
+Standard SharePoint
 
               </div>
-            <div className="p-3">
+            <div className="flex p-3">
               <Button
                 variant="link"
                 onClick={() => {
@@ -217,10 +225,26 @@ Options
                 }}
               >
                   <ArchiveRestoreIcon/>&nbsp;
-                Restore Standard SharePoint navigation
+                Restore navigation
               </Button>
+              <div className="grow"></div>
+              {canSetKeepStandardOn &&
+              <Button variant={keepStandardOn?"default":"secondary"} onClick={()=>{
+                const newSetting = !keepStandardOn
+                setkeepStandardOn(newSetting)
+                window.parent.postMessage(
+                  {
+                    type: "keep-standardnavigation",
+                    data: newSetting,
+                  },
+                  "*"
+                )
+               
+                
+                
+                }}>Keep standard {keepStandardOn?" on":" off"}</Button>}
             </div>
-            {sitePath &&
+            {sitePath && false &&
             <div className=" px-3">
 <Link href={`/channels/sharepoint/${sitePath}/pages/`} target="_blank">
 <Button variant={"link"}>
@@ -239,8 +263,8 @@ Options
                 <Link href={`/magicbox/usecase/search`}>Search</Link>
               </Button>
             </div> */}
-            {legacyPageContext && legacyPageContext.isSiteOwner && 
-            <div>
+            {true && 
+            <div> 
               <div>
 Site owner options
 
