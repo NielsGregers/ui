@@ -34,6 +34,17 @@ export const roles: Role[] = [
     linkname: "Order Services",
   },
   {
+    sortOrder: 6,
+    key: "registerguest",
+    name: "Register Guest",
+    image: "/cava/badge.svg",
+    link: "/cava/visitors",
+    type: "service",
+    version: "preview",
+    description: "Register your guests",
+    linkname: "Register Guests",
+  },
+  {
     sortOrder: 70,
     key: "kitchen",
     name: "Kitchen",
