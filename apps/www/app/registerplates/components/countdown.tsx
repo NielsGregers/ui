@@ -59,7 +59,7 @@ function Countdown(props: PropTypes) {
               ? "text-red-800"
               : timeLeft.days < 2
               ? "text-orange-400"
-              : "text-black"
+              : "text-black dark:text-white"
           }`}
         >
           <div>Time left:</div>
