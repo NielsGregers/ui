@@ -28,7 +28,7 @@ import { Me } from "../profile/data/schemas"
 import { SharePointExtensionContext } from "./usecasecontext"
 import { copyPage } from "./actions/pages"
 import { setConfig } from "next/config"
-import { ArchiveRestoreIcon, CopyIcon,EditIcon, GridIcon, HeartPulseIcon, PenToolIcon } from "lucide-react"
+import { ArchiveRestoreIcon, CopyIcon, EditIcon, GridIcon, HeartPulseIcon, PenToolIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import { LegacyPageContext } from "./data/sharepoint-extention"
 import { Select } from "@/registry/new-york/ui/select"
@@ -56,17 +56,17 @@ export default function RootPage() {
   const [errorMessage, seterrorMessage] = useState("")
   const [legacyPageContext, setlegacyPageContext] = useState<LegacyPageContext>()
 
-const [keepStandardOn, setkeepStandardOn] = useState(false)
-const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
+  const [keepStandardOn, setkeepStandardOn] = useState(false)
+  const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
   const { setTheme } = useTheme()
   React.useEffect(() => {
     setTheme("transparent")
     return () => {
       setTheme("light")
     }
- 
- }, [])
- 
+
+  }, [])
+
 
   React.useEffect(() => {
     const load = async () => {
@@ -140,18 +140,18 @@ const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
           case "resolveduser":
             setresolveduser(m.data?.LoginName)
             break
-            
-            case "context":
-              
-              const context = JSON.parse(m.data)
-              setlegacyPageContext(context)
-              break
-              
-              case "capabilities":
-              
-             setcanSetKeepStandardOn(true)
-              break
-            
+
+          case "context":
+
+            const context = JSON.parse(m.data)
+            setlegacyPageContext(context)
+            break
+
+          case "capabilities":
+
+            setcanSetKeepStandardOn(true)
+            break
+
 
           default:
             break
@@ -190,7 +190,7 @@ const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
   const onCopyPage = async () => {
     setcopying(true)
     const destSiteUrl = context.parentlocation.split("/SitePages")[0]
-    const copyPageResult = await copyPage(sourceUrl,destSiteUrl)
+    const copyPageResult = await copyPage(sourceUrl, destSiteUrl)
     setcopying(false)
     if (copyPageResult.hasError) {
       seterrorMessage(copyPageResult.errorMessage ?? "Unknown error")
@@ -201,59 +201,57 @@ const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
   }
 
   return (
-    <div className="h-screen w-screen">
-      <div className="flex h-screen flex-row">
-        <div className="flex-grow bg-transparent blur-md"></div>
-        <div className="w-[500px] bg-gray-200 transition-transform delay-150 ease-in-out">
-          <div className="m-4 overflow-scroll ">
-   
-            <div>
-Standard SharePoint
 
-              </div>
-            <div className="flex p-3">
-              <Button
-                variant="link"
-                onClick={() => {
-                  window.parent.postMessage(
-                    {
-                      type: "closemagicbox",
-                      data: "",
-                    },
-                    "*"
-                  )
-                }}
-              >
-                  <ArchiveRestoreIcon/>&nbsp;
-                Restore navigation
-              </Button>
-              <div className="grow"></div>
-              {canSetKeepStandardOn &&
-              <Button variant={keepStandardOn?"default":"secondary"} onClick={()=>{
-                const newSetting = !keepStandardOn
-                setkeepStandardOn(newSetting)
-                window.parent.postMessage(
-                  {
-                    type: "keep-standardnavigation",
-                    data: newSetting,
-                  },
-                  "*"
-                )
-               
-                
-                
-                }}>Keep standard {keepStandardOn?" on":" off"}</Button>}
-            </div>
-            {sitePath && false &&
-            <div className=" px-3">
-<Link href={`/channels/sharepoint/${sitePath}/pages/`} target="_blank">
-<Button variant={"link"}>
-  <GridIcon />&nbsp;News Channels
-</Button>
-</Link>
 
-              </div>}
-            {/* <div className="p-3">
+    <div className="m-4 overflow-scroll ">
+
+      <div>
+        Standard SharePoint
+
+      </div>
+      <div className="flex p-3">
+        <Button
+          variant="link"
+          onClick={() => {
+            window.parent.postMessage(
+              {
+                type: "closemagicbox",
+                data: "",
+              },
+              "*"
+            )
+          }}
+        >
+          <ArchiveRestoreIcon />&nbsp;
+          Restore navigation
+        </Button>
+        <div className="grow"></div>
+        {canSetKeepStandardOn &&
+          <Button variant={keepStandardOn ? "default" : "secondary"} onClick={() => {
+            const newSetting = !keepStandardOn
+            setkeepStandardOn(newSetting)
+            window.parent.postMessage(
+              {
+                type: "keep-standardnavigation",
+                data: newSetting,
+              },
+              "*"
+            )
+
+
+
+          }}>Keep standard {keepStandardOn ? " on" : " off"}</Button>}
+      </div>
+      {sitePath && false &&
+        <div className=" px-3">
+          <Link href={`/channels/sharepoint/${sitePath}/pages/`} target="_blank">
+            <Button variant={"link"}>
+              <GridIcon />&nbsp;News Channels
+            </Button>
+          </Link>
+
+        </div>}
+      {/* <div className="p-3">
               <Button variant="default">
                 <Link href={`/magicbox/sitepages${legacyPageContext?.siteServerRelativeUrl}`}>Pages</Link>
               </Button>
@@ -263,13 +261,13 @@ Standard SharePoint
                 <Link href={`/magicbox/usecase/search`}>Search</Link>
               </Button>
             </div> */}
-            {true && 
-            <div> 
-              <div>
-Site owner options
+      {true &&
+        <div>
+          <div>
+            Site owner options
 
-              </div>
-              {/* <div className="p-3">
+          </div>
+          {/* <div className="p-3">
               <Button variant="link"  className=""
                 onClick={() => {
                   const newUrl = legacyPageContext.multiGeoInfo[0]?.RootSiteUrl + legacyPageContext.serverRequestPath.substring(1) + "?mode=edit"
@@ -286,111 +284,109 @@ Site owner options
                 <PenToolIcon/>&nbsp;Edit
               </Button>
             </div> */}
-            <div className="px-3 pt-3">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="link"  className="">
-                    <CopyIcon/>&nbsp;
-                    Copy Page
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white sm:max-w-[600px]">
-                  <DialogHeader>
-                    <DialogTitle>Copy Page</DialogTitle>
-                    <DialogDescription>
-                   Find the URL of the page that you like to have a copy of.
+          <div className="px-3 pt-3">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="link" className="">
+                  <CopyIcon />&nbsp;
+                  Copy Page
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-white sm:max-w-[600px]">
+                <DialogHeader>
+                  <DialogTitle>Copy Page</DialogTitle>
+                  <DialogDescription>
+                    Find the URL of the page that you like to have a copy of.
                   </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4 ">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="name" className="text-right">
-                        Source URL 
-                      </Label>
-                      <Input
-                        value={sourceUrl}
-                        onChange={(e) => {
-                          setsourceUrl(e.target.value)
-                        }}
-                        id="name"
-                        className="col-span-3"
-                      />
-                    </div>
-                   
+                </DialogHeader>
+                <div className="grid gap-4 py-4 ">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Source URL
+                    </Label>
+                    <Input
+                      value={sourceUrl}
+                      onChange={(e) => {
+                        setsourceUrl(e.target.value)
+                      }}
+                      id="name"
+                      className="col-span-3"
+                    />
                   </div>
-                  <DialogFooter>
-                    {copying && <div>Copying... Expect 5-15 seconds delay</div>}
-                    {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-                    {newPageUrl && <div>
+
+                </div>
+                <DialogFooter>
+                  {copying && <div>Copying... Expect 5-15 seconds delay</div>}
+                  {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+                  {newPageUrl && <div>
                     <Button type="button" ><Link href={newPageUrl} target="_blank">Open new page</Link> </Button>
-                    </div>}
-                    {!copying && !newPageUrl && 
-                    <Button type="button" disabled={sourceUrl===""} onClick={()=>onCopyPage()}>Copy</Button>}
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              </div>
-              <div className="hidden p-3">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="link"  className="">
-                    <CopyIcon/>&nbsp;
-                    Copy Library
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white sm:max-w-[600px]">
-                  <DialogHeader>
-                    <DialogTitle>Copy Page</DialogTitle>
-                    <DialogDescription>
-                   Find the URL of the page that you like to have a copy of.
+                  </div>}
+                  {!copying && !newPageUrl &&
+                    <Button type="button" disabled={sourceUrl === ""} onClick={() => onCopyPage()}>Copy</Button>}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+          <div className="hidden p-3">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="link" className="">
+                  <CopyIcon />&nbsp;
+                  Copy Library
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-white sm:max-w-[600px]">
+                <DialogHeader>
+                  <DialogTitle>Copy Page</DialogTitle>
+                  <DialogDescription>
+                    Find the URL of the page that you like to have a copy of.
                   </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4 ">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="name" className="text-right">
-                        Source URL 
-                      </Label>
-                      <Input
-                        value={sourceUrl}
-                        onChange={(e) => {
-                          setsourceUrl(e.target.value)
-                        }}
-                        id="name"
-                        className="col-span-3"
-                      />
-                    </div>
-                   
+                </DialogHeader>
+                <div className="grid gap-4 py-4 ">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Source URL
+                    </Label>
+                    <Input
+                      value={sourceUrl}
+                      onChange={(e) => {
+                        setsourceUrl(e.target.value)
+                      }}
+                      id="name"
+                      className="col-span-3"
+                    />
                   </div>
-                  <DialogFooter>
-                    {copying && <div>Copying... Expect 5-15 seconds delay</div>}
-                    {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-                    {newPageUrl && <div>
+
+                </div>
+                <DialogFooter>
+                  {copying && <div>Copying... Expect 5-15 seconds delay</div>}
+                  {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+                  {newPageUrl && <div>
                     <Button type="button" ><Link href={newPageUrl} target="_blank">Open new page</Link> </Button>
-                    </div>}
-                    {!copying && !newPageUrl && 
-                    <Button type="button" disabled={sourceUrl===""} onClick={()=>onCopyPage()}>Copy</Button>}
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              </div>
-             
-              <div className=" px-3">
-<Link href="https://clarity.microsoft.com/projects/view/iwgs4fzf64/dashboard?date=Last%203%20days" target="_blank">
-<Button variant={"link"}>
-  <HeartPulseIcon />&nbsp; Health &amp; Performance
-</Button>
-</Link>
+                  </div>}
+                  {!copying && !newPageUrl &&
+                    <Button type="button" disabled={sourceUrl === ""} onClick={() => onCopyPage()}>Copy</Button>}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
 
-              </div>
-            </div>
-            
-            
-            
-            }
+          <div className=" px-3">
+            <Link href="https://clarity.microsoft.com/projects/view/iwgs4fzf64/dashboard?date=Last%203%20days" target="_blank">
+              <Button variant={"link"}>
+                <HeartPulseIcon />&nbsp; Health &amp; Performance
+              </Button>
+            </Link>
 
-          
-          </div>{" "}
+          </div>
         </div>
-      </div>
+
+
+
+      }
+
+
     </div>
+
   )
 }
