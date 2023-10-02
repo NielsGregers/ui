@@ -1,4 +1,5 @@
-"use client";
+
+
 
 import { NewsChannel,Country, Unit, NewsCategory, ValidGuestDomain } from "./schemas";
 import { https } from "@/lib/httphelper";

@@ -1,7 +1,14 @@
 import Logo from "@/components/logo"
-
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import "./home-animations.css"
 export default function WelcomePage() {
 
+  const data = cookies().has("user") ? JSON.parse(cookies().get("user")?.value as string) : {}
+  
+  if (data.country && data.unit) {
+    redirect("https://christianiabpos.sharepoint.com/sites/nexiintra-home?country=" + data.country + "&unit=" + data.unit)
+  } 
   return (
 
     <div className="-space  container h-screen  bg-[url('/NexiEurope.svg')] bg-cover text-center">
@@ -10,10 +17,10 @@ export default function WelcomePage() {
       </div>
 
       <div className="grid h-screen place-items-center">
-        <div className=" w-screen bg-[#FFFFFFAA] p-10">
-          <div className="pb-4 text-2xl text-black">Welcome to Nexi Group</div>
+        <div className="home_welcome_animate mx-auto  rounded-xl bg-[#2D32A9] p-10">
+          <div className="pb-4 text-2xl text-white">Welcome to Nexi Group</div>
           <div>
-            <button className="rounded-full bg-[#2D32A9] px-10 text-white">
+            <button  className="rounded-full bg-[#FFFFFF] px-10 text-[#2D32A9] ">
               {" "}
               <a href="/profile">Click to get started</a>
             </button>

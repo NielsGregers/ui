@@ -16,9 +16,9 @@ import { MagicboxContext } from "@/app/magicbox-context"
 import {
   createNewsChannelGroup,
   setNewsChannelGroupResourceBehaviour,
-} from "../actions/memberships"
-import { Me, NewsChannel } from "../data/schemas"
-import { getNewsChannels } from "../data/sharepoint"
+} from "../../../profile/actions/memberships"
+import { Me, NewsChannel } from "../../../profile/data/schemas"
+import { getNewsChannels } from "../../../profile/data/sharepoint"
 
 // export const schema = z.object({
 //   title: z.string(),
@@ -71,13 +71,15 @@ export default function SettingsProfilePage() {
       return
     }
     const me = meResponse.data
+    // Only create groups for items that have no GroupId
     const items = params.rows.map((row: any) => {
       return row.original as GenericItem
     }).filter((item: GenericItem) => {
         return item.details !== "No GroupId"
         })
     LogToMongo("logs-niels", "createGroups", { me, items })
-    //return
+    
+    
 
     for (let i = 0; i < items.length; i++) {
       const item = items[i]

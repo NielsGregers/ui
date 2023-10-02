@@ -34,8 +34,8 @@ import {
   getSitePages,
 } from "../../../../profile/data/officegraph"
 import { Me } from "../../../../profile/data/schemas"
-import { SitepageCard } from "../../../components/pagecard"
-import { SharePointExtensionContext } from "../../../usecasecontext"
+import { SitepageCard } from "../../../../magicbox/components/pagecard"
+import { SharePointExtensionContext } from "../../../../magicbox/usecasecontext"
 
 export interface WebParts {
   "@odata.context": string

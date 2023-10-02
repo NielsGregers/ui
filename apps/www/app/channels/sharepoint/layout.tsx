@@ -8,20 +8,20 @@ import ToSmall from "@/components/tosmall"
 import { Button } from "@/registry/new-york/ui/button"
 import { Separator } from "@/registry/new-york/ui/separator"
 
-import { SidebarNav } from "./[upn]/components/sidebar-nav"
+
 import { SiteFooter as LocalSiteFooter } from "./components/site-footer"
 import { SiteHeader } from "./components/site-header"
 
 export const metadata: Metadata = {
-  title: "intra/profile",
-  description: "Configure your profile",
+  title: "intra/channels",
+  description: "Channels",
   openGraph: {
   images: [
     {
       url: "https://nexiintra365.blob.core.windows.net/public/nexi-intra-profile.png",
       width: 1200,
       height: 630,
-      alt: "Nexi Intra Profile",
+      alt: "Channels",
     },
   ]
 }

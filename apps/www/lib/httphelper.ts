@@ -6,6 +6,7 @@
 //     AccountInfo,
 //   } from "@azure/msal-browser";
 import { Method } from "axios";
+import { logMagicpot } from "./magicpot";
 //import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 //import { logVerbose } from "./logging";
 const sleep = (ms: number) => {
@@ -55,15 +56,14 @@ export const https = <T>(
     //   headers,
     //   ...additionalAxiosConfig,
     // };
-
-
-
+    const dataType = typeof data;
+const dataText =  data ? (dataType === "string" ? data :  JSON.stringify(data)) : null
     //logVerbose("https",method,url)
     const send = (retryNumber: number) => {
       fetch(url, {
         method: method,
         headers: headers,
-        body: data,
+        body: dataText,
         ...additionalConfig
       })
         //axios(config)
@@ -73,12 +73,14 @@ export const https = <T>(
             response.status === 401 ||
             response.status === 400
           ) {
+            await logMagicpot("general", "https_error", { status: "Error 40X", url,contentType,headers, method, data:dataText, statusText: response.statusText , statusCode: response.status})
             resolve({
               hasError: true,
 
               errorMessage:
                 response.statusText,
             });
+            
             return;
           }
           if (response.status > 400) {
@@ -86,7 +88,8 @@ export const https = <T>(
               await sleep(1000 * (retryNumber + 1));
               send(retryNumber + 1);
             } else {
-              resolve({
+              await logMagicpot("general", "https_error", { status: "Error Other", url,contentType,headers, method, data:dataText, statusText: response.statusText , statusCode: response.status})
+              return resolve({
                 hasError: true,
                 errorMessage:
                   response.statusText,

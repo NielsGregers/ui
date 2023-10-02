@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name: "Nexi Group Intranet",
+  name: "Nexi intra",
   url: "https://home.nexi-group.com",
-  ogImage: "https://ui.shadcn.com/og.jpg",
+  ogImage: "https://nexiintra365.blob.core.windows.net/public/nexi-intra.png",
   description:
     "Landing page for the Nexi Group Intranet .",
   links: {

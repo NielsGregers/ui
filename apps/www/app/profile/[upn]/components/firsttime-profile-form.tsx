@@ -90,16 +90,20 @@ function match(channel: NewsChannel, unit: string, country: string): boolean {
 export function ProfileForm(props: {
   currentUnit: string
   currentCountry: string
+  newsCategories: NewsCategory[]
+  newsChannels: NewsChannel[]
+  countries: Country[]
+  units: Unit[]
 }) {
+  const {newsCategories, newsChannels, countries, units} = props
   const magicbox = useContext(MagicboxContext)
-
   const [showCountries, setshowCountries] = useState(false)
   const [showUnits, setshowUnits] = useState(false)
   const [showChannels, setshowChannels] = useState(false)
-  const [newsChannels, setNewsChannels] = useState<NewsChannel[]>([])
-  const [countries, setCountries] = useState<Country[]>([])
-  const [newsCategories, setNewsCategories] = useState<NewsCategory[]>([])
-  const [units, setUnits] = useState<Unit[]>([])
+  //const [newsChannels, setNewsChannels] = useState<NewsChannel[]>([])
+ // const [countries, setCountries] = useState<Country[]>([])
+  // const [newsCategories, setNewsCategories] = useState<NewsCategory[]>([])
+  //const [units, setUnits] = useState<Unit[]>([])
   const [defaultChannels, setdefaultChannels] = useState<NewsChannel[]>([])
   const [processing, setProcessing] = useState(false)
   const [processPercentage, setProcessPercentage] = useState(0)
@@ -116,15 +120,15 @@ export function ProfileForm(props: {
     }
     if (magicbox.session?.accessToken) load()
   }, [magicbox.session?.accessToken])
-  useEffect(() => {
-    const load = async () => {
-      setNewsChannels((await getNewsChannels(accessToken)) ?? [])
-      setCountries((await getCountries(accessToken)) ?? [])
-      setUnits((await getUnits(accessToken)) ?? [])
-      setNewsCategories((await getNewsCategories(accessToken)) ?? [])
-    }
-    if (accessToken) load()
-  }, [accessToken])
+  // useEffect(() => {
+  //   const load = async () => {
+  //     setNewsChannels((await getNewsChannels(accessToken)) ?? [])
+  //     setCountries((await getCountries(accessToken)) ?? [])
+  //     setUnits((await getUnits(accessToken)) ?? [])
+  //     setNewsCategories((await getNewsCategories(accessToken)) ?? [])
+  //   }
+  //   if (accessToken) load()
+  // }, [accessToken])
 
   // This can come from your database or API.
   const defaultValues: Partial<ProfileFormValues> = {
