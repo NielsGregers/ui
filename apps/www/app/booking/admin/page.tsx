@@ -24,6 +24,7 @@ import TeamSwitcher from "@/app/shadcn/examples/dashboard/components/team-switch
 import { UserNav } from "@/app/shadcn/examples/dashboard/components/user-nav"
 
 import ParkingDashboard from "./parking/components/parking-dashboard"
+import UserTable from "./users/components/user-table"
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -61,9 +62,7 @@ export default function DashboardPage() {
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="users" disabled>
-                Users
-              </TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
               <TabsTrigger value="parking">Parking</TabsTrigger>
               <TabsTrigger value="desks" disabled>
                 Desks
@@ -193,6 +192,11 @@ export default function DashboardPage() {
                     <RecentSales />
                   </CardContent>
                 </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="users" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <UserTable />
               </div>
             </TabsContent>
             <TabsContent value="parking" className="space-y-4">

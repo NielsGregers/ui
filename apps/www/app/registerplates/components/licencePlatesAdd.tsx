@@ -74,11 +74,7 @@ function LicencePlatesAdd(props: PropTypes) {
                   : "Please provide your input"}
               </div>
             )}
-            {timeUp && (
-              <div className="text-center text-4xl text-gray-800">
-                Time is up!
-              </div>
-            )}
+            {timeUp && <div className="text-center text-4xl ">Time is up!</div>}
             {!timeUp && (
               <div className="text-md pt-4 text-center italic">
                 {existingPlates
