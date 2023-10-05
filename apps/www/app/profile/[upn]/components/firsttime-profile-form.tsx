@@ -483,7 +483,10 @@ export function ProfileForm(props: {
                             <div className="grid auto-cols-auto grid-cols-3 gap-1">
                               {field.value.map((val) => {
                                 return (
-                                  <div className=" max-h-7 rounded-full bg-slate-500 p-1 text-white">
+                                  <div
+                                    key={val}
+                                    className=" max-h-7 rounded-full bg-slate-500 p-1 text-white"
+                                  >
                                     {val.substring(0, 14)}
                                   </div>
                                 )
