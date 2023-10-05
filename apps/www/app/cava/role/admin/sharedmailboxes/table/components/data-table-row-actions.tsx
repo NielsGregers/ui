@@ -2,7 +2,7 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row } from "@tanstack/react-table"
-import { EXCHANGEPOWERSHELLROOT, POWERSHELLROOT } from "@/app/powershell/exchange"
+
 import { Button } from "@/registry/new-york/ui/button"
 import {
   DropdownMenu,
@@ -20,7 +20,6 @@ import {
 
 import { labels } from "../data/data"
 import { schema } from "../data/schema"
-import Link from "next/link"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -29,7 +28,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const logentry = schema.parse(row.original)
+  const task = schema.parse(row.original)
 
   return (
     <DropdownMenu>
@@ -44,17 +43,27 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>View</DropdownMenuItem>
-         
+         {/* 
+        <DropdownMenuItem>Make a copy</DropdownMenuItem>
+        <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
-
-       
-        <DropdownMenuItem >
-          <Link href={`auditlog/${logentry._id}`}>
-          View Details
-          </Link>
+       <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup value={task.label}>
+              {labels.map((label) => (
+                <DropdownMenuRadioItem key={label.value} value={label.value}>
+                  {label.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub> */}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
-    
       </DropdownMenuContent>
     </DropdownMenu>
   )

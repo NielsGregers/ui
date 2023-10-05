@@ -125,13 +125,13 @@ export const roles: Role[] = [
     description: "Security is responsible for the safety of the meeting as well as ensure guests have checked out",
   },
   {
-    sortOrder: 75,
+    sortOrder: 100,
     key: "technician",
-    name: "Technician",
+    name: "Administrator",
     image: "/cava/technician.svg",
-    link: "/cava/role/technician",
+    link: "/cava/role/admin/rooms",
     type: "supporting",
-    version: "draft",
+    version: "preview",
     description: "Technician is responsible for the meeting infrastructure",
   },
 ];
