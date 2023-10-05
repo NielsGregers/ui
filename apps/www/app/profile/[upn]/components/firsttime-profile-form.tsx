@@ -117,7 +117,7 @@ export function ProfileForm(props: {
 
   const [memberships, setmemberships] = useState<Membership[]>()
   const [stringMemberships, setstringMemberships] = useState<string[]>([])
-  const [keepOld, setkeepOld] = useState<boolean>(false)
+  const [keepOld, setkeepOld] = useState<boolean>(true)
   useEffect(() => {
     const load = async () => {
       setmemberships(await getMemberOfs(magicbox.session?.accessToken ?? ""))
