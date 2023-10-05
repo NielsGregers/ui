@@ -264,9 +264,9 @@ export function SearchUserForm({ onSelectUser, defaultuserUserPrincipalName }: P
             <AvatarFallback><AvatarImage src="/avatars/01.png" alt={"Image of selected user"} /></AvatarFallback>
           </Avatar>
           </div>
-          <div className="flex overflow-ellipsis whitespace-nowrap ">
+          <div className="flex text-ellipsis whitespace-nowrap ">
           <div className="hidden  lg:inline-flex">{foundUser ? foundUser.displayName : "Search users..."}</div>
-          <div className="inline-flex overflow-ellipsis whitespace-nowrap lg:hidden ">{foundUser ? foundUser.displayName : "Search ..."}</div>
+          <div className="inline-flex text-ellipsis whitespace-nowrap lg:hidden ">{foundUser ? foundUser.displayName : "Search ..."}</div>
           </div>
           <div className="grow"></div>
           <ChevronDownIcon  />

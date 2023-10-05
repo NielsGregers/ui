@@ -55,7 +55,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
     <>
       <ToSmall />
       <div className="flex  h-screen w-screen ">
-        <div className="flex-grow " />
+        <div className="grow " />
           <div className="container mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
             <div className="hidden space-y-6 p-10 pb-16 md:block">
               <div className="space-y-0.5">
@@ -80,7 +80,7 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
               </div>
             </div>
             </div>
-            <div className="flex-grow" />
+            <div className="grow" />
             </div>
      
   

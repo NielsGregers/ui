@@ -248,7 +248,7 @@ const [minute, setminute] = useState(0)
               />
             </div>
           </div>
-          <div className="flex-grow" />
+          <div className="grow" />
           <div>
             {order && (
               <Basket

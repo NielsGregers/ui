@@ -480,12 +480,12 @@ export function ProfileForm(props: {
                         >
                           {/* <NewsChannels country={watchCountry} unit={watchUnit} channels={newsChannels} /> */}
                           {field.value ? (
-                            <div className="grid auto-cols-auto grid-cols-3 gap-1">
+                            <div className="flex flex-wrap gap-1">
                               {field.value.map((val) => {
                                 return (
                                   <div
                                     key={val}
-                                    className=" max-h-7 rounded-full bg-slate-500 p-1 text-white"
+                                    className=" max-h-7 rounded-sm bg-black p-1 px-3 text-sm font-light text-white"
                                   >
                                     {val.substring(0, 14)}
                                   </div>
@@ -617,7 +617,7 @@ export function ProfileForm(props: {
         description={processDescription}
         progress={processPercentage}
       />
-      {false && memberships && (
+      {true && memberships && (
         <div className="ml-5">
           <div className="text-xl">Current Office 365 Group memberships</div>
 
