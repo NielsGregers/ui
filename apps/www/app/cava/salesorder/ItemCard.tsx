@@ -74,7 +74,7 @@ export function ItemCard(props: ItemCardProps) {
                   <img src={item.imageUrl} className="rounded-md" />
                   <div className="absolute  right-0 top-0  rounded-bl-2xl rounded-tr-md bg-cyan-200 p-2">
                     {existingQuantity > 0 && (
-                      <div className="pl-2 pr-2 text-2xl font-bold">
+                      <div className="px-2 text-2xl font-bold">
                         {existingQuantity}
                       </div>
                     )}

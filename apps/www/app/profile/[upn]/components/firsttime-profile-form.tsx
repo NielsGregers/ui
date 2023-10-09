@@ -15,6 +15,10 @@ import { LogToMongo } from "@/lib/trace"
 import { getUserSession } from "@/lib/user"
 import { cn } from "@/lib/utils"
 import { IProgressProps, ProcessStatusOverlay } from "@/components/progress"
+import { GenericTable } from "@/components/table"
+import { GenericItem } from "@/components/table/data/schema"
+import { Checkbox } from "@/registry/default/ui/checkbox"
+import { Switch } from "@/registry/default/ui/switch"
 import { Button } from "@/registry/new-york/ui/button"
 import {
   Command,
@@ -58,8 +62,6 @@ import {
   getUnits,
 } from "../../data/sharepoint"
 import { NewsChannels } from "./channel-picker"
-import { GenericTable } from "@/components/table"
-import { GenericItem } from "@/components/table/data/schema"
 
 const profileFormSchema = z.object({
   country: z.string({ required_error: "Please select a country." }),
@@ -95,13 +97,13 @@ export function ProfileForm(props: {
   countries: Country[]
   units: Unit[]
 }) {
-  const {newsCategories, newsChannels, countries, units} = props
+  const { newsCategories, newsChannels, countries, units } = props
   const magicbox = useContext(MagicboxContext)
   const [showCountries, setshowCountries] = useState(false)
   const [showUnits, setshowUnits] = useState(false)
   const [showChannels, setshowChannels] = useState(false)
   //const [newsChannels, setNewsChannels] = useState<NewsChannel[]>([])
- // const [countries, setCountries] = useState<Country[]>([])
+  // const [countries, setCountries] = useState<Country[]>([])
   // const [newsCategories, setNewsCategories] = useState<NewsCategory[]>([])
   //const [units, setUnits] = useState<Unit[]>([])
   const [defaultChannels, setdefaultChannels] = useState<NewsChannel[]>([])
@@ -114,12 +116,62 @@ export function ProfileForm(props: {
   const accessToken = magicbox.session?.accessToken ?? ""
 
   const [memberships, setmemberships] = useState<Membership[]>()
+  const [stringMemberships, setstringMemberships] = useState<string[]>([])
+  const [keepOld, setkeepOld] = useState<boolean>(true)
+
+  useEffect(() => {
+    const localStorageData = localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user") as string)
+      : {}
+
+    if (localStorageData.country && localStorageData.unit) {
+      form.setValue("country", localStorageData.country)
+      form.setValue("unit", localStorageData.unit)
+    }
+  }, [])
+
   useEffect(() => {
     const load = async () => {
       setmemberships(await getMemberOfs(magicbox.session?.accessToken ?? ""))
     }
     if (magicbox.session?.accessToken) load()
   }, [magicbox.session?.accessToken])
+
+  useEffect(() => {
+    const names: string[] = []
+    for (const obj of (memberships ?? []).filter((a) => {
+      return a.mailNickname?.startsWith("nexiintra-newschannel-")
+    })) {
+      names.push(obj.groupDisplayName.replace("News Channel - ", ""))
+    }
+    setstringMemberships(names)
+  }, [memberships])
+
+  useEffect(() => {
+    //const selected = form.getValues("channels") as string[]
+    if (keepOld) {
+      if (watchChannels !== undefined) {
+        form.setValue("channels", [
+          ...stringMemberships,
+          ...(watchChannels?.filter((i) => !stringMemberships.includes(i)) ??
+            []),
+        ])
+      } else {
+        form.setValue("channels", stringMemberships)
+      }
+    } else {
+      //from current form value, remove all that are in stringMemberships
+      if (watchChannels !== undefined) {
+        form.setValue(
+          "channels",
+          watchChannels?.filter((i) => !stringMemberships.includes(i))
+        )
+      } else {
+        form.setValue("channels", stringMemberships)
+      }
+    }
+  }, [keepOld])
+
   // useEffect(() => {
   //   const load = async () => {
   //     setNewsChannels((await getNewsChannels(accessToken)) ?? [])
@@ -161,6 +213,16 @@ export function ProfileForm(props: {
       return
     }
     const me = meResponse.data
+    const oldMemberShips =
+      stringMemberships
+        ?.map((channel) => {
+          const c = newsChannels.find(
+            (i) => i.channelName.toLowerCase() === channel.toLowerCase()
+          )
+          return c?.GroupId ?? ""
+        })
+        .filter((i) => i !== "") ?? []
+
     const membershipsToBe =
       data.channels
         ?.map((channel) => {
@@ -171,14 +233,25 @@ export function ProfileForm(props: {
         })
         .filter((i) => i !== "") ?? []
 
+    const membershipsToRemove = oldMemberShips.filter(
+      (i) => !membershipsToBe.includes(i)
+    )
+
+    const membershipsToAdd = membershipsToBe.filter(
+      (i) => !oldMemberShips.includes(i)
+    )
     // LogToMongo("logs-niels", "createGroups", { upn, membershipsToBe })
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ country: data.country, unit: data.unit })
+    )
 
     const redirectto = await saveProfile(
       me?.id ?? "",
       data.country,
       data.unit,
-      membershipsToBe,
-      []
+      membershipsToAdd,
+      membershipsToRemove
     )
 
     // toast({
@@ -214,15 +287,18 @@ export function ProfileForm(props: {
 
   const watchUnit = form.watch("unit", "")
   const watchCountry = form.watch("country", "")
+  const watchChannels = form.watch("channels", [])
 
   useEffect(() => {
     form.setValue(
       "channels",
-      getDefultChannels(props.currentCountry, props.currentUnit).map(
-        (i) => i.channelName
-      )
+      memberships?.length === 0
+        ? getDefultChannels(props.currentCountry, props.currentUnit).map(
+            (i) => i.channelName
+          )
+        : stringMemberships
     )
-  }, [newsChannels, props.currentUnit, props.currentCountry])
+  }, [newsChannels, props.currentUnit, props.currentCountry, stringMemberships])
 
   useEffect(() => {
     form.setValue(
@@ -284,6 +360,7 @@ export function ProfileForm(props: {
                                   key={unit.unitName}
                                   onSelect={(value) => {
                                     form.setValue("unit", value)
+                                    setkeepOld(false)
                                     setshowUnits(false)
                                   }}
                                 >
@@ -374,15 +451,18 @@ export function ProfileForm(props: {
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
                             {countries
-                              .sort((a, b) =>{   if (a.countryName > b.countryName) return 1
+                              .sort((a, b) => {
+                                if (a.countryName > b.countryName) return 1
                                 if (a.countryName < b.countryName) return -1
-                                return 0})
+                                return 0
+                              })
                               .map((country) => (
                                 <CommandItem
                                   value={country.countryName}
                                   key={country.countryName}
                                   onSelect={(value) => {
                                     form.setValue("country", value)
+                                    setkeepOld(false)
                                     setshowCountries(false)
                                   }}
                                 >
@@ -423,14 +503,27 @@ export function ProfileForm(props: {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[400px] justify-between",
+                            "h-max w-[400px] justify-between",
                             !field.value && "text-muted-foreground"
                           )}
                         >
                           {/* <NewsChannels country={watchCountry} unit={watchUnit} channels={newsChannels} /> */}
-                          {field.value
-                            ? field.value.join(", ")
-                            : "Select news channels"}
+                          {field.value ? (
+                            <div className="flex flex-wrap gap-1">
+                              {field.value.map((val) => {
+                                return (
+                                  <div
+                                    key={val}
+                                    className=" max-h-7 rounded-sm bg-black p-1 px-3 text-sm font-light text-white"
+                                  >
+                                    {val.substring(0, 14)}
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          ) : (
+                            "Select news channels"
+                          )}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -528,8 +621,33 @@ export function ProfileForm(props: {
                 </FormItem>
               )}
             />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="keep"
+                checked={keepOld}
+                onCheckedChange={() => setkeepOld(!keepOld)}
+              />
+
+              <label
+                htmlFor="keep"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Keep previously subscribed channels
+              </label>
+            </div>
           </div>
-          <Button type="submit">Save profile</Button>
+
+          <Button
+            type="submit"
+            disabled={
+              watchUnit === undefined ||
+              watchUnit === "" ||
+              watchCountry === undefined ||
+              watchCountry === ""
+            }
+          >
+            Save profile
+          </Button>
         </form>
       </Form>
       <ProcessStatusOverlay
@@ -542,30 +660,31 @@ export function ProfileForm(props: {
         <div className="ml-5">
           <div className="text-xl">Current Office 365 Group memberships</div>
 
-          <GenericTable data={(memberships ?? [])
-            .filter((a) => {
-              return a.mailNickname?.startsWith("nexiintra-newschannel-")
-            })
-            .sort((a, b) => {
-              if (a.groupDisplayName > b.groupDisplayName) return 1
-              if (a.groupDisplayName < b.groupDisplayName) return -1
-              return 0
-            })
-            .map((membership, key) => {
-            
+          <GenericTable
+            data={(memberships ?? [])
+              .filter((a) => {
+                return a.mailNickname?.startsWith("nexiintra-newschannel-")
+              })
+              .sort((a, b) => {
+                if (a.groupDisplayName > b.groupDisplayName) return 1
+                if (a.groupDisplayName < b.groupDisplayName) return -1
+                return 0
+              })
+              .map((membership, key) => {
                 const item: GenericItem = {
-                  link: "https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Members/groupId/" + membership.groupId,
+                  link:
+                    "https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Members/groupId/" +
+                    membership.groupId,
                   id: membership.groupId,
                   details: membership.mailNickname + " " + membership.groupId,
                   title: membership.groupDisplayName,
                   string1: null,
                   string2: null,
-                  string3: null
+                  string3: null,
                 }
                 return item
-              
-            })}  />
-          
+              })}
+          />
         </div>
       )}
       {/* <div>

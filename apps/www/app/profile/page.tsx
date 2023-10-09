@@ -9,7 +9,7 @@ export default async function RedirectToLoggedinUse() {
     <div>
       <div className="">
         <div className=" flex h-screen w-screen place-items-center ">
-          <div className="flex-grow"></div>
+          <div className="grow"></div>
           <div className="mt-4 overflow-hidden rounded-[0.5rem] border bg-background shadow">
             <div className="hidden space-y-6 p-10 pb-16 md:block">
               <div className="space-y-0.5">
@@ -23,7 +23,7 @@ export default async function RedirectToLoggedinUse() {
               <ValidateEmailAccountForm />
             </div>
           </div>
-          <div className="flex-grow"></div>
+          <div className="grow"></div>
         </div>
       </div>
     </div>

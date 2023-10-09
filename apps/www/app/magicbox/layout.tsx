@@ -9,7 +9,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <UsercaseProvider>
       <div className="h-screen w-screen">
       <div className="flex h-screen flex-row">
-        <div className="flex-grow bg-transparent blur-md"></div>
+        <div className="grow bg-transparent blur-md"></div>
         <div className="w-[500px] bg-gray-200 transition-transform delay-150 ease-in-out">
       {children}
      
