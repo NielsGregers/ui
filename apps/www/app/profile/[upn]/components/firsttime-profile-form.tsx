@@ -118,6 +118,18 @@ export function ProfileForm(props: {
   const [memberships, setmemberships] = useState<Membership[]>()
   const [stringMemberships, setstringMemberships] = useState<string[]>([])
   const [keepOld, setkeepOld] = useState<boolean>(true)
+
+  useEffect(() => {
+    const localStorageData = localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user") as string)
+      : {}
+
+    if (localStorageData.country && localStorageData.unit) {
+      form.setValue("country", localStorageData.country)
+      form.setValue("unit", localStorageData.unit)
+    }
+  }, [])
+
   useEffect(() => {
     const load = async () => {
       setmemberships(await getMemberOfs(magicbox.session?.accessToken ?? ""))
@@ -136,15 +148,27 @@ export function ProfileForm(props: {
   }, [memberships])
 
   useEffect(() => {
-    const selected = form.getValues("channels") as string[]
+    //const selected = form.getValues("channels") as string[]
     if (keepOld) {
-      form.setValue("channels", [...stringMemberships, ...selected])
+      if (watchChannels !== undefined) {
+        form.setValue("channels", [
+          ...stringMemberships,
+          ...(watchChannels?.filter((i) => !stringMemberships.includes(i)) ??
+            []),
+        ])
+      } else {
+        form.setValue("channels", stringMemberships)
+      }
     } else {
       //from current form value, remove all that are in stringMemberships
-      form.setValue(
-        "channels",
-        selected?.filter((i) => !stringMemberships.includes(i))
-      )
+      if (watchChannels !== undefined) {
+        form.setValue(
+          "channels",
+          watchChannels?.filter((i) => !stringMemberships.includes(i))
+        )
+      } else {
+        form.setValue("channels", stringMemberships)
+      }
     }
   }, [keepOld])
 
@@ -217,6 +241,10 @@ export function ProfileForm(props: {
       (i) => !oldMemberShips.includes(i)
     )
     // LogToMongo("logs-niels", "createGroups", { upn, membershipsToBe })
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ country: data.country, unit: data.unit })
+    )
 
     const redirectto = await saveProfile(
       me?.id ?? "",
@@ -259,6 +287,7 @@ export function ProfileForm(props: {
 
   const watchUnit = form.watch("unit", "")
   const watchCountry = form.watch("country", "")
+  const watchChannels = form.watch("channels", [])
 
   useEffect(() => {
     form.setValue(
@@ -608,7 +637,17 @@ export function ProfileForm(props: {
             </div>
           </div>
 
-          <Button type="submit">Save profile</Button>
+          <Button
+            type="submit"
+            disabled={
+              watchUnit === undefined ||
+              watchUnit === "" ||
+              watchCountry === undefined ||
+              watchCountry === ""
+            }
+          >
+            Save profile
+          </Button>
         </form>
       </Form>
       <ProcessStatusOverlay
