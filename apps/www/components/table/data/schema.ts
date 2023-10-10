@@ -10,10 +10,22 @@ export const schema = z.object({
   string1:z.string().nullable(),  
   string2:z.string().nullable(),
   string3:z.string().nullable(),
+  refObject1:z.any().nullable(),
   // created_at:z.date().nullable(),
   // updated_at:z.date().nullable(),
 
 })
 
 
-export type GenericItem = z.infer<typeof schema>
+export type GenericItem<T> = {
+  id:string
+  title:string
+  link?:string 
+  details?:string 
+  string1?:string 
+  string2?:string 
+  string3?:string 
+  refObject1?:T 
+  // created_at:Date | null
+  // updated_at:Date | null
+}

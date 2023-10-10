@@ -218,7 +218,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
   }, [magicbox])
 
 
-  const col1: ColumnDef<GenericItem> = {
+  const col1: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (
@@ -228,7 +228,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
     enableSorting: true,
     enableHiding: true,
   }
-  const col2: ColumnDef<GenericItem> = {
+  const col2: ColumnDef<GenericItem<any>> = {
     id: "string2",
     accessorKey: "string2",
     header: ({ column }) => (
@@ -238,7 +238,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
     enableSorting: true,
     enableHiding: true,
   }
-  const col3: ColumnDef<GenericItem> = {
+  const col3: ColumnDef<GenericItem<any>> = {
     id: "string3",
     accessorKey: "string3",
     header: ({ column }) => (

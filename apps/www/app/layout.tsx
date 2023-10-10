@@ -19,6 +19,7 @@ import { MagicboxProvider } from "./magicbox-providers";
 import { NextAuthProvider } from "./providers"
 import { headers } from 'next/headers'
 
+
 import Script from 'next/script'
 
 export const metadata: Metadata = {

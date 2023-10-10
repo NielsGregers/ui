@@ -44,6 +44,7 @@ export default function RootPage() {
   const [parentLocation, setparentLocation] = useState(
     searchParams ? searchParams.get("href") : ""
   )
+  const [mode, setmode] = useState(searchParams ? searchParams.get("mode") : "")
   const [me, setMe] = useState<Me>()
   const [sitePath, setsitePath] = useState("")
   const [sharePointTenantName, setsharePointTenantName] = useState("")
@@ -58,7 +59,31 @@ export default function RootPage() {
 
   const [keepStandardOn, setkeepStandardOn] = useState(false)
   const [canSetKeepStandardOn, setcanSetKeepStandardOn] = useState(false)
+
+
+  const [pageId, setpageId] = useState("")
   const { setTheme } = useTheme()
+
+
+  React.useEffect(() => {
+    const load = async () => {
+      debugger
+      const res = await https<any>(
+        token ?? "",
+        "GET",
+        "https://christianiabpos.sharepoint.com/sites/intra365/_api/sitepages/pages/GetTranslations('16399343-d200-4bfe-b67d-4f8321a0dfab')"
+      )
+      if (!res.hasError) {
+        
+        //setMe(res.data)
+      }
+    }
+    if (token && pageId) {
+     
+      load()
+    }
+  }, [token, pageId])
+
   React.useEffect(() => {
     setTheme("transparent")
     return () => {
@@ -145,6 +170,8 @@ export default function RootPage() {
 
             const context = JSON.parse(m.data)
             setlegacyPageContext(context)
+            
+            setpageId(context?.listId)
             break
 
           case "capabilities":
@@ -199,7 +226,12 @@ export default function RootPage() {
     setnewPageUrl(copyPageResult.data?.newpageurl ?? "")
 
   }
+if (mode==="1"){
+  return <div>
+mode 1
 
+  </div>
+}
   return (
 
 

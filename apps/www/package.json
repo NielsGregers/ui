@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^1.0.0",
+    "@azure/msal-browser": "^3.2.0",
     "@azure/msal-node": "^1.18.0",
+    "@azure/msal-react": "^2.0.4",
     "@faker-js/faker": "^7.6.0",
     "@hookform/resolvers": "^3.1.0",
     "@pnp/graph": "^3.17.0",

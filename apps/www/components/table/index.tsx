@@ -13,8 +13,8 @@ export interface GenericTableProps {
   caption?: string
   description?: string
   data: any
-  addtionalColumns?: ColumnDef<GenericItem>[]
-  actions?: GenericTableActions<GenericItem>
+  addtionalColumns?: ColumnDef<GenericItem<any>>[]
+  actions?: GenericTableActions<GenericItem<any>>
 }
 
 export function GenericTable(params: GenericTableProps) {

@@ -63,7 +63,7 @@ export default function OrganizerRole() {
     }
     if (magicbox.session?.accessToken && date) load()
   }, [magicbox.session?.accessToken,date,cava.orders])
-  const col1: ColumnDef<GenericItem> = {
+  const col1: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (
@@ -73,7 +73,7 @@ export default function OrganizerRole() {
     enableSorting: true,
     enableHiding: true,
   } 
-  const col2: ColumnDef<GenericItem> = {
+  const col2: ColumnDef<GenericItem<any>> = {
     id: "string2",
     accessorKey: "string2",
     header: ({ column }) => (
@@ -83,7 +83,7 @@ export default function OrganizerRole() {
     enableSorting: true,
     enableHiding: true,
   }
-  const col3: ColumnDef<GenericItem> = {
+  const col3: ColumnDef<GenericItem<any>> = {
     id: "string3",
     accessorKey: "string3",
     header: ({ column }) => (

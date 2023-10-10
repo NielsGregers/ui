@@ -56,7 +56,7 @@ export default function Devices() {
   useEffect(() => {
     refresh()
   }, [])
-  const col3: ColumnDef<GenericItem> = {
+  const col3: ColumnDef<GenericItem<any>> = {
     id: "string3",
     accessorKey: "string3",
     header: ({ column }) => (
@@ -66,7 +66,7 @@ export default function Devices() {
     enableSorting: true,
     enableHiding: true,
   }
-  const col1: ColumnDef<GenericItem> = {
+  const col1: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (
@@ -76,7 +76,7 @@ export default function Devices() {
     enableSorting: true,
     enableHiding: true,
   }
-  const col2: ColumnDef<GenericItem> = {
+  const col2: ColumnDef<GenericItem<any>> = {
     id: "string2",
     accessorKey: "string2",
     header: ({ column }) => (

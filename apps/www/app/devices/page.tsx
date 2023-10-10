@@ -214,7 +214,7 @@ const [filter, setfilter] = useState("")
     load((device)=>{return true})
   }, [deviceData])
 
-  const col1: ColumnDef<GenericItem> = {
+  const col1: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (

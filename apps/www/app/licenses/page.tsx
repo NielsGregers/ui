@@ -88,7 +88,7 @@ export default function Licenses() {
     load()
   }, [])
 
-  const col1: ColumnDef<GenericItem> = {
+  const col1: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (

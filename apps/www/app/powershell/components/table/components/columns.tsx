@@ -10,7 +10,7 @@ import { AuditLogItem as GenericItem } from "../data/schema"
 import { DataTableColumnHeader } from "@/app/powershell/components/data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 
-export const columns: ColumnDef<GenericItem>[] = [
+export const columns: ColumnDef<GenericItem<any>>[] = [
   {
     id: "select",
     header: ({ table }) => (

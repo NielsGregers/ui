@@ -69,7 +69,7 @@ const [panelopen, setpanelopen] = useState(false)
     }
     if (magicbox.session?.accessToken && date) load()
   }, [magicbox.session?.accessToken, date, cava.orders])
-  const col: ColumnDef<GenericItem> = {
+  const col: ColumnDef<GenericItem<any>> = {
     id: "string1",
     accessorKey: "string1",
     header: ({ column }) => (
@@ -79,7 +79,7 @@ const [panelopen, setpanelopen] = useState(false)
     enableSorting: true,
     enableHiding: true,
   }
-  const col2: ColumnDef<GenericItem> = {
+  const col2: ColumnDef<GenericItem<any>> = {
     id: "string2",
     accessorKey: "string2",
 
