@@ -255,7 +255,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
           Pages - {sitename}
         </h3>
         {error && <div className="text-red-500">{error}</div>}
-        <div className="flex-grow  bg-white">
+        <div className="grow  bg-white">
           <GenericTable data={pageItems} addtionalColumns={[col3, col2, col1]}
             actions={{
               filterComponent: (params) => {

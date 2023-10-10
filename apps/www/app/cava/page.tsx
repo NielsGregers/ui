@@ -57,7 +57,7 @@ export default function Cava() {
                     />
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <div className="flex-grow"></div>
+                    <div className="grow"></div>
                     <Button disabled={service.version === "draft"}>
                       <Link href={service.link}>
                         {service.linkname ?? "Start"}
@@ -93,7 +93,7 @@ export default function Cava() {
                     />
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <div className="flex-grow"></div>
+                    <div className="grow"></div>
                     <Button disabled={role.version === "draft"}>
                       <Link href={role.link}>{role.name} role</Link>
                     </Button>
@@ -128,7 +128,7 @@ export default function Cava() {
                     />
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <div className="flex-grow"></div>
+                    <div className="grow"></div>
                     <Button disabled={role.version === "draft"}>
                       <Link href={role.link}>{role.name} role</Link>
                     </Button>
