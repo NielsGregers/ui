@@ -235,7 +235,54 @@ mode 1
   return (
 
 
-    <div className="m-4 overflow-scroll ">
+    <div className="m-4  ">
+      <div>
+        News Author
+
+      </div>
+
+<div className=" px-3">
+
+          <Link href={`https://christianiabpos.sharepoint.com/sites/sandbox-team-comms/Lists/Communication%20Channels/AllItems.aspx`} target="_top">
+            <Button variant={"link"}>
+              <GridIcon />&nbsp;Make new `News Bite`
+            </Button>
+          </Link>
+
+        </div>
+
+       
+<div>
+        Administration
+
+      </div>
+
+<div className=" px-3">
+
+          <Link href={`https://christianiabpos.sharepoint.com/sites/sandbox-team-comms/Lists/Communication%20Channels/AllItems.aspx`} target="_top">
+            <Button variant={"link"}>
+              <GridIcon />&nbsp;`News Bites`
+            </Button>
+          </Link>
+
+        </div>
+
+        <div className=" px-3">
+
+<Link href={`https://christianiabpos.sharepoint.com/sites/sandbox-team-comms/Lists/Communication%20Channels/AllItems.aspx`} target="_top">
+  <Button variant={"link"}>
+    <GridIcon />&nbsp;News Channels
+  </Button>
+</Link>
+
+</div>
+        <div className="h-[2px]"></div>
+
+
+
+      <div>
+        
+      </div>
 
       <div>
         Standard SharePoint
