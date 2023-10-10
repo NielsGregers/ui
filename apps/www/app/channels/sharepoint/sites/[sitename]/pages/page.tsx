@@ -161,7 +161,7 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
   const [profileData, setprofileData] = useState<ProfileCache>()
 
   const [showSidepanel, setshowSidepanel] = useState(false)
-  const [pageItems, setpageItems] = useState<GenericItem[]>([])
+  const [pageItems, setpageItems] = useState<GenericItem<any>[]>([])
   const [selectedChannels, setselectedChannels] = useState<string[]>([])
 
   React.useEffect(() => {
@@ -200,14 +200,14 @@ export default function RootPage({ params }: { params: { sitename: string } }) {
           
 
 
-          const genericItem: GenericItem = {
+          const genericItem: GenericItem<any> = {
             title: translatedTo + (item.fields.Title ?? "Missing title"),
             link: item.webUrl,
             details: item.fields.Description ?? "",
             id: item.id,
             string1,
-            string2: item.fields.LinkFilename,
-            string3: null
+            string2: item.fields.LinkFilename
+            
           }
           return genericItem
         }))

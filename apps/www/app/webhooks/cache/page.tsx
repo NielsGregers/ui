@@ -21,7 +21,7 @@ const status: {
 }
 export default function Devices() {
   const magicbox = useContext(MagicboxContext)
-  const [data, setdata] = useState<GenericItem[]>([])
+  const [data, setdata] = useState<GenericItem<any>[]>([])
   const [numberOfItemsRead, setnumberOfItemsRead] = useState(0)
   const [isWorking, setisWorking] = useState(false)
   const [isloaded, setisloaded] = useState(false)
@@ -35,7 +35,7 @@ export default function Devices() {
     const subs =
       (eventSummary ?? []).sort((a,b)=> differenceInMilliseconds(b.eventdate, a.eventdate)).map((summary) => {
     
-        const g: GenericItem = {
+        const g: GenericItem<any> = {
           id: summary.id,
           title: format(summary.start, "yyyy-MM-dd HH:mm") + " to " +  format(summary.end, "HH:mm ") + " "+summary.organizer,
           details: summary.changetype  ,

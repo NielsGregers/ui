@@ -73,8 +73,8 @@ export default function SettingsProfilePage() {
     const me = meResponse.data
     // Only create groups for items that have no GroupId
     const items = params.rows.map((row: any) => {
-      return row.original as GenericItem
-    }).filter((item: GenericItem) => {
+      return row.original as GenericItem<any>
+    }).filter((item: GenericItem<any>) => {
         return item.details !== "No GroupId"
         })
     LogToMongo("logs-niels", "createGroups", { me, items })
@@ -126,9 +126,9 @@ export default function SettingsProfilePage() {
     }
     const me = meResponse.data
     const items = params.rows.map((row: any) => {
-      return row.original as GenericItem
+      return row.original as GenericItem<any>
     })
-    const itemsToUpdate: GenericItem[] = items.filter((item: GenericItem) => {
+    const itemsToUpdate: GenericItem<any>[] = items.filter((item: GenericItem<any>) => {
       return item.details !== "No GroupId"
     })
 

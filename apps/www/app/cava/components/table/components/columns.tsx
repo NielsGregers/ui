@@ -6,9 +6,10 @@ import { Badge } from "@/registry/new-york/ui/badge"
 import { Checkbox } from "@/registry/new-york/ui/checkbox"
 
 import { labels, priorities, statuses } from "../data/data"
-import { AuditLogItem as GenericItem } from "../data/schema"
+
 import { DataTableColumnHeader } from "@/app/powershell/components/data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import { GenericItem } from "@/components/table/data/schema"
 
 export const columns: ColumnDef<GenericItem<any>>[] = [
   {

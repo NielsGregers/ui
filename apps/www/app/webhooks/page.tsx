@@ -19,7 +19,7 @@ const status: {
 }
 export default function Devices() {
   const magicbox = useContext(MagicboxContext)
-  const [data, setdata] = useState<GenericItem[]>([])
+  const [data, setdata] = useState<GenericItem<any>[]>([])
   const [numberOfItemsRead, setnumberOfItemsRead] = useState(0)
   const [isWorking, setisWorking] = useState(false)
   const [isloaded, setisloaded] = useState(false)
@@ -39,14 +39,13 @@ export default function Devices() {
       }
       const subs =
         (subscriptionsResponse.data ?? []).map((subscription) => {
-          const g: GenericItem = {
+          const g: GenericItem<any> = {
             id: subscription.id,
             title: subscription.resource,
             details: subscription.changeType + " " + subscription.expirationDateTime,
-            link: null,
+           
             string1: "Unknown",
-            string2: null,
-            string3: null,
+            
           }
           return g
         }) ?? []

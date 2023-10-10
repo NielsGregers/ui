@@ -51,7 +51,7 @@ function KPI({ name, numerator, numeratorValue, denominator, denominatorValue,co
 export default function Devices() {
   const magicbox = useContext(MagicboxContext)
   const [deviceData, setdeviceData] = useState<Device[]>([])
-  const [viewData, setViewData] = useState<GenericItem[]>([])
+  const [viewData, setViewData] = useState<GenericItem<any>[]>([])
   const [numberOfItemsRead, setnumberOfItemsRead] = useState(0)
   const [isWorking, setisWorking] = useState(false)
   const [isloaded, setisloaded] = useState(false)
@@ -152,7 +152,7 @@ const [filter, setfilter] = useState("")
     var more: boolean = true
     var nextUrl: string = ""
     var token: string = ""
-    const newSet: GenericItem[] = []
+    const newSet: GenericItem<any>[] = []
     let countOfItemsRead = 0
     const snapshotToken = ""
     while (more) {
@@ -182,14 +182,13 @@ const [filter, setfilter] = useState("")
 
     const users =
       deviceData.filter(device=>applyFilter(device)).map((user) => {
-        const g: GenericItem = {
+        const g: GenericItem<any> = {
           id: user.id,
           title: (user.displayName ?? "not named") + " (" + user.operatingSystem + " " + user.operatingSystemVersion + ").",
           details: user.model ?? "unknown model",
           link: `https://portal.azure.com/#view/Microsoft_AAD_Devices/DeviceDetailsMenuBlade/~/Properties/objectId/${user.id}/deviceId`,
           string1: "Unknown",
-          string2: null,
-          string3: null,
+         
         }
         return g
       }) ?? []

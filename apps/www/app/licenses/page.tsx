@@ -19,7 +19,7 @@ const status: {
 }
 export default function Licenses() {
   const magicbox = useContext(MagicboxContext)
-  const [data, setdata] = useState<GenericItem[]>([])
+  const [data, setdata] = useState<GenericItem<any>[]>([])
   const [numberOfItemsRead, setnumberOfItemsRead] = useState(0)
   const [isWorking, setisWorking] = useState(false)
   const [isloaded, setisloaded] = useState(false)
@@ -34,7 +34,7 @@ export default function Licenses() {
     var more: boolean = true
     var nextUrl: string = ""
     var token: string = ""
-    const newSet: GenericItem[] = []
+    const newSet: GenericItem<any>[] = []
     let countOfItemsRead = 0
     const snapshotToken = ""
     while (more) {
@@ -68,7 +68,7 @@ export default function Licenses() {
 
       const users =
         licenses.map((user) => {
-          const g: GenericItem = {
+          const g: GenericItem<any> = {
             id: user.userPrincipalName,
             title: user.displayName + " (" + user.userPrincipalName + ") ",
             details: user.licenses
@@ -76,8 +76,7 @@ export default function Licenses() {
               .join(","),
             link: `https://portal.azure.com/#view/Microsoft_AAD_UsersAndTenants/UserProfileMenuBlade/~/overview/userId/${user.id}/hidePreviewBanner~/true`,
             string1: user.lastSignInDateTime ?? "Unknown",
-            string2: null,
-            string3: null,
+           
           }
           return g
         }) ?? []
