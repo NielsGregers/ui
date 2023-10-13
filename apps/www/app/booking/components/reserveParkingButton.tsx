@@ -42,36 +42,79 @@ import { UsecaseContext } from "@/app/booking/usecasecontext"
 import {
   BookingConfirmationType,
   UserParkingBooking,
-  newBooking,
+  deleteBooking,
+  getUsersBookingByDate,
+  newParkingBooking,
 } from "../actions/parking/parkingBookings"
 import { getUserPlates } from "../actions/parking/user"
 import { LicencePicker } from "./licenceplate-picker"
 
-function BookParkingButton(params: {
+function ReserveParkingButton(params: {
   date: Date
-  booking?: UserParkingBooking
   userEmail: string | undefined | null
-  onDone: () => void
 }) {
   const [isopen, setisopen] = useState<boolean>(false)
   const [plates, setPlates] = useState<string>("")
   const [EV, setEV] = useState<boolean>(false)
+  const [refresh, setrefresh] = useState(0)
   const [handicapped, sethandicapped] = useState<boolean>(false)
+  const [booking, setbooking] = useState<UserParkingBooking | undefined>(
+    undefined
+  )
   const [result, setresult] = useState<BookingConfirmationType | undefined>(
     undefined
   )
 
   const { date, userEmail } = params
-  const usecases = useContext(UsecaseContext)
   const { toast } = useToast()
+
+  useEffect(() => {
+    async function getBooking() {
+      let result = await getUsersBookingByDate(
+        params.userEmail ?? "",
+        params.date
+      )
+      setbooking(result)
+    }
+
+    if (params.userEmail) {
+      getBooking()
+    }
+  }, [params.date, params.userEmail, refresh])
 
   const platesChanged = (plates: string) => {
     setPlates(plates)
   }
   const router = useRouter()
 
+  function refreshPage() {
+    setTimeout(() => {
+      setrefresh(refresh + 1)
+    }, 1000)
+
+    return
+  }
+
+  async function handleCancel() {
+    if (booking !== undefined) {
+      const response = await deleteBooking(booking)
+      if (response) {
+        toast({
+          title: "Success",
+          description: "You cancelled your parking reservation",
+        })
+        refreshPage()
+      } else {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+        })
+      }
+    } else return
+  }
+
   async function handleBooking() {
-    const response = await newBooking(
+    const response = await newParkingBooking(
       date?.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "2-digit",
@@ -81,6 +124,7 @@ function BookParkingButton(params: {
       plates,
       EV,
       handicapped,
+      0,
       0
     )
 
@@ -97,7 +141,7 @@ function BookParkingButton(params: {
             year: "numeric",
           }),
       })
-      params.onDone()
+      refreshPage()
     } else {
       setresult(response)
     }
@@ -105,7 +149,7 @@ function BookParkingButton(params: {
 
   return (
     <>
-      {!params.booking && (
+      {booking === undefined && (
         <Dialog open={isopen} onOpenChange={() => setisopen(!isopen)}>
           <DialogTrigger asChild>
             <Button
@@ -121,7 +165,7 @@ function BookParkingButton(params: {
               Reserve parking
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-white dark:bg-black sm:max-w-[425px]">
+          <DialogContent className="bg-white dark:bg-black ">
             <DialogHeader>
               <DialogTitle>
                 Reserve parking for{" "}
@@ -135,9 +179,9 @@ function BookParkingButton(params: {
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
             </DialogHeader>
-            <div className="grid space-y-2">
+            <div className="grid max-w-lg space-y-2">
               {result === undefined && (
-                <div className="grid space-y-3">
+                <div className="grid max-w-[300px] space-y-3">
                   <LicencePicker
                     onPlatesChange={platesChanged}
                     userEmail={params.userEmail}
@@ -169,16 +213,16 @@ function BookParkingButton(params: {
                 </div>
               )}
               {result?.cause === "No available parking slots for EV" && (
-                <div className="w-full">
-                  <div>{result.cause}</div>
+                <div className="sm:max-w-[425px]">
+                  <div className="sm:max-w-[425px]">{result.cause}</div>
                   <br />
-                  <div>
+                  <div className="sm:max-w-[425px]">
                     Would you like to reserve a parking space without the
                     charger?
                   </div>
                   <br />
 
-                  <div className="flex flex-row justify-center space-x-2">
+                  <div className="flex flex-row justify-center space-x-2 sm:max-w-[425px]">
                     <Button
                       type="button"
                       variant="outline"
@@ -201,7 +245,7 @@ function BookParkingButton(params: {
               )}
               {result?.cause ===
                 "No available parking slots for handicapped" && (
-                <div className="w-full">
+                <div className="sm:max-w-[425px]">
                   <div>
                     <pre>No available handicapped parking.</pre>
                     <pre>
@@ -230,7 +274,7 @@ function BookParkingButton(params: {
               {result?.cause ===
                 "No available parking slots for EV and handicapped" && (
                 <>
-                  <div>
+                  <div className="w-[200px]">
                     <pre>No available handicapped parking with EV charger.</pre>
                     <pre>
                       Would you like to reserve a regular parking space?
@@ -273,20 +317,20 @@ function BookParkingButton(params: {
           </DialogContent>
         </Dialog>
       )}
-      {params.booking && (
+      {booking !== undefined && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" className="w-full rounded-full">
               <FaParking className="mr-2 h-4 w-4" style={{ color: "blue" }} />
-              {"Reserved: " + params.booking.parkingTitle}
+              {"Reserved: " + booking.parkingTitle}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>
               <div className="flex flex-row justify-between">
-                {params.booking?.plates.toUpperCase()}
-                {params.booking?.EV && (
+                {booking?.plates.toUpperCase()}
+                {booking?.EV && (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -304,7 +348,7 @@ function BookParkingButton(params: {
                     </Tooltip>
                   </TooltipProvider>
                 )}
-                {params.booking?.handicapped && (
+                {booking?.handicapped && (
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -323,6 +367,7 @@ function BookParkingButton(params: {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              onClick={() => handleCancel()}
               disabled={
                 new Date(params.date.setHours(12, 0, 0, 0)) < new Date()
               }
@@ -337,4 +382,4 @@ function BookParkingButton(params: {
   )
 }
 
-export default BookParkingButton
+export default ReserveParkingButton

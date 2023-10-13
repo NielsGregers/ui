@@ -202,6 +202,7 @@ export default function DashboardPage() {
             <TabsContent value="parking" className="space-y-4">
               <ParkingDashboard />
             </TabsContent>
+            <TabsContent value="desks" className="space-y-4"></TabsContent>
           </Tabs>
         </div>
       </div>

@@ -36,7 +36,7 @@ export function MainNav() {
       </Link>
 
       <nav className="flex items-center space-x-6 text-sm font-medium">
-        <Link
+        {/* <Link
           href="/booking/admin"
           className={cn(
             "transition-colors hover:text-foreground/80",
@@ -46,7 +46,7 @@ export function MainNav() {
           )}
         >
           Admin
-        </Link>
+        </Link> */}
       </nav>
     </div>
   )

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4321",
+    "dev": "next dev -p 3001",
     "build": "contentlayer build && pnpm build:registry && next build",
     "buildnext": "next build",
     "build:registry": "ts-node --esm --project ./tsconfig.scripts.json ./scripts/build-registry.ts",

@@ -23,25 +23,9 @@ import { UsercaseProvider } from "./usecaseproviders"
 // as the build process would need to have access to the database / api's
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: [
-    "Next.js",
-    "React",
-    "Tailwind CSS",
-    "Server Components",
-    "Radix UI",
-  ],
-  authors: [
-    {
-      name: "shadcn",
-      url: "https://shadcn.com",
-    },
-  ],
-  creator: "shadcn",
+  title: "Nexi booking solution",
+  description: "Booking tool for Nexi group members",
+  
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -50,9 +34,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: siteConfig.name,
+    title: "Nexi booking solution",
     description: siteConfig.description,
-    siteName: siteConfig.name,
+    siteName: "Nexi booking solution",
     images: [
       {
         url: siteConfig.ogImage,
@@ -89,7 +73,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         {/* <ForModule module="Booking"> */}
         <div className="flex-1">{children}</div>
         {/* </ForModule> */}
-        <SiteFooter />
+        {/* <SiteFooter /> */}
       </div>
     </UsercaseProvider>
   )

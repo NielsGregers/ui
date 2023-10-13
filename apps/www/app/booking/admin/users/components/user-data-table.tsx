@@ -1,10 +1,15 @@
 "use client"
 
-import { use, useEffect, useState } from "react"
+import { use, useState } from "react"
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -14,34 +19,10 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-} from "@/registry/default/ui/table"
-import { TableRow } from "@/registry/new-york/ui/table"
-
-import { getBookingsByDate } from "../../../actions/parking/parkingBookings"
-import { DatePicker } from "./datepicker"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type ParkingBooking = {
-  parking: string
-  user: string
-  plates: string
-}
-
-export const columns: ColumnDef<ParkingBooking>[] = [
-  {
-    accessorKey: "title",
-    header: "Parking spot",
-  },
-  {
-    accessorKey: "userEmail",
-    header: "Booked By",
-  },
-  {
-    accessorKey: "plates",
-    header: "Licence plates",
-  },
-]
+  TableRow,
+} from "@/components/ui/table"
+import { Button } from "@/registry/default/ui/button"
+import { Input } from "@/registry/default/ui/input"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -52,14 +33,35 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   })
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("upn")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("upn")?.setFilterValue(event.target.value)
+          }
+          className=""
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -103,52 +105,30 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No bookings for that day.
+                  No results.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-    </div>
-  )
-}
-
-interface PropsType {
-  // data: ParkingBooking[]
-}
-export function ParkingBookingsTable(props: PropsType) {
-  // const { data } = props
-  const [date, setdate] = useState<Date>(new Date())
-  const [bookings, setbookings] = useState<ParkingBooking[]>([])
-
-  useEffect(() => {
-    async function load() {
-      const result = await getBookingsByDate(
-        date?.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-      )
-      setbookings(result)
-    }
-
-    load()
-  }, [date])
-
-  // setbookings(result)
-
-  return (
-    <div className="my-3 w-full">
-      <DatePicker
-        currentDate={new Date()}
-        onDateChanged={(date) => {
-          setdate(date)
-        }}
-      />
-      <div className="flex items-center py-4">
-        <DataTable data={bookings} columns={columns} />
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   )

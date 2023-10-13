@@ -22,11 +22,8 @@ import {
   CardTitle,
 } from "@/registry/default/ui/card"
 
-import {
-  UserParkingBooking,
-  getBookingsByUser,
-} from "../actions/parking/parkingBookings"
-import BookParkingButton from "./bookparkingbutton"
+import { UserParkingBooking } from "../actions/parking/parkingBookings"
+import DateCard from "./datecard"
 import PieGraph from "./piegraph"
 
 const delay = async (ms: number) => new Promise((res) => setTimeout(res, ms))
@@ -71,89 +68,10 @@ function DateCards(props: PropTypes) {
     setdates(datesSelected)
   }, [props.dateRange])
 
-  useEffect(() => {
-    async function load() {
-      const bookings = await getBookingsByUser(props.userEmail ?? "", dates)
-      setuserbookings(bookings)
-    }
-    if (dates.length > 0) {
-      load()
-    }
-  }, [dates, props.userEmail])
-
-  useEffect(() => {
-    async function load() {
-      const bookings = await getBookingsByUser(props.userEmail ?? "", dates)
-      setuserbookings(bookings)
-    }
-    async function refresh() {
-      await delay(10000).then(() => load())
-    }
-    refresh()
-  }, [refresh])
-
   return (
     <div className="grid max-h-[75vh] min-h-[50vh] grid-cols-4 gap-8 2xl:mt-10">
       {dates.map((date) => {
-        return (
-          <Card
-            className={`max-h-[50vh] min-h-[35vh] border-none shadow-md ${
-              date.getTime() === new Date().getTime()
-                ? "col-span-2"
-                : "col-span-1"
-            }`}
-          >
-            <CardHeader className="h-1/4">
-              <CardTitle>
-                <div className=" flex w-full flex-row justify-between">
-                  {date.toLocaleDateString("en-US", { weekday: "short" })}
-                  {date.getTime() == new Date().getTime() && <div> Today</div>}
-                </div>
-              </CardTitle>
-              <CardDescription>
-                {date.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="mt-5 h-2/4 items-center justify-center">
-              <div className="grid h-full items-center">
-                <Button
-                  className="w-full rounded-full"
-                  variant="outline"
-                  disabled={true}
-                >
-                  <GiDesk className="mr-2 h-4 w-4" />
-                  {/* <Car className="mr-2 h-4 w-4" /> */}
-                  Book a desk
-                </Button>
-                <BookParkingButton
-                  onDone={() => {
-                    setrefresh(refresh + 1)
-                  }}
-                  userEmail={props.userEmail}
-                  date={date}
-                  booking={
-                    userbookings.filter((data) => {
-                      if (
-                        data.date ===
-                        date.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })
-                      )
-                        return data
-                    })[0]
-                  }
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="h-1/4"></CardFooter>
-          </Card>
-        )
+        return <DateCard date={date} userEmail={props.userEmail} />
       })}
 
       <Card
