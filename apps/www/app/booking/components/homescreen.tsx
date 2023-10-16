@@ -8,6 +8,7 @@ import { DateRange } from "react-day-picker"
 import CurrentTime from "./currentTime"
 import DateCards from "./datecards"
 import { DateRangePicker } from "./datepicker"
+import Mobile from "./mobile"
 
 export interface DateRangeSelection {
   from: Date
@@ -21,7 +22,7 @@ interface PropTypes {
 function HomeScreen(props: PropTypes) {
   const [date, setdate] = useState<DateRange>({
     from: new Date() as Date,
-    to: addDays(new Date(), 7) as Date,
+    to: addDays(new Date(), 3) as Date,
   })
 
   const onDateChange = (dateRange: DateRange) => {
@@ -30,10 +31,15 @@ function HomeScreen(props: PropTypes) {
 
   return (
     <div>
-      <CurrentTime />
-      <div className="min-h-[90vh] container flex flex-col gap-2 justify-center">
-        <DateRangePicker numberOfDays={3} onDateChange={onDateChange} />
-        <DateCards dateRange={date} userEmail={props.userEmail} />
+      <div className="hidden md:flex">
+        <CurrentTime />
+        <div className="min-h-[90vh] container flex flex-col gap-2 justify-center">
+          <DateRangePicker numberOfDays={3} onDateChange={onDateChange} />
+          <DateCards dateRange={date} userEmail={props.userEmail} />
+        </div>
+      </div>
+      <div className="flex md:hidden">
+        <Mobile />
       </div>
     </div>
   )

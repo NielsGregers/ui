@@ -21,10 +21,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/registry/default/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/registry/default/ui/dialog"
+import { Label } from "@/registry/default/ui/label"
 
 import { UserParkingBooking } from "../actions/parking/parkingBookings"
 import DateCard from "./datecard"
 import PieGraph from "./piegraph"
+import Rules from "./rules"
 
 const delay = async (ms: number) => new Promise((res) => setTimeout(res, ms))
 
@@ -93,6 +104,7 @@ function DateCards(props: PropTypes) {
         </CardHeader>
         <CardContent className="h-2/4 items-center justify-center">
           <div className="grid h-full items-center">
+            <Rules />
             <a href="garage_plan.pdf" target="_blank">
               <Button className="w-full" variant="outline">
                 <BsFillMapFill className="mr-2 h-4 w-4" />
@@ -103,12 +115,6 @@ function DateCards(props: PropTypes) {
               <Button className="w-full" variant="outline">
                 <HiMail className="mr-2 h-4 w-4" />
                 Have a question?
-              </Button>
-            </a>
-            <a href="How to use the Nexi booking app.pdf" target="_blank">
-              <Button className="w-full" variant="outline">
-                <FaQuestion className="mr-2 h-4 w-4" />
-                How to use the app
               </Button>
             </a>
           </div>

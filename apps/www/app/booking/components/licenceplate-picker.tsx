@@ -62,15 +62,15 @@ export function LicencePicker(props: PropTypes) {
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-[300px] p-0">
           <Command>
-            <CommandInput
+            {/* <CommandInput
               onValueChange={(text) => {
                 setCurrentText(text)
               }}
               placeholder="Enter licence plate number..."
-            />
-            <CommandEmpty>
+            /> */}
+            {/* <CommandEmpty>
               <div className="grid justify-center space-y-3">
                 <div>No licence plates found.</div>
                 <Button
@@ -89,10 +89,16 @@ export function LicencePicker(props: PropTypes) {
                   Add a new one
                 </Button>
               </div>
-            </CommandEmpty>
+            </CommandEmpty> */}
             <CommandGroup>
+              {allPlates.length < 1 && (
+                <CommandItem>
+                  <div>No licence plates found.</div>
+                </CommandItem>
+              )}
               {allPlates.map((oneplate) => (
                 <CommandItem
+                  className="cursor-pointer"
                   key={oneplate}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)

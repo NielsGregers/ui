@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/registry/default/ui/card"
 
+import PieGraph from "./piegraph"
 import ReserveParkingButton from "./reserveParkingButton"
 
 type PropTypes = {
@@ -21,7 +22,7 @@ type PropTypes = {
 function DateCard(props: PropTypes) {
   return (
     <Card
-      className={`max-h-[50vh] min-h-[35vh] border-none shadow-md ${
+      className={` min-h-[65vh] min-w-[85vw] border-none shadow-md md:min-h-[35vh] md:min-w-[10vw] ${
         props.date.getTime() === new Date().getTime()
           ? "col-span-2"
           : "col-span-1"
@@ -56,7 +57,7 @@ function DateCard(props: PropTypes) {
           <ReserveParkingButton userEmail={props.userEmail} date={props.date} />
         </div>
       </CardContent>
-      <CardFooter className="h-1/4"></CardFooter>
+      <CardFooter className="h-1/4">{/* <PieGraph /> */}</CardFooter>
     </Card>
   )
 }

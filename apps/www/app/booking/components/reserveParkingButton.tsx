@@ -90,7 +90,7 @@ function ReserveParkingButton(params: {
   function refreshPage() {
     setTimeout(() => {
       setrefresh(refresh + 1)
-    }, 1000)
+    }, 500)
 
     return
   }
@@ -108,6 +108,7 @@ function ReserveParkingButton(params: {
         toast({
           title: "Error",
           description: "Something went wrong. Please try again.",
+          variant: "destructive",
         })
       }
     } else return
@@ -131,6 +132,7 @@ function ReserveParkingButton(params: {
     if (response.success) {
       router.refresh()
       setisopen(false)
+      refreshPage()
       toast({
         title: "Success",
         description:
@@ -141,7 +143,9 @@ function ReserveParkingButton(params: {
             year: "numeric",
           }),
       })
-      refreshPage()
+      setEV(false)
+      sethandicapped(false)
+      setresult(undefined)
     } else {
       setresult(response)
     }
@@ -154,7 +158,12 @@ function ReserveParkingButton(params: {
           <DialogTrigger asChild>
             <Button
               disabled={
-                new Date(params.date.setHours(16, 0, 0, 0)) < new Date()
+                (date.getDate() ===
+                  new Date(
+                    new Date().setDate(new Date().getDate() + 1)
+                  ).getDate() &&
+                  new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
+                date.getDate() <= new Date().getDate()
               }
               className="w-full rounded-full"
               variant="outline"
@@ -226,7 +235,12 @@ function ReserveParkingButton(params: {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setisopen(false)}
+                      onClick={() => {
+                        setisopen(false)
+                        setresult(undefined)
+                        setEV(false)
+                        sethandicapped(false)
+                      }}
                     >
                       No
                     </Button>
@@ -255,7 +269,12 @@ function ReserveParkingButton(params: {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setisopen(false)}
+                    onClick={() => {
+                      setisopen(false)
+                      setresult(undefined)
+                      setEV(false)
+                      sethandicapped(false)
+                    }}
                   >
                     No
                   </Button>
@@ -283,7 +302,12 @@ function ReserveParkingButton(params: {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setisopen(false)}
+                    onClick={() => {
+                      setisopen(false)
+                      setresult(undefined)
+                      setEV(false)
+                      sethandicapped(false)
+                    }}
                   >
                     No
                   </Button>

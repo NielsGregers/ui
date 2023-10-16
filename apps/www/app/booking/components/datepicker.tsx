@@ -145,9 +145,15 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
           <Calendar
             disabled={(date) =>
               date >
-                new Date(
-                  new Date().setDate(new Date().getDate() + numberOfDays - 1)
-                ) || date < new Date("2023-07-01")
+                (new Date().getTime() > 12
+                  ? new Date(
+                      new Date().setDate(new Date().getDate() + numberOfDays)
+                    )
+                  : new Date(
+                      new Date().setDate(
+                        new Date().getDate() + numberOfDays - 1
+                      )
+                    )) || date < new Date("2023-07-01")
             }
             initialFocus
             mode="range"
@@ -180,5 +186,143 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
       </Button>
     </div>
     // </div>
+  )
+}
+
+interface SinglePropTypes {
+  onDateChange: (dateValue: Date) => void
+}
+
+export function SingleDatePicker({ onDateChange }: SinglePropTypes) {
+  const [date, setDate] = React.useState<Date>(new Date(addDays(new Date(), 1)))
+
+  React.useEffect(() => {
+    onDateChange(date)
+  }, [date])
+
+  return (
+    <div className="flex flex-row gap-2">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant={"outline"}
+            className={cn(
+              "w-[280px] justify-start text-left font-normal",
+              !date && "text-muted-foreground"
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, "PPP") : <span>Pick a date</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(date) => setDate(date as Date)}
+            initialFocus
+            disabled={(date) =>
+              date >
+                (new Date().getTime() > 12
+                  ? new Date(new Date().setDate(new Date().getDate() + 3))
+                  : new Date(
+                      new Date().setDate(new Date().getDate() + 3 - 1)
+                    )) || date < new Date("2023-07-01")
+            }
+          />
+        </PopoverContent>
+      </Popover>
+      <div className="flex flex-row gap-1">
+        <Button
+          onClick={() => {
+            setDate(addDays(date, -1))
+          }}
+          variant="outline"
+          className="bg-white dark:bg-black shadow-md"
+        >
+          {"<"}
+        </Button>
+        <Button
+          disabled={
+            new Date().getTime() < 12
+              ? new Date(addDays(new Date(), 2)).getDate() <
+                new Date(addDays(date, 1)).getDate()
+              : new Date(addDays(new Date(), 3)).getDate() <
+                new Date(addDays(date, 1)).getDate()
+          }
+          onClick={() => {
+            setDate(addDays(date, 1))
+          }}
+          className="bg-white dark:bg-black shadow-md"
+          variant="outline"
+        >
+          {">"}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export function MobileDatePicker({ onDateChange }: SinglePropTypes) {
+  const [date, setDate] = React.useState<Date>(new Date(addDays(new Date(), 1)))
+
+  React.useEffect(() => {
+    onDateChange(date)
+  }, [date])
+
+  return (
+    <div>
+      <div className=" flex flex-row justify-between items-end fixed bottom-0 left-0 z-40 w-full h-[6vh] bg-white dark:bg-zinc-900 border-t shadow-2xl"></div>
+      <div className=" flex flex-row justify-between items-end fixed bottom-0 left-0 z-50 w-full h-[10vh]">
+        <Button
+          onClick={() => {
+            setDate(addDays(date, -1))
+          }}
+          variant="outline"
+          className="w-[40vw] bg-transparent shadow-none h-[6vh] border-none hover:bg-transparent hover:shadow-none hover:border-none text-xl font-bold"
+        >
+          {"<"}
+        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button className=" w-[10vh] h-[10vh] rounded-full bg-[#2d32aa] hover:bg-[#212861] dark:bg-[#212861] dark:hover:bg-[#2d32aa] mb-[-5px]">
+              <CalendarIcon className=" h-16 w-16 text-white" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(date) => setDate(date as Date)}
+              initialFocus
+              disabled={(date) =>
+                date >
+                  (new Date().getTime() > 12
+                    ? new Date(new Date().setDate(new Date().getDate() + 3))
+                    : new Date(
+                        new Date().setDate(new Date().getDate() + 3 - 1)
+                      )) || date < new Date("2023-07-01")
+              }
+            />
+          </PopoverContent>
+        </Popover>
+        <Button
+          disabled={
+            new Date().getTime() < 12
+              ? new Date(addDays(new Date(), 2)).getDate() <
+                new Date(addDays(date, 1)).getDate()
+              : new Date(addDays(new Date(), 3)).getDate() <
+                new Date(addDays(date, 1)).getDate()
+          }
+          onClick={() => {
+            setDate(addDays(date, 1))
+          }}
+          className="w-[40vw] bg-transparent shadow-none h-[6vh] border-none hover:bg-transparent hover:shadow-none hover:border-none text-xl font-bold"
+          variant="outline"
+        >
+          {">"}
+        </Button>
+      </div>
+    </div>
   )
 }
