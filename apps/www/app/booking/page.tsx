@@ -12,7 +12,7 @@ export default async function Koksmat() {
   const session = await getServerSession(authOptions)
   console.log(session)
   return (
-    <div className="h-[92.3vh] w-full bg-[url('/hard_blur.png')] bg-cover dark:bg-[url('/hard_blur_black.png')]">
+    <div className="h-[92.9vh] w-full bg-[url('/hard_blur.png')] bg-cover dark:bg-[url('/hard_blur_black.png')]">
       {session && <HomeScreen userEmail={session?.user?.email} />}
       {!session && <AnonymousScreen />}
       {/* <MaintainanceScreen /> */}

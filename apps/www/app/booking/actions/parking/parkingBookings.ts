@@ -10,6 +10,7 @@ export interface UserParkingBookingMongo extends WithId<Document> {
   date: string
   EV: boolean
   handicapped: boolean
+  floor: string
   free: string[]
 }
 
@@ -31,6 +32,7 @@ export interface UserParkingBooking {
   date: string
   EV: boolean
   handicapped: boolean
+  floor: string
   type: "permanent" | "booked"
 }
 interface ParkingBooking {
@@ -281,6 +283,7 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
         handicapped: result[0].handicapped,
         date: dateString,
         plates: result[0].licence,
+        floor: result[0].floor,
         type: "permanent",
       }
     }
@@ -307,6 +310,7 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
         handicapped: parkingResult[0].handicapped,
         date: oneBooking.date,
         plates: oneBooking.plates,
+        floor: parkingResult[0].floor,
         type: "booked",
       }
     }

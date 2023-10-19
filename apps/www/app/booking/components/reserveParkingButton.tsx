@@ -2,10 +2,12 @@
 
 import React, { use, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { set } from "date-fns"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { BiHandicap } from "react-icons/bi"
 import { BsFillEvStationFill } from "react-icons/bs"
 import { FaParking } from "react-icons/fa"
+import { ThreeDots } from "react-loader-spinner"
 
 import { Button } from "@/registry/default/ui/button"
 import {
@@ -64,6 +66,7 @@ function ReserveParkingButton(params: {
   const [result, setresult] = useState<BookingConfirmationType | undefined>(
     undefined
   )
+  const [loading, setloading] = useState(true)
 
   const { date, userEmail } = params
   const { toast } = useToast()
@@ -75,9 +78,11 @@ function ReserveParkingButton(params: {
         params.date
       )
       setbooking(result)
+      setloading(false)
     }
 
     if (params.userEmail) {
+      setloading(true)
       getBooking()
     }
   }, [params.date, params.userEmail, refresh])
@@ -153,7 +158,24 @@ function ReserveParkingButton(params: {
 
   return (
     <>
-      {booking === undefined && (
+      {loading && (
+        <Button
+          variant="secondary"
+          className="w-full rounded-full"
+          disabled={true}
+        >
+          <ThreeDots
+            height="50"
+            width="80"
+            radius="9"
+            color="blue"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            visible={true}
+          />
+        </Button>
+      )}
+      {!loading && booking === undefined && (
         <Dialog open={isopen} onOpenChange={() => setisopen(!isopen)}>
           <DialogTrigger asChild>
             <Button
@@ -341,7 +363,7 @@ function ReserveParkingButton(params: {
           </DialogContent>
         </Dialog>
       )}
-      {booking !== undefined && (
+      {!loading && booking !== undefined && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" className="w-full rounded-full">
@@ -354,6 +376,29 @@ function ReserveParkingButton(params: {
             <DropdownMenuLabel>
               <div className="flex flex-row justify-between">
                 {booking?.plates.toUpperCase()}
+                {booking?.type == "permanent" && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="cursor-help items-center  justify-center rounded-full bg-gray-600 px-1 text-white">
+                          P
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Permanently booked</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>
+              <div className="flex flex-row justify-between">
+                <div className="font-normal">
+                  floor:{" "}
+                  <span style={{ fontWeight: "bold" }}>{booking?.floor}</span>
+                </div>
                 {booking?.EV && (
                   <TooltipProvider>
                     <Tooltip>
@@ -390,12 +435,18 @@ function ReserveParkingButton(params: {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+
             <DropdownMenuItem
               onClick={() => handleCancel()}
               disabled={
-                new Date(params.date.setHours(12, 0, 0, 0)) < new Date()
+                (date.getDate() ===
+                  new Date(
+                    new Date().setDate(new Date().getDate() + 1)
+                  ).getDate() &&
+                  new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
+                date.getDate() <= new Date().getDate()
               }
-              className="text-red-700"
+              className="cursor-pointer text-red-700"
             >
               Cancel
             </DropdownMenuItem>

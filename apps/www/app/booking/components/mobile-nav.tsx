@@ -68,7 +68,7 @@ export function MobileNav() {
                 )
             )} */}
             <Rules />
-            <a href="mailto:desktopbooking@nexigroup.com" target="_blank">
+            <a href="mailto:nexibooking-cro@nexigroup.com" target="_blank">
               <Button className="w-full" variant="outline">
                 <HiMail className="mr-2 h-4 w-4" />
                 Have a question?

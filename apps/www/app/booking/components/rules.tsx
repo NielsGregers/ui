@@ -24,10 +24,7 @@ function Rules() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Basic rules for booking</DialogTitle>
-          <DialogDescription>
-            Here are some basic rules for using the booking app to reserve
-            parking in the building.
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <div>
@@ -41,9 +38,10 @@ function Rules() {
             <span style={{ fontWeight: "bold" }}>2 days in advance.</span>
           </div>
           <div>
-            • All parking spots are numbered, and you will be allowed to park{" "}
+            • All parking spots are numbered.
             <span style={{ fontWeight: "bold" }}>
-              only on the parking spot indicated by the application.
+              You have to park on the exact parking spot indicated by the
+              application.
             </span>
           </div>
         </div>

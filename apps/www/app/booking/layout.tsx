@@ -25,7 +25,7 @@ import { UsercaseProvider } from "./usecaseproviders"
 export const metadata: Metadata = {
   title: "Nexi booking solution",
   description: "Booking tool for Nexi group members",
-  
+
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -67,14 +67,12 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <UsercaseProvider>
-      <div className="relative flex min-h-screen flex-col">
-        <SiteHeader />
-        {/* <ForModule module="Booking"> */}
-        <div className="flex-1">{children}</div>
-        {/* </ForModule> */}
-        {/* <SiteFooter /> */}
-      </div>
-    </UsercaseProvider>
+    <div className="relative flex min-h-screen flex-col">
+      <SiteHeader />
+      {/* <ForModule module="Booking"> */}
+      <div className="flex-1">{children}</div>
+      {/* </ForModule> */}
+      {/* <SiteFooter /> */}
+    </div>
   )
 }
