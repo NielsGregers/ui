@@ -79,7 +79,7 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
         endDate > new Date(addDays(new Date(), numberOfDays))
       ) {
         endDate = new Date(addDays(new Date(), numberOfDays))
-        fromDate = new Date()
+        fromDate = new Date(addDays(new Date(), 1))
       }
       setDate({ from: fromDate, to: endDate })
     }
@@ -100,12 +100,12 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
       endDate = new Date(addDays(new Date(), numberOfDays - 1))
       fromDate = new Date()
     } else if (
-      new Date().getTime() <
+      new Date().getTime() >
         new Date(new Date().setHours(12, 0, 0)).getTime() &&
       endDate > new Date(addDays(new Date(), numberOfDays))
     ) {
       endDate = new Date(addDays(new Date(), numberOfDays))
-      fromDate = new Date()
+      fromDate = new Date(addDays(new Date(), 1))
     }
     setDate({ from: fromDate, to: endDate })
   }
@@ -166,16 +166,17 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             disabled={(date) =>
-              (new Date().getTime() >
-              new Date(new Date().setHours(12, 0, 0)).getTime()
-                ? date >
-                  new Date(
-                    new Date().setDate(new Date().getDate() + numberOfDays)
+              date >
+                new Date(
+                  new Date().setDate(
+                    new Date().getDate() +
+                      numberOfDays +
+                      (new Date().getTime() >
+                      new Date(new Date().setHours(12, 0, 0)).getTime()
+                        ? 0
+                        : -1)
                   )
-                : date >
-                  new Date(
-                    new Date().setDate(new Date().getDate() + numberOfDays - 1)
-                  )) || date < new Date("2023-07-01")
+                ) || date < new Date("2023-07-01")
             }
             initialFocus
             mode="range"
@@ -197,12 +198,14 @@ export function DateRangePicker({ onDateChange, numberOfDays }: PropTypes) {
       </Button>
       <Button
         disabled={
-          new Date().getTime() <
-          new Date(new Date().setHours(12, 0, 0)).getTime()
-            ? new Date(addDays(new Date(), numberOfDays - 1)).setHours(12) <
-              new Date(addDays(date?.to ?? new Date(), 1)).setHours(12)
-            : new Date(addDays(new Date(), numberOfDays)).setHours(12) ===
-              new Date(addDays(date?.to ?? new Date(), 1)).setHours(12)
+          (new Date().getTime() <
+            new Date(new Date().setHours(12, 0, 0)).getTime() &&
+            new Date(addDays(new Date(), numberOfDays - 1)).setHours(12) <
+              new Date(addDays(date?.to ?? new Date(), 1)).setHours(12)) ||
+          (new Date().getTime() >
+            new Date(new Date().setHours(12, 0, 0)).getTime() &&
+            new Date(addDays(new Date(), numberOfDays)).setHours(12) <
+              new Date(addDays(date?.to ?? new Date(), 1)).setHours(12))
         }
         onClick={() => moveForward(numberOfDays)}
         className="bg-white dark:bg-black shadow-md"
