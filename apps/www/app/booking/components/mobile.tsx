@@ -6,7 +6,9 @@ import { addDays } from "date-fns"
 import DateCard from "./datecard"
 import { MobileDatePicker, SingleDatePicker } from "./datepicker"
 
-function Mobile() {
+type InputProps = { email: string | undefined | null }
+
+function Mobile(props: InputProps) {
   const [date, setdate] = useState<Date>(new Date(addDays(new Date(), 1)))
 
   const onDateChange = (dateValue: Date) => {
@@ -16,7 +18,7 @@ function Mobile() {
   return (
     <div className=" container flex h-[80vh] flex-col items-center justify-center gap-2">
       {/* <SingleDatePicker onDateChange={onDateChange} /> */}
-      <DateCard date={date} userEmail="karlo.mrakovcic@nexigroup.com" />
+      <DateCard date={date} userEmail={props.email} />
       <MobileDatePicker onDateChange={onDateChange} />
     </div>
   )

@@ -65,7 +65,7 @@ function HomeScreen(props: PropTypes) {
         )}
       </div>
       <div className="flex md:hidden">
-        <Mobile />
+        <Mobile email={props.userEmail} />
       </div>
     </div>
   )
