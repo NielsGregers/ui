@@ -45,6 +45,7 @@ import {
   BookingConfirmationType,
   UserParkingBooking,
   deleteBooking,
+  getParkingAvailability,
   getUsersBookingByDate,
   newParkingBooking,
 } from "../actions/parking/parkingBookings"
@@ -67,6 +68,8 @@ function ReserveParkingButton(params: {
     undefined
   )
   const [loading, setloading] = useState(true)
+  const [newBooking, setnewBooking] = useState(false)
+  const [available, setavailable] = useState<number | undefined>(undefined)
 
   const { date, userEmail } = params
   const { toast } = useToast()
@@ -77,7 +80,22 @@ function ReserveParkingButton(params: {
         params.userEmail ?? "",
         params.date
       )
+      if (!result) {
+        let available = await getParkingAvailability(params.date)
+        if (available) {
+          setavailable(available)
+        }
+      }
+
+      if (newBooking && result === undefined) {
+        result = await getUsersBookingByDate(
+          params.userEmail ?? "",
+          params.date
+        )
+      }
+
       setbooking(result)
+      setnewBooking(false)
       setloading(false)
     }
 
@@ -104,11 +122,12 @@ function ReserveParkingButton(params: {
     if (booking !== undefined) {
       const response = await deleteBooking(booking)
       if (response) {
+        setloading(true)
+        refreshPage()
         toast({
           title: "Success",
           description: "You cancelled your parking reservation",
         })
-        refreshPage()
       } else {
         toast({
           title: "Error",
@@ -135,9 +154,11 @@ function ReserveParkingButton(params: {
     )
 
     if (response.success) {
-      router.refresh()
+      //router.refresh()
       setisopen(false)
+      setloading(true)
       refreshPage()
+      router.refresh()
       toast({
         title: "Success",
         description:
@@ -159,299 +180,334 @@ function ReserveParkingButton(params: {
   return (
     <>
       {loading && (
-        <Button
-          variant="secondary"
-          className="w-full rounded-full"
-          disabled={true}
-        >
-          <ThreeDots
-            height="50"
-            width="80"
-            radius="9"
-            color="blue"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            visible={true}
-          />
-        </Button>
+        <div className="h-14">
+          <Button
+            variant="secondary"
+            className="w-full rounded-full"
+            disabled={true}
+          >
+            <ThreeDots
+              height="50"
+              width="80"
+              radius="9"
+              color="blue"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              visible={true}
+            />
+          </Button>
+        </div>
       )}
       {!loading && booking === undefined && (
-        <Dialog open={isopen} onOpenChange={() => setisopen(!isopen)}>
-          <DialogTrigger asChild>
-            <Button
-              disabled={
-                (date.getDate() ===
-                  new Date(
-                    new Date().setDate(new Date().getDate() + 1)
-                  ).getDate() &&
-                  new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
-                date.getDate() <= new Date().getDate()
-              }
-              className="w-full rounded-full"
-              variant="outline"
-              //   onClick={() => setisopen(true)}
-            >
-              <FaParking className="mr-2 h-5 w-5" style={{ color: "blue" }} />
-              {/* <Car className="mr-2 h-4 w-4" /> */}
-              Reserve parking
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="bg-white dark:bg-black ">
-            <DialogHeader>
-              <DialogTitle>
-                Reserve parking for{" "}
-                {date?.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-              </DialogTitle>
-              {/* <DialogDescription>
+        <div className="h-14">
+          <Dialog
+            open={isopen}
+            onOpenChange={() => {
+              setrefresh(refresh + 1)
+              setisopen(!isopen)
+            }}
+          >
+            <DialogTrigger asChild>
+              <Button
+                disabled={
+                  (date.getDate() ===
+                    new Date(
+                      new Date().setDate(new Date().getDate() + 1)
+                    ).getDate() &&
+                    new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
+                  date.getDate() <= new Date().getDate()
+                }
+                className="w-full rounded-full"
+                variant="outline"
+                //   onClick={() => setisopen(true)}
+              >
+                <FaParking className="mr-2 h-5 w-5" style={{ color: "blue" }} />
+                {/* <Car className="mr-2 h-4 w-4" /> */}
+                Reserve parking
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-white dark:bg-black ">
+              <DialogHeader>
+                <DialogTitle>
+                  Reserve parking for{" "}
+                  {date?.toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                </DialogTitle>
+                {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription> */}
-            </DialogHeader>
-            <div className="grid max-w-lg space-y-2">
-              {result === undefined && (
-                <div className="grid max-w-[300px] space-y-3">
-                  <LicencePicker
-                    onPlatesChange={platesChanged}
-                    userEmail={params.userEmail}
-                  />
-                  <div className=" flex flex-row space-x-6 text-sm">
-                    <div className="flex flex-row space-x-2 text-sm">
-                      <Switch
-                        className="checked:bg-green-700"
-                        checked={EV}
-                        onCheckedChange={() => setEV(!EV)}
-                      />
-                      <BsFillEvStationFill
-                        className=" h-5 w-5 cursor-help"
-                        style={{ color: "green" }}
-                      />
-                    </div>
-                    <div className="flex flex-row space-x-2 text-sm">
-                      <Switch
-                        className="bg-white dark:bg-black"
-                        checked={handicapped}
-                        onCheckedChange={() => sethandicapped(!handicapped)}
-                      />
-                      <BiHandicap
-                        className="h-5 w-5 cursor-help"
-                        style={{ color: "blue" }}
-                      />
-                    </div>
-                  </div>
+              </DialogHeader>
+              {booking !== undefined && (
+                <div className="grid max-w-lg space-y-2">
+                  You already have a reservation for this day. Please refresh
+                  the page.
                 </div>
               )}
-              {result?.cause === "No available parking slots for EV" && (
-                <div className="sm:max-w-[425px]">
-                  <div className="sm:max-w-[425px]">{result.cause}</div>
-                  <br />
-                  <div className="sm:max-w-[425px]">
-                    Would you like to reserve a parking space without the
-                    charger?
-                  </div>
-                  <br />
+              {booking === undefined && (
+                <div className="grid max-w-lg space-y-2">
+                  {result === undefined && (
+                    <div className="grid max-w-[300px] space-y-3">
+                      <LicencePicker
+                        onPlatesChange={platesChanged}
+                        userEmail={params.userEmail}
+                      />
+                      <div className=" flex flex-row space-x-6 text-sm">
+                        <div className="flex flex-row space-x-2 text-sm">
+                          <Switch
+                            className="checked:bg-green-700"
+                            checked={EV}
+                            onCheckedChange={() => setEV(!EV)}
+                          />
+                          <BsFillEvStationFill
+                            className=" h-5 w-5 cursor-help"
+                            style={{ color: "green" }}
+                          />
+                        </div>
+                        <div className="flex flex-row space-x-2 text-sm">
+                          <Switch
+                            className="bg-white dark:bg-black"
+                            checked={handicapped}
+                            onCheckedChange={() => sethandicapped(!handicapped)}
+                          />
+                          <BiHandicap
+                            className="h-5 w-5 cursor-help"
+                            style={{ color: "blue" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {result?.cause === "No available parking slots for EV" && (
+                    <div className="sm:max-w-[425px]">
+                      <div className="sm:max-w-[425px]">{result.cause}</div>
+                      <br />
+                      <div className="sm:max-w-[425px]">
+                        Would you like to reserve a parking space without the
+                        charger?
+                      </div>
+                      <br />
 
-                  <div className="flex flex-row justify-center space-x-2 sm:max-w-[425px]">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setisopen(false)
-                        setresult(undefined)
-                        setEV(false)
-                        sethandicapped(false)
-                      }}
-                    >
-                      No
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="default"
-                      onClick={() => {
-                        setEV(false)
-                        handleBooking()
-                      }}
-                    >
-                      Yes
-                    </Button>
-                  </div>
+                      <div className="flex flex-row justify-center space-x-2 sm:max-w-[425px]">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            setisopen(false)
+                            setresult(undefined)
+                            setEV(false)
+                            sethandicapped(false)
+                          }}
+                        >
+                          No
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="default"
+                          onClick={() => {
+                            setEV(false)
+                            handleBooking()
+                          }}
+                        >
+                          Yes
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  {result?.cause ===
+                    "No available parking slots for handicapped" && (
+                    <div className="sm:max-w-[425px]">
+                      <div>
+                        <pre>No available handicapped parking.</pre>
+                        <pre>
+                          Would you like to reserve a regular parking space?
+                        </pre>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setisopen(false)
+                          setresult(undefined)
+                          setEV(false)
+                          sethandicapped(false)
+                        }}
+                      >
+                        No
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        onClick={() => {
+                          sethandicapped(false)
+                          handleBooking()
+                        }}
+                      >
+                        Yes
+                      </Button>
+                    </div>
+                  )}
+                  {result?.cause ===
+                    "No available parking slots for EV and handicapped" && (
+                    <>
+                      <div className="w-[200px]">
+                        <pre>
+                          No available handicapped parking with EV charger.
+                        </pre>
+                        <pre>
+                          Would you like to reserve a regular parking space?
+                        </pre>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setisopen(false)
+                          setresult(undefined)
+                          setEV(false)
+                          sethandicapped(false)
+                        }}
+                      >
+                        No
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        onClick={() => {
+                          setEV(false)
+                          sethandicapped(false)
+                          handleBooking()
+                        }}
+                      >
+                        Yes
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
-              {result?.cause ===
-                "No available parking slots for handicapped" && (
-                <div className="sm:max-w-[425px]">
-                  <div>
-                    <pre>No available handicapped parking.</pre>
-                    <pre>
-                      Would you like to reserve a regular parking space?
-                    </pre>
-                  </div>
+              <DialogFooter>
+                {result === undefined && booking === undefined && (
                   <Button
-                    type="button"
-                    variant="outline"
+                    disabled={plates === "" || newBooking}
+                    type="submit"
                     onClick={() => {
-                      setisopen(false)
-                      setresult(undefined)
-                      setEV(false)
-                      sethandicapped(false)
-                    }}
-                  >
-                    No
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="default"
-                    onClick={() => {
-                      sethandicapped(false)
+                      setnewBooking(true)
                       handleBooking()
                     }}
                   >
-                    Yes
+                    Book
                   </Button>
-                </div>
-              )}
-              {result?.cause ===
-                "No available parking slots for EV and handicapped" && (
-                <>
-                  <div className="w-[200px]">
-                    <pre>No available handicapped parking with EV charger.</pre>
-                    <pre>
-                      Would you like to reserve a regular parking space?
-                    </pre>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setisopen(false)
-                      setresult(undefined)
-                      setEV(false)
-                      sethandicapped(false)
-                    }}
-                  >
-                    No
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="default"
-                    onClick={() => {
-                      setEV(false)
-                      sethandicapped(false)
-                      handleBooking()
-                    }}
-                  >
-                    Yes
-                  </Button>
-                </>
-              )}
+                )}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          {!(
+            (date.getDate() ===
+              new Date(
+                new Date().setDate(new Date().getDate() + 1)
+              ).getDate() &&
+              new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
+            date.getDate() <= new Date().getDate()
+          ) && (
+            <div className="flex w-full items-center justify-center text-xs ">
+              {available ? available + " spots available" : ""}
             </div>
-            <DialogFooter>
-              {result === undefined && (
-                <Button
-                  disabled={plates === ""}
-                  type="submit"
-                  onClick={() => {
-                    handleBooking()
-                  }}
-                >
-                  Book
-                </Button>
-              )}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          )}
+        </div>
       )}
       {!loading && booking !== undefined && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" className="w-full rounded-full">
-              <FaParking className="mr-2 h-4 w-4" style={{ color: "blue" }} />
-              {"Reserved: " + booking.parkingTitle}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>
-              <div className="flex flex-row justify-between">
-                {booking?.plates.toUpperCase()}
-                {booking?.type == "permanent" && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="cursor-help items-center  justify-center rounded-full bg-gray-600 px-1 text-white">
-                          P
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Permanently booked</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>
-              <div className="flex flex-row justify-between">
-                <div className="font-normal">
-                  floor:{" "}
-                  <span style={{ fontWeight: "bold" }}>{booking?.floor}</span>
+        <div className="h-14">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="w-full rounded-full">
+                <FaParking className="mr-2 h-4 w-4" style={{ color: "blue" }} />
+                {"Reserved: " + booking.parkingTitle}
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                <div className="flex flex-row justify-between">
+                  {booking?.plates.toUpperCase()}
+                  {booking?.type == "permanent" && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="cursor-help items-center  justify-center rounded-full bg-gray-600 px-1 text-white">
+                            P
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Permanently booked</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
                 </div>
-                {booking?.EV && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <BsFillEvStationFill
-                          className=" h-5 w-5 cursor-help"
-                          style={{ color: "green" }}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          This parking spot has access to EV charger you can use
-                          free of charge
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-                {booking?.handicapped && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <BiHandicap
-                          className="h-5 w-5 cursor-help"
-                          style={{ color: "blue" }}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>This parking spot is handicapped accessible.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>
+                <div className="flex flex-row justify-between">
+                  <div className="font-normal">
+                    floor:{" "}
+                    <span style={{ fontWeight: "bold" }}>{booking?.floor}</span>
+                  </div>
+                  {booking?.EV && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <BsFillEvStationFill
+                            className=" h-5 w-5 cursor-help"
+                            style={{ color: "green" }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            This parking spot has access to EV charger you can
+                            use free of charge
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+                  {booking?.handicapped && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <BiHandicap
+                            className="h-5 w-5 cursor-help"
+                            style={{ color: "blue" }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>This parking spot is handicapped accessible.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
 
-            <DropdownMenuItem
-              onClick={() => handleCancel()}
-              disabled={
-                (date.getDate() ===
-                  new Date(
-                    new Date().setDate(new Date().getDate() + 1)
-                  ).getDate() &&
-                  new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
-                date.getDate() <= new Date().getDate()
-              }
-              className="cursor-pointer text-red-700"
-            >
-              Cancel
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuItem
+                onClick={() => handleCancel()}
+                disabled={
+                  (date.getDate() ===
+                    new Date(
+                      new Date().setDate(new Date().getDate() + 1)
+                    ).getDate() &&
+                    new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
+                  date.getDate() <= new Date().getDate()
+                }
+                className="cursor-pointer text-red-700"
+              >
+                Cancel
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       )}
     </>
   )

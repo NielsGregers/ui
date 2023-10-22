@@ -319,18 +319,84 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
   return booking
 }
 
-export async function getParkingAvailability(dates?: Date[]) {
-  let datesString: string[] = []
-
-  if (dates && dates.length > 0) {
-    datesString = dates.map((date) => {
-      return date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    })
+export async function getParkingAvailability(date: Date) {
+  const dateString = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+  let filter = {
+    $or: [
+      {
+        permanent: false,
+      },
+      {
+        permanent: true,
+        free: { $in: [dateString] },
+      },
+    ],
   }
+  const client = await connect()
+  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const parkingBookingsCollection = client
+    .db("booking")
+    .collection<ParkingBooking>("parking_bookings")
+
+  const bookingsForDate = (await parkingBookingsCollection
+    .find({ date: dateString })
+    .toArray()) as ParkingBooking[]
+
+  const availableParkingSpaces = await parkingSpacesCollection
+    .find({
+      $and: [
+        filter,
+
+        { title: { $nin: bookingsForDate.map((booking) => booking.parking) } },
+      ],
+    })
+    .toArray()
+
+  return availableParkingSpaces.length
+}
+
+export async function getAvailableParkingSpaces(date: Date) {
+  const dateString = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+  let filter = {
+    $or: [
+      {
+        permanent: false,
+      },
+      {
+        permanent: true,
+        free: { $in: [dateString] },
+      },
+    ],
+  }
+  const client = await connect()
+  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const parkingBookingsCollection = client
+    .db("booking")
+    .collection<ParkingBooking>("parking_bookings")
+
+  const bookingsForDate = (await parkingBookingsCollection
+    .find({ date })
+    .toArray()) as ParkingBooking[]
+
+  const availableParkingSpaces = await parkingSpacesCollection
+    .find({
+      $and: [
+        filter,
+
+        { title: { $nin: bookingsForDate.map((booking) => booking.parking) } },
+      ],
+    })
+    .toArray()
+
+  return availableParkingSpaces
 }
 export interface BookingConfirmationType {
   success: boolean
