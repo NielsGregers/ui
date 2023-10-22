@@ -20,6 +20,7 @@
     "paths": {
       "@/*": ["./*"],
       "@/components/ui/*": ["./registry/new-york/ui/*"],
+      "@/components/*": ["./components/*"],
       "contentlayer/generated": ["./.contentlayer/generated"],
       "react": [ "./node_modules/@types/react" ]
     },

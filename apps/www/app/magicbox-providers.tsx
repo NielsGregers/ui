@@ -60,8 +60,9 @@ export const MagicboxProvider = ({ children }: Props) => {
 
   const magicbox: MagicboxContextType = {
     session, version, refresh: () => {
-      setversion(version + 1)
-    }
+      setversion(version + 1);
+    },
+    tenant: "christianiabpos"
   }
   const pca = new PublicClientApplication(configuration);
 

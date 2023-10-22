@@ -3,8 +3,8 @@
 import { useContext, useEffect, useState } from "react";
 import { CavaContext, Cava } from "./cavacontext";
 import { MagicboxContext } from "../magicbox-context";
-import { getCavaOrders } from "./data";
-import { Item, ItemGroup, Order } from "./data/schemas";
+import { getCavaOrders } from "./[site]/data";
+import { Item, ItemGroup, Order } from "./[site]/data/schemas";
 
 import {
 

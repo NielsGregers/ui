@@ -61,6 +61,7 @@ export interface Root {
     Text_x0020_Color: string
     Link_x0020_URL: LinkX0020Url
     Embed_x0020_URL?: EmbedX0020Url
+    Openin?: string
     id: string
     ContentType: string
     Modified: string
@@ -79,6 +80,11 @@ export interface Root {
     _ComplianceTagWrittenTime: string
     _ComplianceTagUserId: string
     Script?: string
+    Supporteddevices?: string[]
+    SupportedNetwork?: string[]
+    SupportedUsers?: string[]
+    SupportingProcesses?: string[]
+    ResponsibleLookupId?: string
   }
   
   export interface Icon {

@@ -70,25 +70,6 @@ export default function RootPage() {
 
 
   React.useEffect(() => {
-    const load = async () => {
-      debugger
-      const res = await https<any>(
-        token ?? "",
-        "GET",
-        "https://christianiabpos.sharepoint.com/sites/intra365/_api/sitepages/pages/GetTranslations('16399343-d200-4bfe-b67d-4f8321a0dfab')"
-      )
-      if (!res.hasError) {
-        
-        //setMe(res.data)
-      }
-    }
-    if (token && pageId) {
-     
-      load()
-    }
-  }, [token, pageId])
-
-  React.useEffect(() => {
     setTheme("transparent")
     return () => {
       setTheme("light")
