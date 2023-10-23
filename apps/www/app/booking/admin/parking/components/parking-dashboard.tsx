@@ -7,10 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/registry/default/ui/card"
+import { getParkingAvailability } from "@/app/booking/actions/parking/parkingBookings"
+import { getParkingSpaces } from "@/app/booking/actions/parking/parkingSpaces"
 
 import { ParkingBookingsTable } from "./parking-bookings-table"
 import { ParkingTable } from "./parking-table"
-import { getParkingSpaces } from "@/app/booking/actions/parking/parkingSpaces"
 
 export interface ParkingSpotMongo extends WithId<Document> {
   title: string
@@ -30,7 +31,7 @@ function ParkingDashboard() {
   // const magicbox = useContext(MagicboxContext)
 
   // useEffect(() => {
-    
+
   //   async function load(){
   //     const spots= await getParkingSpaces()
   //     setparkingSpots(spots)
@@ -38,9 +39,9 @@ function ParkingDashboard() {
   //   load()
 
   // }, [magicbox.version])
-  
-  const parkingSpots=use(getParkingSpaces())
 
+  const parkingSpots = use(getParkingSpaces())
+  const availableSpots = use(getParkingAvailability(new Date()))
 
   return (
     <div>
@@ -121,8 +122,8 @@ function ParkingDashboard() {
             </svg> */}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">70%</div>
-            <p className="text-xs text-muted-foreground">+19% from last week</p>
+            <div className="text-2xl font-bold">?</div>
+            <p className="text-xs text-muted-foreground">? from last week</p>
           </CardContent>
         </Card>
         <Card>
@@ -142,10 +143,12 @@ function ParkingDashboard() {
             </svg> */}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">90%</div>
-            <p className="text-xs text-muted-foreground">
-              -10% from week average
-            </p>
+            <div className="text-2xl font-bold">
+              {((parkingSpots.length - availableSpots) / parkingSpots.length) *
+                100}
+              %
+            </div>
+            <p className="text-xs text-muted-foreground">? from week average</p>
           </CardContent>
         </Card>
       </div>

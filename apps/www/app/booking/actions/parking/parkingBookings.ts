@@ -43,7 +43,8 @@ interface ParkingBooking {
   plates: string
 }
 
-export async function getBookingsByDate(date: string) {
+//old
+export async function getBookingsByStringDate(date: string) {
   let agg = [
     {
       $unwind: "$bookings",
@@ -90,6 +91,92 @@ export async function getBookingsByDate(date: string) {
   result = result.concat(result2)
   client.close()
   return result
+}
+
+export interface ParkingSpotBooking {
+  _id: string | undefined
+  parking: string
+  user: string | undefined
+  plates: string | undefined
+  type: "permanent" | "booked"
+  EV: boolean
+  handicapped: boolean
+}
+
+//new
+export async function getBookingsByDate(date: Date) {
+  let dateString = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+
+  //get all permanent parking spots with datestring in free array and all parking spots with false as permanent
+  let filter = {
+    $or: [
+      {
+        permanent: false,
+      },
+      {
+        permanent: true,
+        free: { $in: [dateString] },
+      },
+    ],
+  }
+  const client = await connect()
+  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const parkingBookingsCollection = client
+    .db("booking")
+    .collection<ParkingBooking>("parking_bookings")
+
+  const bookingsForDate = (await parkingBookingsCollection
+    .find({ date: dateString })
+    .toArray()) as ParkingBooking[]
+
+  //get all parking spots that are booked for date and are not permanent or are permanent and date is not in free array
+  const bookedParkingSpaces = await parkingSpacesCollection
+    .find({
+      $or: [
+        {
+          title: { $in: bookingsForDate.map((booking) => booking.parking) },
+        },
+        {
+          permanent: true,
+          free: { $nin: [dateString] },
+        },
+      ],
+    })
+    .toArray()
+
+  //convert bookedParkingSpaces to ParkingSpotBooking
+  const bookedParkingSpacesConverted: ParkingSpotBooking[] =
+    bookedParkingSpaces.map((booking) => {
+      if (booking.permanent && !booking.free.includes(dateString)) {
+        return {
+          _id: booking._id.toString(),
+          parking: booking.title,
+          user: booking.bookedBy,
+          plates: booking.licence.toUpperCase(),
+          type: "permanent",
+          EV: booking.EV,
+          handicapped: booking.handicapped,
+        }
+      } else {
+        const bookingForDate = bookingsForDate.find(
+          (booking2) => booking2._id === booking.title + "_" + dateString
+        )
+        return {
+          _id: bookingForDate?._id.toString(),
+          parking: booking.title,
+          user: bookingForDate?.user,
+          plates: bookingForDate?.plates.toUpperCase(),
+          type: "booked",
+          EV: booking.EV,
+          handicapped: booking.handicapped,
+        }
+      }
+    }) ?? []
+  return bookedParkingSpacesConverted
 }
 
 //old
@@ -383,7 +470,7 @@ export async function getAvailableParkingSpaces(date: Date) {
     .collection<ParkingBooking>("parking_bookings")
 
   const bookingsForDate = (await parkingBookingsCollection
-    .find({ date })
+    .find({ dateString })
     .toArray()) as ParkingBooking[]
 
   const availableParkingSpaces = await parkingSpacesCollection
