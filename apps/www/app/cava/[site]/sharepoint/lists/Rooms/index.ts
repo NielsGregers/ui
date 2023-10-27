@@ -3,9 +3,10 @@
 
 		export const listName = "Rooms"
 		export const listURL = "Lists/Rooms"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"LocationonFloor"|"FloorMapZoom"|"Provisioning_x0020_Status"|"Email"|"Capacity"|"RestrictedTo"|"TeamsMeetingRoom"|"Canbeusedforreceptions"|"DeviceSerialNumber"|"Price_x0020_List"|"CiscoVideo"|"Production"|"_ColorTag"|"Comments"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"LocationonFloor"|"FloorMapZoom"|"Provisioning_x0020_Status"|"Email"|"Capacity"|"RestrictedTo"|"TeamsMeetingRoom"|"Canbeusedforreceptions"|"DeviceSerialNumber"|"Price_x0020_List"|"CiscoVideo"|"Production"
 	export const dependencies =["Pricelists2"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,9 +21,10 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		LocationonFloor: item.fields.LocationonFloor ? item.fields.LocationonFloor : "",
 			FloorMapZoom: item.fields.FloorMapZoom ? item.fields.FloorMapZoom : "",
@@ -36,8 +38,6 @@
 			Price_x0020_List: mapLookup("Pricelists2",item.fields.Price_x0020_ListLookupId),
 			CiscoVideo: item.fields.CiscoVideo ? true : false,
 			Production: item.fields.Production ? true : false,
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
-			Comments: item.fields.Comments ? item.fields.Comments : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -45,6 +45,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		LocationonFloor : z.string(),
@@ -62,8 +63,6 @@
 			  }).nullable(),
 			CiscoVideo : z.boolean(),
 			Production : z.boolean(),
-			_ColorTag : z.string(),
-			Comments : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

@@ -37,20 +37,21 @@ export const getOneItemURL = (
 
 export const version = 1
 
-export function useSharePointList<T>(
+export function useSharePointList(
   token: string,
   tenantName: string,
   siteName: string,
-  listName: string
+  listName: string,
+
 ) {
-  const [items, setitems] = useState<T[]>([])
+  const [items, setitems] = useState<any[]>([])
   const [isLoading, setisLoading] = useState(false)
   const [error, seterror] = useState("")
 
   useEffect(() => {
     const load = async () => {
       setisLoading(true)
-      const result = await httpsGetAll<T>(
+      const result = await httpsGetAll<any>(
         token,
         getAllItemsURL(tenantName, siteName, listName)
       )
@@ -60,9 +61,10 @@ export function useSharePointList<T>(
         setitems([])
         return
       }
+        
         setitems(result.data ?? [])
     }
-    if (token && tenantName && siteName && listName) {
+    if (token && tenantName && siteName && listName ) {
       load()
     }
   }, [token, tenantName, siteName, listName])
@@ -84,7 +86,7 @@ export function useSharePointListItem<T>(
   schema:z.Schema
 ) {
   const [item, setitem] = useState<T>()
-  const [rawdata, setrawdata] = useState<any>()
+  const [itemRaw, setitemRaw] = useState<any>()
   const [isLoading, setisLoading] = useState(false)
   const [error, seterror] = useState("")
 
@@ -92,7 +94,7 @@ export function useSharePointListItem<T>(
     const load = async () => {
       setisLoading(true)
       setitem(undefined)
-      setrawdata(undefined)
+      setitemRaw(undefined)
 
       const result = await https<T>(
         token,
@@ -108,7 +110,7 @@ export function useSharePointListItem<T>(
       }
       
       if (result.data ) {
-        setrawdata(result.data)
+        setitemRaw(result.data)
         const mapped = schema.safeParse( map(result.data))
         
         if (mapped.success===true){
@@ -129,6 +131,6 @@ export function useSharePointListItem<T>(
     item,
     error,
     isLoading,
-    rawdata
+    itemRaw
   }
 }

@@ -3,9 +3,10 @@
 
 		export const listName = "Desks"
 		export const listURL = "Lists/Desks"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Email"|"ProvisioningStatus"|"LocationonWorkspace"|"Last_x0020_PowerShell_x0020_Comm"|"RestrictedTo"|"DeskNumber"|"_ColorTag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Email"|"ProvisioningStatus"|"LocationonWorkspace"|"Last_x0020_PowerShell_x0020_Comm"|"RestrictedTo"|"DeskNumber"
 	export const dependencies =[]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,9 +21,10 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		Email: item.fields.Email ? item.fields.Email : "",
 			ProvisioningStatus: item.fields.ProvisioningStatus ?? "",
@@ -30,7 +32,6 @@
 			Last_x0020_PowerShell_x0020_Comm: item.fields.Last_x0020_PowerShell_x0020_Comm ? item.fields.Last_x0020_PowerShell_x0020_Comm : "",
 			RestrictedTo: item.fields.RestrictedTo ? item.fields.RestrictedTo : "",
 			DeskNumber: item.fields.DeskNumber ? item.fields.DeskNumber : "",
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -38,6 +39,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		Email : z.string(),
@@ -46,7 +48,6 @@
 			Last_x0020_PowerShell_x0020_Comm : z.string(),
 			RestrictedTo : z.string(),
 			DeskNumber : z.string(),
-			_ColorTag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

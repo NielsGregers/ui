@@ -42,6 +42,7 @@ import { listName as StyleLibraryList,dependencies as StyleLibraryDependencies }
 import { listName as TestChangesList,dependencies as TestChangesDependencies } from "./TestChanges";
 import { listName as UseCasesList,dependencies as UseCasesDependencies } from "./UseCases";
 import { listName as WorkspacesList,dependencies as WorkspacesDependencies } from "./Workspaces";
+import { listName as UserInformationListList,dependencies as UserInformationListDependencies } from "./UserInformationList";
 export function map(){
 
 	const dependencies = []
@@ -110,6 +111,8 @@ dependencies.push({listName : UseCasesList,
 dependencies:  UseCasesDependencies }) 
 dependencies.push({listName : WorkspacesList,
 dependencies:  WorkspacesDependencies }) 
+dependencies.push({listName : UserInformationListList,
+dependencies:  UserInformationListDependencies }) 
 
 
 	return dependencies

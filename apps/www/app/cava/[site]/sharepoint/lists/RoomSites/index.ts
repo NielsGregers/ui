@@ -3,9 +3,10 @@
 
 		export const listName = "Room Sites"
 		export const listURL = "Lists/Room Sites"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"MailRequestto"|"Integration"|"IntegratedWith"|"Name_x0020_prefix"|"IntegrationStatus"|"VisitorSystem"|"Creategroupforsite"|"VisitorSystemParameters"|"Title_x0020_prefix"|"Country"|"_ColorTag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"MailRequestto"|"Integration"|"IntegratedWith"|"Name_x0020_prefix"|"IntegrationStatus"|"VisitorSystem"|"Creategroupforsite"|"VisitorSystemParameters"|"Title_x0020_prefix"|"Country"
 	export const dependencies =["Countries"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,9 +21,10 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		MailRequestto: item.fields.MailRequestto ? item.fields.MailRequestto : "",
 			Integration: item.fields.Integration ? item.fields.Integration : "",
@@ -34,7 +36,6 @@
 			VisitorSystemParameters: item.fields.VisitorSystemParameters ? item.fields.VisitorSystemParameters : "",
 			Title_x0020_prefix: item.fields.Title_x0020_prefix ? item.fields.Title_x0020_prefix : "",
 			Country: mapLookup("Countries",item.fields.CountryLookupId),
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -42,6 +43,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		MailRequestto : z.string(),
@@ -57,7 +59,6 @@
 				LookupId:z.number(),
 				LookupValue:z.string()
 			  }).nullable(),
-			_ColorTag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

@@ -123,4 +123,14 @@ export const roles = (site:string): Role[] => {return  [
     version: `draft`,
     description: `Technician is responsible for the meeting infrastructure`,
   },
+  {
+    sortOrder: 110,
+    key: `admin`,
+    name: `Administrator`,
+    image: `/cava/technician.svg`,
+    link: `/cava/${site}/role/admin`,
+    type: `supporting`,
+    version: `preview`,
+    description: `Administrator is responsible for settings and configuration of the CAVA system`,
+  },
 ]}

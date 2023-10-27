@@ -3,9 +3,10 @@
 
 		export const listName = "Catering Orders Invoices"
 		export const listURL = "Lists/Catering Orders Invoices"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Amount"|"InvoiceHTML"|"Sales_x0020_Order"|"CostCentre"|"Invoicedto"|"_ColorTag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Amount"|"InvoiceHTML"|"Sales_x0020_Order"|"CostCentre"|"Invoicedto"
 	export const dependencies =["Catering Orders"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,16 +21,16 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		Amount: item.fields.Amount,
 			InvoiceHTML: item.fields.InvoiceHTML ? item.fields.InvoiceHTML : "",
 			Sales_x0020_Order: mapLookup("Catering Orders",item.fields.Sales_x0020_OrderLookupId),
 			CostCentre: item.fields.CostCentre ? item.fields.CostCentre : "",
 			Invoicedto: item.fields.Invoicedto ?? "",
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -37,6 +38,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		Amount : z.number(),
@@ -47,7 +49,6 @@
 			  }).nullable(),
 			CostCentre : z.string(),
 			Invoicedto : z.string().nullable(),
-			_ColorTag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

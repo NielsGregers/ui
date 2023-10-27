@@ -3,9 +3,10 @@
 
 		export const listName = "Floors"
 		export const listURL = "Lists/Floors"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"FloorNumber"|"FloorPlan"|"HasWorkspaces"|"WayfindingInformation"|"Workspaces"|"Rooms"|"Rooms_x003a__x0020_Email"|"Rooms_x003a__x0020_Capacity"|"ProvisioningStatus"|"_ColorTag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"FloorNumber"|"FloorPlan"|"HasWorkspaces"|"WayfindingInformation"|"Workspaces"|"Rooms"|"Rooms_x003a__x0020_Email"|"Rooms_x003a__x0020_Capacity"|"ProvisioningStatus"
 	export const dependencies =["Workspaces","Rooms","Rooms","Rooms"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,9 +21,10 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		FloorNumber: item.fields.FloorNumber,
 			FloorPlan: item.fields.FloorPlan ? item.fields.FloorPlan : "",
@@ -33,7 +35,6 @@
 			Rooms_x003a__x0020_Email: mapLookupMulti("Rooms",item.fields.Rooms_x003a__x0020_EmailLookupId),
 			Rooms_x003a__x0020_Capacity: mapLookupMulti("Rooms",item.fields.Rooms_x003a__x0020_CapacityLookupId),
 			ProvisioningStatus: item.fields.ProvisioningStatus ?? "",
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -41,6 +42,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		FloorNumber : z.number(),
@@ -64,7 +66,6 @@
 				LookupValue:z.string()
 			  }).array().nullable(),
 			ProvisioningStatus : z.string().nullable(),
-			_ColorTag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

@@ -3,9 +3,10 @@
 
 		export const listName = "Catering Orders"
 		export const listURL = "Lists/Catering Orders"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"RoomEmail"|"Appointmentstart"|"Appointmentend"|"OrderData"|"Organizer_x0020_Email"|"Appointmentdata"|"Status"|"Visitor_x0020_Registrations"|"Equipment_x0020_Orders"|"Reference"|"Booking_x0020_Web_x0020_Link"|"Catering_x0020_order_x0020_refer"|"Stage"|"Comments"|"Cost_x0020_Centre"|"ConfirmationHTML"|"Site"|"Room"|"_ColorTag"|"Outlook_x0020_Reference"|"Outlook_x0020_Etag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"RoomEmail"|"Appointmentstart"|"Appointmentend"|"OrderData"|"Organizer_x0020_Email"|"Appointmentdata"|"Status"|"Visitor_x0020_Registrations"|"Equipment_x0020_Orders"|"Reference"|"Booking_x0020_Web_x0020_Link"|"Catering_x0020_order_x0020_refer"|"Stage"|"Comments"|"Cost_x0020_Centre"|"ConfirmationHTML"|"Site"|"Room"
 	export const dependencies =["Room Sites","Rooms"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,9 +21,10 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		RoomEmail: item.fields.RoomEmail ? item.fields.RoomEmail : "",
 			Appointmentstart: new Date(item.fields.Appointmentstart),
@@ -42,9 +44,6 @@
 			ConfirmationHTML: item.fields.ConfirmationHTML ? item.fields.ConfirmationHTML : "",
 			Site: mapLookup("Room Sites",item.fields.SiteLookupId),
 			Room: mapLookup("Rooms",item.fields.RoomLookupId),
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
-			Outlook_x0020_Reference: item.fields.Outlook_x0020_Reference ? item.fields.Outlook_x0020_Reference : "",
-			Outlook_x0020_Etag: item.fields.Outlook_x0020_Etag ? item.fields.Outlook_x0020_Etag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -52,6 +51,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		RoomEmail : z.string(),
@@ -78,9 +78,6 @@
 				LookupId:z.number(),
 				LookupValue:z.string()
 			  }).nullable(),
-			_ColorTag : z.string(),
-			Outlook_x0020_Reference : z.string(),
-			Outlook_x0020_Etag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

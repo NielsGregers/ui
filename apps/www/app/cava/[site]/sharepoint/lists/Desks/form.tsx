@@ -22,6 +22,7 @@
 	import { Button } from "@/registry/new-york/ui/button"
 	
 	export function ItemForm(props: { item?: ItemType }) {
+		const {item} = props
 		const [processing, setProcessing] = useState(false)
 		const [processPercentage, setProcessPercentage] = useState(0)
 		const [processTitle, setProcessTitle] = useState("")
@@ -47,33 +48,21 @@
 	
 	
 		useEffect(() => {
-			if (props.item) {
-				form.reset(props.item)
+			if (item) {
+				form.reset(item)
 			}
-		}, [form,props.item])
+		}, [form,item])
 	
 	
 	
 		return (
+			<div>
+		
 			<div className="flex">
 				<Form {...form}>
+				
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 						<FormField 
-			control={form.control}
-			name="Id"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>Id</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} />
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
-		/><FormField 
 			control={form.control}
 			name="Title"
 			render={({ field }) => (
@@ -81,66 +70,6 @@
 					<FormLabel>Title</FormLabel>
 					<FormControl>
 						<Input placeholder="" {...field} />
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
-		/><FormField 
-			control={form.control}
-			name="CreatedBy"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>CreatedBy</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} />
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
-		/><FormField 
-			control={form.control}
-			name="Created"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>Created</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} value={field.value.toISOString()} />
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
-		/><FormField 
-			control={form.control}
-			name="ModifiedBy"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>ModifiedBy</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} />
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
-		/><FormField 
-			control={form.control}
-			name="Modified"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>Modified</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} value={field.value.toISOString()} />
 					</FormControl>
 					<FormDescription>
 						
@@ -238,21 +167,6 @@
 					<FormMessage />
 				</FormItem>
 			)}
-		/><FormField
-			control={form.control}
-			name="_ColorTag"
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>Color Tag</FormLabel>
-					<FormControl>
-						<Input placeholder="" {...field} value={field.value??"" }/>
-					</FormControl>
-					<FormDescription>
-						
-					</FormDescription>
-					<FormMessage />
-				</FormItem>
-			)}
 		/>
 
 						<Button
@@ -263,9 +177,7 @@
 					  </Button>
 					</form>
 				</Form>
-				<pre className="max-w-[500px] overflow-auto">
-				{JSON.stringify(form.getValues(), null, 2)}
-			</pre>
+				
 				<ProcessStatusOverlay
 					done={!processing}
 					title={processTitle}
@@ -273,6 +185,7 @@
 					progress={processPercentage}
 				/>
 	
+			</div>
 			</div>
 		)
 	

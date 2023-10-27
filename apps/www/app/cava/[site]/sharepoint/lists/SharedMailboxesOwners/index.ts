@@ -3,9 +3,10 @@
 
 		export const listName = "Shared Mailboxes Owners"
 		export const listURL = "Lists/Shared Mailboxes Owners"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Owners"|"State"|"_ColorTag"|"VIP"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"Owners"|"State"
 	export const dependencies =[]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,13 +21,13 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
-		State: item.fields.State ?? "",
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
-			VIP: item.fields.VIP ? true : false,
+		Owners: item.fields.Owners ?? "",
+			State: item.fields.State ?? "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -34,11 +35,11 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
-		State : z.string().nullable(),
-			_ColorTag : z.string(),
-			VIP : z.boolean(),
+		Owners : z.string().array().nullable(),
+			State : z.string().nullable(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

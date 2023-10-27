@@ -3,9 +3,10 @@
 
 		export const listName = "Companies"
 		export const listURL = "Lists/Companies"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"field_1"|"field_2"|"ContactPerson"|"PrimaryLocation"|"_ColorTag"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"field_1"|"field_2"|"ContactPerson"|"PrimaryLocation"
 	export const dependencies =["Locations"]
 	
+
 	export function mapLookup(listName:string,item:any) {
 		return item ? {LookupId:parseInt(item),LookupValue:"id " + item + " in " + listName  }: null
 	}
@@ -20,15 +21,15 @@
 	return {
 		Id : item.id,
 	Title : item.fields.Title,
-	CreatedBy : item.createdBy.user.email,
+	eTag : JSON.parse(item.eTag),
+	CreatedBy : item.createdBy.user.email ?? item.createdBy.user.displayName,
 	Created :new Date(item.createdDateTime),
-	ModifiedBy : item.lastModifiedBy.user.email,
+	ModifiedBy : item.lastModifiedBy.user.email ?? item.lastModifiedBy.user.displayName,
 	Modified : new Date(item.lastModifiedDateTime),	
 		field_1: item.fields.field_1 ? item.fields.field_1 : "",
 			field_2: item.fields.field_2 ? item.fields.field_2 : "",
 			ContactPerson: item.fields.ContactPerson ?? "",
 			PrimaryLocation: mapLookup("Locations",item.fields.PrimaryLocationLookupId),
-			_ColorTag: item.fields._ColorTag ? item.fields._ColorTag : "",
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -36,6 +37,7 @@
 		ModifiedBy : z.string(),
 		Modified: z.date(),
 		Id: z.string(),
+		eTag : z.string(),
 		Title: z.string(),
 		
 		field_1 : z.string(),
@@ -45,7 +47,6 @@
 				LookupId:z.number(),
 				LookupValue:z.string()
 			  }).nullable(),
-			_ColorTag : z.string(),
 			})
 	
 	export type ItemType = z.infer<typeof schema>
