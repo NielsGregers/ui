@@ -111,24 +111,24 @@ function DateCards(props: PropTypes) {
         <CardContent className="h-2/4 items-center justify-center">
           <div className="grid h-full items-center">
             <Rules />
-            {/* <a href="garage_plan.pdf" target="_blank"> */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="w-full cursor-not-allowed opacity-20"
-                    variant="outline"
-                  >
-                    <BsFillMapFill className="mr-2 h-4 w-4" />
-                    Garage floor plan
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Coming soon!</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            {/* </a> */}
+            <a href="Tlocrt_garaze.pdf" target="_blank">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className="w-full cursor-not-allowed opacity-20"
+                      variant="outline"
+                    >
+                      <BsFillMapFill className="mr-2 h-4 w-4" />
+                      Garage floor plan
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Coming soon!</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </a>
             <a href="mailto:nexibooking-cro@nexigroup.com" target="_blank">
               <Button className="w-full" variant="outline">
                 <HiMail className="mr-2 h-4 w-4" />
