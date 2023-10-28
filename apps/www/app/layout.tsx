@@ -177,7 +177,7 @@ export interface ConfigCache {
 }
 
 export async function readConfigData(key:string,hostname:string) {
-  
+  if (!process.env.DATABASE) return {}
   const defaultConfig : ConfigCache = {
     date: new Date(),
     key,
@@ -252,7 +252,7 @@ export async function refreshConfigCache(key:string,hostname:string) {
 }
 
 export async function getConfigCache(host:string) {
-  
+  if (!process.env.MONGODB) return {}
   const client = await connect()
   const key = KEY + ":" + host
   let cache = await client
@@ -292,7 +292,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <head>
           <Script id="magicpot-clarity">
-            {config?.hostdata.TrackingCode}
+            {config?.hostdata?.TrackingCode}
           </Script>
 
 
