@@ -1,8 +1,7 @@
 # magicbox/ui
+> Make killer apps by decompositioning Microsoft 365 and other digital services and build Magical bite size dishes
 
-UI for the Magicbox project
-
-Based on the work of [shadcn/](https://github.com/shadcn/ui)
+[Get started in 5 min](https://koksmat.nexi-intra.com/docs/koksmat/ui/)
 
 ## License
 
