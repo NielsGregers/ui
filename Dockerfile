@@ -2,6 +2,7 @@ FROM node:lts
 WORKDIR /usr/src/app
 COPY . .
 RUN npm install -g pnpm turbo ts-node
+RUN npm cache clean --force
 WORKDIR /usr/src/app/apps/www
 RUN pnpm install
 # RUN mkdir -p /tmp/root/365admin-nodejs
