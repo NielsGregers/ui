@@ -2,7 +2,7 @@
 
 import { WithId } from "mongodb"
 
-import { connect } from "@/lib/mongodb"
+import { connect, connectBooking } from "@/lib/mongodb"
 
 export interface UserParkingBookingMongo extends WithId<Document> {
   title: string
@@ -65,8 +65,8 @@ export async function getBookingsByStringDate(date: string) {
       },
     },
   ]
-  const client = await connect()
-  const coll = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("parking")
   const cursor = coll.aggregate(agg)
   let result = (await cursor.toArray()) as ParkingBooking[]
   let agg2 = [
@@ -123,10 +123,10 @@ export async function getBookingsByDate(date: Date) {
       },
     ],
   }
-  const client = await connect()
-  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const parkingSpacesCollection = client.db("booking-cro").collection("parking")
   const parkingBookingsCollection = client
-    .db("booking")
+    .db("booking-cro")
     .collection<ParkingBooking>("parking_bookings")
 
   const bookingsForDate = (await parkingBookingsCollection
@@ -347,7 +347,7 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
     year: "numeric",
   })
 
-  const client = await connect()
+  const client = await connectBooking()
 
   //find permanent bookings
   const filter = {
@@ -355,7 +355,7 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
     bookedBy: userEmail,
   }
 
-  const coll = client.db("booking").collection("parking")
+  const coll = client.db("booking-cro").collection("parking")
   const cursor = coll.find(filter)
   const result = await cursor.toArray()
   let booking: UserParkingBooking | undefined = undefined
@@ -377,7 +377,7 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
   }
 
   if (booking === undefined) {
-    const bookingColl = client.db("booking").collection("parking_bookings")
+    const bookingColl = client.db("booking-cro").collection("parking_bookings")
     const bookingCursor = bookingColl.find({
       user: userEmail,
       date: dateString,
@@ -423,10 +423,10 @@ export async function getParkingAvailability(date: Date) {
       },
     ],
   }
-  const client = await connect()
-  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const parkingSpacesCollection = client.db("booking-cro").collection("parking")
   const parkingBookingsCollection = client
-    .db("booking")
+    .db("booking-cro")
     .collection<ParkingBooking>("parking_bookings")
 
   const bookingsForDate = (await parkingBookingsCollection
@@ -463,10 +463,10 @@ export async function getAvailableParkingSpaces(date: Date) {
       },
     ],
   }
-  const client = await connect()
-  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const parkingSpacesCollection = client.db("booking-cro").collection("parking")
   const parkingBookingsCollection = client
-    .db("booking")
+    .db("booking-cro")
     .collection<ParkingBooking>("parking_bookings")
 
   const bookingsForDate = (await parkingBookingsCollection
@@ -576,10 +576,10 @@ export async function newParkingBooking(
     }
     bookingType = "both"
   }
-  const client = await connect()
-  const parkingSpacesCollection = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const parkingSpacesCollection = client.db("booking-cro").collection("parking")
   const parkingBookingsCollection = client
-    .db("booking")
+    .db("booking-cro")
     .collection<ParkingBooking>("parking_bookings")
 
   const bookingsForDate = (await parkingBookingsCollection
@@ -699,11 +699,11 @@ export async function newParkingBooking(
 
 export async function deleteBooking(booking: UserParkingBooking) {
   let result
-  const client = await connect()
+  const client = await connectBooking()
 
   if (booking.type === "permanent") {
     const parkingSpacesCollection = client
-      .db("booking")
+      .db("booking-cro")
       .collection<ParkingSpace>("parking")
     //add date from booking to free array
     result = await parkingSpacesCollection.findOneAndUpdate(
@@ -712,7 +712,7 @@ export async function deleteBooking(booking: UserParkingBooking) {
     )
   } else {
     const parkingBookingsCollection = client
-      .db("booking")
+      .db("booking-cro")
       .collection<ParkingBooking>("parking_bookings")
     //delete booking
     result = await parkingBookingsCollection.findOneAndDelete({

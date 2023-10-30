@@ -1,12 +1,12 @@
 "use server"
 
-import { connect } from "@/lib/mongodb"
+import { connect, connectBooking } from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 import { ParkingSpot, ParkingSpotMongo } from "../../admin/parking/components/parking-dashboard"
 
 export async function deleteParkingSpot(parkingSpotId: string) {
-  const client = await connect()
-  const coll = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("parking")
   let result
 
   try {
@@ -23,8 +23,8 @@ export async function deleteParkingSpot(parkingSpotId: string) {
 export async function getParkingSpaces(){
   const filter = {}
 
-  const client = await connect()
-  const coll = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("parking")
   const cursor = coll.find(filter)
 
   const parkingSpotsMongo: ParkingSpotMongo[] = (await 
@@ -44,8 +44,8 @@ export async function getParkingSpaces(){
 }
 
 export async function addParkingSpot(title: string, bookedBy: string, permanent: boolean, EV:boolean, handicapped:boolean, licence:string) {
-  const client = await connect()
-  const coll = client.db("booking").collection("parking")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("parking")
   const result = await coll.insertOne({
     title,
     bookedBy,

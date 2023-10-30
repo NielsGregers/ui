@@ -2,7 +2,7 @@
 
 import { WithId } from "mongodb"
 
-import { connect } from "@/lib/mongodb"
+import { connect, connectBooking } from "@/lib/mongodb"
 
 interface LicencePlates extends WithId<Document> {
   licenceplates: string[]
@@ -16,8 +16,8 @@ export async function getUserPlates(email: string) {
     _id: 0,
     upn: 0,
   }
-  const client = await connect()
-  const coll = client.db("booking").collection("users")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("users")
   const cursor = coll.find(filter, { projection })
   const data = (await cursor.toArray()) as LicencePlates[]
   const result = data[0]?.licenceplates ?? []
@@ -34,8 +34,8 @@ export async function addUserPlates(email: string, plates: string[]) {
       licenceplates: plates,
     },
   }
-  const client = await connect()
-  const coll = client.db("booking").collection("users")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("users")
   const cursor = coll.find({ upn: email })
   const user = await cursor.toArray()
   if (user.length <= 0) {

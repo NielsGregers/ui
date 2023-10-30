@@ -13,6 +13,7 @@
         "https_proxy",
         "SECRET",
         "MONGODB",
+        "MONGODBBOOKING",
         "AZURE_AD_CLIENT_ID",
         "AZURE_AD_CLIENT_SECRET",
         "AZURE_AD_TENANT_ID",

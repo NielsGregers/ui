@@ -2,7 +2,7 @@
 
 import { WithId } from "mongodb"
 
-import { connect } from "@/lib/mongodb"
+import { connect, connectBooking } from "@/lib/mongodb"
 
 import { User } from "../../admin/users/components/user-table-columns"
 
@@ -18,8 +18,8 @@ export async function getUserPlates(email: string) {
     _id: 0,
     upn: 0,
   }
-  const client = await connect()
-  const coll = client.db("booking").collection("users")
+  const client = await connectBooking()
+  const coll = client.db("booking-cro").collection("users")
   const cursor = coll.find(filter, { projection })
   const data = (await cursor.toArray()) as LicencePlates[]
   const result = data[0]?.licenceplates ?? []
@@ -28,9 +28,10 @@ export async function getUserPlates(email: string) {
 }
 
 export async function getAllUsers() {
-  const client = await connect()
-  const bookingUsersColl = client.db("booking").collection("users")
-  const nextauthUsersColl = client.db("nextauth").collection("users")
+  const clientUser = await connect()
+  const clientBooking = await connectBooking()
+  const bookingUsersColl = clientBooking.db("booking-cro").collection("users")
+  const nextauthUsersColl = clientUser.db("nextauth").collection("users")
   const bookingUsers = await bookingUsersColl.find({}).toArray()
 
   const users: User[] = []
@@ -45,6 +46,7 @@ export async function getAllUsers() {
       name: nextauthUser?.name,
     })
   }
-  await client.close()
+  await clientUser.close()
+  await clientBooking.close()
   return users
 }
