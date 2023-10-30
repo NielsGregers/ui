@@ -2,7 +2,7 @@
 
 import React, { use, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { set } from "date-fns"
+import { addDays, set } from "date-fns"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { BiHandicap } from "react-icons/bi"
 import { BsFillEvStationFill } from "react-icons/bs"
@@ -51,6 +51,17 @@ import {
 } from "../actions/parking/parkingBookings"
 import { getUserPlates } from "../actions/parking/user"
 import { LicencePicker } from "./licenceplate-picker"
+
+function isDisabled(date: Date, hoursUntil: number) {
+  return (
+    new Date(date.setHours(12, 0, 0, 0)).getTime() <=
+      new Date(new Date().setHours(12, 0, 0, 0)).getTime() ||
+    (new Date().getTime() >
+      new Date(new Date().setHours(hoursUntil, 0, 0, 0)).getTime() &&
+      new Date(date.setHours(12, 0, 0, 0)).getTime() ===
+        new Date(addDays(new Date().setHours(12, 0, 0, 0), 1)).getTime())
+  )
+}
 
 function ReserveParkingButton(params: {
   date: Date
@@ -209,14 +220,7 @@ function ReserveParkingButton(params: {
           >
             <DialogTrigger asChild>
               <Button
-                disabled={
-                  (date.getDate() ===
-                    new Date(
-                      new Date().setDate(new Date().getDate() + 1)
-                    ).getDate() &&
-                    new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
-                  date.getDate() <= new Date().getDate()
-                }
+                disabled={isDisabled(date, 16)}
                 className="w-full rounded-full"
                 variant="outline"
                 //   onClick={() => setisopen(true)}
@@ -403,14 +407,7 @@ function ReserveParkingButton(params: {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          {!(
-            (date.getDate() ===
-              new Date(
-                new Date().setDate(new Date().getDate() + 1)
-              ).getDate() &&
-              new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
-            date.getDate() <= new Date().getDate()
-          ) && (
+          {!isDisabled(date, 16) && (
             <div className="flex w-full items-center justify-center text-xs ">
               {available ? available + " spots available" : ""}
             </div>

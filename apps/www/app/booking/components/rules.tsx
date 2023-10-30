@@ -29,7 +29,7 @@ function Rules() {
         <div className="flex flex-col gap-4">
           <div>
             • The parking space can only be booked in advance and latest
-            <span style={{ fontWeight: "bold" }}> until 12.p.m</span> of the
+            <span style={{ fontWeight: "bold" }}> until 4 p.m</span> of the
             current day when booking a spot{" "}
             <span style={{ fontWeight: "bold" }}>for the next day.</span>
           </div>
