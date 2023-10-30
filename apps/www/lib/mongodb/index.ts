@@ -1,5 +1,5 @@
 // https://www.mongodb.com/community/forums/t/mongodb-equivalent-of-stored-procedures/130476
-
+/* eslint-disable turbo/no-undeclared-env-vars */
 import * as mongoDB from "mongodb"
 
 /*
