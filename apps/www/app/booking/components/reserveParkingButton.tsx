@@ -45,6 +45,7 @@ import {
   BookingConfirmationType,
   UserParkingBooking,
   deleteBooking,
+  getBookingByDate,
   getParkingAvailability,
   getUsersBookingByDate,
   newParkingBooking,
@@ -87,10 +88,7 @@ function ReserveParkingButton(params: {
 
   useEffect(() => {
     async function getBooking() {
-      let result = await getUsersBookingByDate(
-        params.userEmail ?? "",
-        params.date
-      )
+      let result = await getBookingByDate(params.userEmail ?? "", params.date)
       if (!result) {
         let available = await getParkingAvailability(params.date)
         if (available) {
@@ -233,12 +231,14 @@ function ReserveParkingButton(params: {
             <DialogContent className="bg-white dark:bg-black ">
               <DialogHeader>
                 <DialogTitle>
-                  Reserve parking for{" "}
-                  {date?.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                  })}
+                  <div className="text-xl">Reserve parking</div>
+                  <div className="text-sm italic">
+                    {date?.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </div>
                 </DialogTitle>
                 {/* <DialogDescription>
             Make changes to your profile here. Click save when you're done.
@@ -251,14 +251,14 @@ function ReserveParkingButton(params: {
                 </div>
               )}
               {booking === undefined && (
-                <div className="grid max-w-lg space-y-2">
+                <div className="flex max-w-lg flex-col space-y-2">
                   {result === undefined && (
-                    <div className="grid max-w-[300px] space-y-3">
+                    <div className="flex flex-col  space-y-3">
                       <LicencePicker
                         onPlatesChange={platesChanged}
                         userEmail={params.userEmail}
                       />
-                      <div className=" flex flex-row space-x-6 text-sm">
+                      <div className=" my-3 flex flex-row space-x-6 text-sm">
                         <div className="flex flex-row space-x-2 text-sm">
                           <Switch
                             className="checked:bg-green-700"
@@ -272,7 +272,7 @@ function ReserveParkingButton(params: {
                         </div>
                         <div className="flex flex-row space-x-2 text-sm">
                           <Switch
-                            className="bg-white dark:bg-black"
+                            className=""
                             checked={handicapped}
                             onCheckedChange={() => sethandicapped(!handicapped)}
                           />
@@ -282,6 +282,16 @@ function ReserveParkingButton(params: {
                           />
                         </div>
                       </div>
+                      <Button
+                        disabled={plates === "" || newBooking}
+                        type="submit"
+                        onClick={() => {
+                          setnewBooking(true)
+                          handleBooking()
+                        }}
+                      >
+                        Book
+                      </Button>
                     </div>
                   )}
                   {result?.cause === "No available parking slots for EV" && (
@@ -391,7 +401,7 @@ function ReserveParkingButton(params: {
                   )}
                 </div>
               )}
-              <DialogFooter>
+              {/* <DialogFooter>
                 {result === undefined && booking === undefined && (
                   <Button
                     disabled={plates === "" || newBooking}
@@ -404,7 +414,7 @@ function ReserveParkingButton(params: {
                     Book
                   </Button>
                 )}
-              </DialogFooter>
+              </DialogFooter> */}
             </DialogContent>
           </Dialog>
           {!isDisabled(date, 16) && (
@@ -490,14 +500,7 @@ function ReserveParkingButton(params: {
 
               <DropdownMenuItem
                 onClick={() => handleCancel()}
-                disabled={
-                  (date.getDate() ===
-                    new Date(
-                      new Date().setDate(new Date().getDate() + 1)
-                    ).getDate() &&
-                    new Date(new Date().setHours(12, 0, 0, 0)) < new Date()) ||
-                  date.getDate() <= new Date().getDate()
-                }
+                disabled={isDisabled(date, 16)}
                 className="cursor-pointer text-red-700"
               >
                 Cancel

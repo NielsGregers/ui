@@ -406,6 +406,105 @@ export async function getUsersBookingByDate(userEmail: string, date: Date) {
   return booking
 }
 
+export async function getBookingByDate(userEmail: string, date: Date) {
+  let dateString: string = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+
+  const client = await connectBooking()
+
+  const coll = client.db("booking-cro").collection("parking")
+  const cursor = coll.find({})
+  const allParkingSpots = await cursor.toArray()
+
+  let booking: UserParkingBooking | undefined = undefined
+
+  //find permanent bookings
+  // const filter = {
+  //   permanent: true,
+  //   bookedBy: userEmail,
+  // }
+
+  // const coll = client.db("booking-cro").collection("parking")
+  // const cursor = coll.find(filter)
+  // const result = await cursor.toArray()
+
+  //Check if user has permanent booking for date and retrieve parking spot
+  const result = allParkingSpots.filter((parkingSpot) => {
+    return (
+      parkingSpot.permanent &&
+      parkingSpot.bookedBy === userEmail &&
+      !parkingSpot.free.includes(dateString)
+    )
+  })
+
+  if (result.length > 0) {
+    booking = {
+      id: result[0]._id.toString(),
+      parkingTitle: result[0].title,
+      EV: result[0].EV,
+      handicapped: result[0].handicapped,
+      date: dateString,
+      plates: result[0].licence,
+      floor: result[0].floor,
+      type: "permanent",
+    }
+  }
+
+  // if (result.length > 0) {
+  //   let free = result[0].free as string[]
+
+  //   if (!free.includes(dateString)) {
+  //     booking = {
+  //       id: result[0]._id.toString(),
+  //       parkingTitle: result[0].title,
+  //       EV: result[0].EV,
+  //       handicapped: result[0].handicapped,
+  //       date: dateString,
+  //       plates: result[0].licence,
+  //       floor: result[0].floor,
+  //       type: "permanent",
+  //     }
+  //   }
+  // }
+
+  if (booking === undefined) {
+    const bookingColl = client.db("booking-cro").collection("parking_bookings")
+    const bookingCursor = bookingColl.find({
+      user: userEmail,
+      date: dateString,
+    })
+    const bookingResult = await bookingCursor.toArray()
+    if (bookingResult.length > 0) {
+      const oneBooking = bookingResult[0]
+      // const parkingResult = (await coll
+      //   .find({
+      //     title: oneBooking.parking,
+      //   })
+      //   .toArray()) as UserParkingBookingMongo[]
+
+      const parkingResult = allParkingSpots.filter((parkingSpot) => {
+        return parkingSpot.title === oneBooking.parking
+      })
+
+      booking = {
+        id: bookingResult[0]._id.toString(),
+        parkingTitle: parkingResult[0].title,
+        EV: parkingResult[0].EV,
+        handicapped: parkingResult[0].handicapped,
+        date: oneBooking.date,
+        plates: oneBooking.plates,
+        floor: parkingResult[0].floor,
+        type: "booked",
+      }
+    }
+  }
+  await client.close()
+  return booking
+}
+
 export async function getParkingAvailability(date: Date) {
   const dateString = date.toLocaleDateString("en-GB", {
     day: "2-digit",
