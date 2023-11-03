@@ -143,6 +143,7 @@ export async function readConfigData(key: string, hostname: string) {
   return cache;
 }
 export async function refreshConfigCache(key: string, hostname: string) {
+  return
   console.log("Refreshing Config cache");
   const client = await connect();
   const cache = await readConfigData(key, hostname);

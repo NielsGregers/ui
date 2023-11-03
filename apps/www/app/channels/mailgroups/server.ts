@@ -9,7 +9,7 @@ import * as fs from "fs"
 
   
 export async function loadAndparseExcel(){
-    const filename = "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/channels/mailgroups/Mail List (10-2023).XLSX"
+    const filename = "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/channels/mailgroups/Mail List (11-2023).XLSX"
     const workbook = new Excel.Workbook();
     await workbook.xlsx.readFile(filename)
     

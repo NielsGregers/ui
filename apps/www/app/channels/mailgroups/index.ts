@@ -1,3 +1,4 @@
+export const tobedeleted = 1
 // import { Result, https } from "@/lib/httphelper";
 
 
