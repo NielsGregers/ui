@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 
 import { MagicboxContext } from "../../magicbox-context"
-import { CavaContext } from "../cavacontext"
+import { CavaContext } from "./cavacontext"
 import { getCavaOrders } from "./data"
 import { roles } from "./data/roles"
 
@@ -131,7 +131,7 @@ export default function Cava({ params }: { params: {  site: string } }) {
                   <CardFooter className="flex justify-between">
                     <div className="grow"></div>
                     <Button disabled={role.version === "draft"}>
-                      <Link href={role.link}>{role.name} role</Link>
+                      <Link href={role.link}>View</Link>
                     </Button>
                   </CardFooter>
                 </Card>

@@ -3,7 +3,7 @@
 
 		export const listName = "Rooms"
 		export const listURL = "Lists/Rooms"
-		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"LocationonFloor"|"FloorMapZoom"|"Provisioning_x0020_Status"|"Email"|"Capacity"|"RestrictedTo"|"TeamsMeetingRoom"|"Canbeusedforreceptions"|"DeviceSerialNumber"|"Price_x0020_List"|"CiscoVideo"|"Production"
+		export type FieldNames = "Id"|"Title"|"CreatedBy"|"Created"|"ModifiedBy"|"Modified"|"LocationonFloor"|"FloorMapZoom"|"Provisioning_x0020_Status"|"Email"|"Capacity"|"RestrictedTo"|"TeamsMeetingRoom"|"Canbeusedforreceptions"|"DeviceSerialNumber"|"Price_x0020_List"|"CiscoVideo"|"Production"|"ManagedBy"
 	export const dependencies =["Pricelists2"]
 	
 
@@ -38,6 +38,8 @@
 			Price_x0020_List: mapLookup("Pricelists2",item.fields.Price_x0020_ListLookupId),
 			CiscoVideo: item.fields.CiscoVideo ? true : false,
 			Production: item.fields.Production ? true : false,
+			
+			ManagedBy: item.fields.ManagedBy ? (item.fields.ManagedBy as any[]).map(manager=>manager.Email): [],
 			}}
 	export const schema = z.object({
 		CreatedBy : z.string(),
@@ -63,6 +65,7 @@
 			  }).nullable(),
 			CiscoVideo : z.boolean(),
 			Production : z.boolean(),
+			ManagedBy : z.array(z.string()),
 			})
 	
 	export type ItemType = z.infer<typeof schema>

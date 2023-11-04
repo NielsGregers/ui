@@ -35,7 +35,7 @@ import {
 import { SearchUserForm } from "@/components/searchuser"
 import { toast, useToast } from "@/registry/default/ui/use-toast"
 import { DialogFooter } from "@/registry/new-york/ui/dialog"
-import { CavaContext } from "@/app/cava/cavacontext"
+import { CavaContext } from "@/app/cava/[site]/cavacontext"
 import { getCavaOrders } from "@/app/cava/[site]/data"
 import { MagicboxContext } from "@/app/magicbox-context"
 

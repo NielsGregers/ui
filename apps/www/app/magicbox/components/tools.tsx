@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { ToolbarItem } from "../data/sharepoint";
 import {Root as UserProfile} from "../data/sharepoint/userprofile"
 
+import { MagicboxContext } from "@/app/magicbox-context"
+
 type openInOptions = "Same page" | "New page" | "Popup"
 export interface ToolProps extends React.HTMLAttributes<HTMLDivElement> {
   link: string
@@ -108,7 +110,7 @@ useEffect(() => {
 }
 
 interface ToolsProps extends React.HTMLAttributes<HTMLDivElement> {
-  accessToken: string
+  accessToken?: string
 }
 
 export function MagicBar({
@@ -121,14 +123,16 @@ export function MagicBar({
 
 
   const [tools, settools] = useState<ToolbarItem[]>()
-
+  const magicbox = useContext(MagicboxContext)
 
   useEffect(() => {
     (async () => {
-      if (!accessToken) return
-      const profileResponse = await https<UserProfile>(accessToken, "GET","https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/nexiintra-hub:/lists/User Profiles/items?$expand=fields&$filter=fields/Title+eq+'niels.johansen@nexigroup.com'")
-      debugger
-      const response = await httpsGetAll<ToolbarItem>(accessToken, "https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/intranets-tools:/lists/ToolbarItems/items?$expand=fields&$filter=fields/ToolbarLookupId eq 2")
+      const token =  (magicbox.session?.accessToken ?? "")
+      //debugger
+      if (!token) return
+      const profileResponse = await https<UserProfile>(token, "GET","https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/nexiintra-hub:/lists/User Profiles/items?$expand=fields&$filter=fields/Title+eq+'niels.johansen@nexigroup.com'")
+      
+      const response = await httpsGetAll<ToolbarItem>(token, "https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/intranets-tools:/lists/ToolbarItems/items?$expand=fields&$filter=fields/ToolbarLookupId eq 2")
       if (response.hasError) {
         alert(response.errorMessage)
         return
@@ -136,7 +140,7 @@ export function MagicBar({
       settools(response.data)
     })()
   }
-    , [accessToken])
+    , [accessToken,magicbox.session?.accessToken])
 
   return (
     <div className={cn("overflow-hidden", className)} {...props}>

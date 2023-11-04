@@ -24,7 +24,7 @@ import { Search } from "@/app/shadcn/examples/dashboard/components/search"
 import TeamSwitcher from "@/app/shadcn/examples/dashboard/components/team-switcher"
 import { UserNav } from "@/app/shadcn/examples/dashboard/components/user-nav"
 import { useContext } from "react"
-import { CavaContext } from "../../cavacontext"
+import { CavaContext } from "../cavacontext"
 import ToSmall from "@/components/tosmall"
 
 

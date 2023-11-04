@@ -18,7 +18,7 @@ import {
 import { useToast } from "@/registry/new-york/ui/use-toast"
 import { MagicboxContext } from "@/app/magicbox-context"
 
-import { CavaContext } from "../../cavacontext"
+import { CavaContext } from "../cavacontext"
 import { Appointment, getAppointments } from "../data/officegraph"
 import { getRooms } from "../data/sharepoint"
 

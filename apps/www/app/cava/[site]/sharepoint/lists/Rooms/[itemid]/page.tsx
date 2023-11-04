@@ -14,6 +14,7 @@
 	import { ItemType, dependencies, listName, schema,map,listURL } from ".."
 	import { ItemForm } from "../form"
 	import Link from "next/link"
+import { LimitAccessToRoomForm } from "../limitaccessform"
 
 	export default function ItemPage({
 	  params,
@@ -47,14 +48,18 @@
 <div className="grow" />
 <Button variant={"link"}><Link target="_blank" href={"https://" + magicbox.tenant + ".sharepoint.com/sites/" + site + "/"+ listURL + "/DispForm.aspx?ID="+itemid}>View in SharePoint</Link></Button>
 </div>
-<ItemForm item={item} />
+<div>
+<LimitAccessToRoomForm item={item} />
+
+</div>
+{/* <ItemForm item={item} />
 		  <pre>
 				{JSON.stringify(item, null, 2)}
 			</pre>
 			<pre >
 				{JSON.stringify(itemRaw, null, 2)}
-			</pre>
-			</div>
+			</pre>*/}
+			</div> 
 		</div>
 	  )
 

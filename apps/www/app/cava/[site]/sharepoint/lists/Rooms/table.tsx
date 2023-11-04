@@ -13,8 +13,9 @@ import { DataTableRowActions } from "@/components/table/components/data-table-ro
 import Link from "next/link"
 import { Button } from "@/registry/new-york/ui/button"
 import { useState,useMemo } from "react"
+import { RoleItem } from "@/app/cava/[site]/cavacontext"
 
-export function RoomsTable(props: { items: ItemType[], viewFields?: FieldNames[],site:string,listName:string,hideSelect?:boolean,hideLink?:boolean }) {
+export function RoomsTable(props: { items: ItemType[], roles:RoleItem[], viewFields?: FieldNames[],site:string,listName:string,hideSelect?:boolean,hideLink?:boolean }) {
 	// table columns will be inserted here
 	const columns  = React.useMemo<ColumnDef<ItemType>[]>(()=> [
 	

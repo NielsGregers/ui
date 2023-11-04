@@ -1,10 +1,27 @@
 
+export type AccessRoleType = "role.kitchen"  
+| "role.runner"
+| "role.receptionist"
+| "role.dispatcher"
+| "role.security"
+| "role.technician"
+| "role.globaladmin"
+| "role.admin"
+| "role.admin.rooms.all"
+| "role.admin.rooms"
+| "orderservices"
+| "booking"
+| "planning"
+| "organizer"
+| "participant"
+| "presenter"
 interface Role {
   sortOrder: number;
   key: string;
   name: string;
   image: string;
   link: string;
+  accessrole: AccessRoleType | AccessRoleType[];
   type: `core` | `supporting` | `service`;
   version: `draft` | `preview` | `published`;
   description?: string;
@@ -14,6 +31,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 2,
     key: `bookplaces`,
+    accessrole: `booking`,
     name: `Book Places`,
     image: `/cava/inroom.svg`,
     link: `/cava/${site}/book`,
@@ -25,6 +43,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 4,
     key: `orderservices`,
+    accessrole: "orderservices",
     name: `Order Services`,
     image: `/cava/cava-dark.svg`,
     link: `/cava/${site}/salesorder`,
@@ -36,6 +55,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 70,
     key: `kitchen`,
+    accessrole: `role.kitchen`,
     name: `Kitchen`,
     image: `/cava/chef.svg`,
     link: `/cava/${site}/role/kitchen`,
@@ -46,6 +66,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 80,
     key: `waiter`,
+    accessrole: `role.runner`,
     name: `Runner`,
     image: `/cava/waiter.svg`,
     link: `/cava/${site}/role/waiter`,
@@ -56,6 +77,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 10,
     key: `organizer`,
+    accessrole: `organizer`,
     name: `Organizer`,
     image: `/cava/organizer.svg`,
     link: `/cava/${site}/role/organizer`,
@@ -66,6 +88,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 90,
     key: `participant`,
+    accessrole: `participant`,
     name: `Participant`,
     image: `/cava/participants.svg`,
     link: `/cava/${site}/role/participant`,
@@ -76,6 +99,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 91,
     key: `presenter`,
+    accessrole: `presenter`,
     name: `Presenter`,
     image: `/cava/presenter.svg`,
     link: `/cava/${site}/role/presenter`,
@@ -86,6 +110,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 85,
     key: `receptionist`,
+    accessrole: `role.receptionist`,
     name: `Receptionist`,
     image: `/cava/receptionist.svg`,
     link: `/cava/${site}/role/receptionist`,
@@ -96,6 +121,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 60,
     key: `dispatcher`,
+    accessrole: `role.dispatcher`,
     name: `Dispatcher`,
     image: `/cava/receptionist.svg`,
     link: `/cava/${site}/role/dispatcher`,
@@ -106,6 +132,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 99,
     key: `security`,
+    accessrole: `role.security`,  
     name: `Security`,
     image: `/cava/security.svg`,
     link: `/cava/${site}/role/security`,
@@ -116,6 +143,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 75,
     key: `technician`,
+    accessrole: `role.technician`,
     name: `Technician`,
     image: `/cava/technician.svg`,
     link: `/cava/${site}/role/technician`,
@@ -126,6 +154,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 110,
     key: `admin`,
+    accessrole: ["role.admin.rooms,all","role.admin.rooms"],
     name: `Administrator`,
     image: `/cava/technician.svg`,
     link: `/cava/${site}/role/admin`,
