@@ -18,19 +18,23 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
 
   return (
+<div>
+<SiteHeader /> 
 
   <div className="flex">
 
-<div className="w-[64px]">
+ <div className=" w-[64px] border-r border-gray-400">
+  <div className="sticky top-[48px]">
   <MagicBar  />
-</div>
+  </div>
+</div> 
     <div className="grow" >
-     <SiteHeader /> 
+    
       <div className="flex-1">{children}</div>
       <LocalSiteFooter />
       <SiteFooter />
     </div>
     </div>
- 
+    </div>
   )
 }

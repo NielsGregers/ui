@@ -154,7 +154,7 @@ export const roles = (site:string): Role[] => {return  [
   {
     sortOrder: 110,
     key: `admin`,
-    accessrole: ["role.admin.rooms,all","role.admin.rooms"],
+    accessrole: ["role.admin.rooms.all","role.admin.rooms"],
     name: `Administrator`,
     image: `/cava/technician.svg`,
     link: `/cava/${site}/role/admin`,

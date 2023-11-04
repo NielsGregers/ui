@@ -11,6 +11,9 @@ import { listName, ItemType, map,schema } from "@/app/cava/[site]/sharepoint/lis
 import { RoomsTable } from "@/app/cava/[site]/sharepoint/lists/Rooms/table"
 import { AccessRoleType } from "../../../data/roles"
 import { de } from "date-fns/locale"
+import { Button } from "@/registry/new-york/ui/button"
+import Link from "next/link"
+import { PageHeader } from "@/app/cava/components/pageheader"
 
 export default function RoomAdminRole({ params }: { params: { site: string } }) {
   const magicbox = useContext(MagicboxContext)
@@ -81,13 +84,39 @@ const [hasaccess, sethasaccess] = useState(true)
     <div>
       {isLoading && <div>Loading...</div>}
       {(error || loaderror) && <div className="text-red-700">{error}{loaderror}</div>}
+      {!isLoading && !error && <div>
+        <div>
+        <PageHeader title="Rooms that you can manage" />
+          <div className="flex">
+            <div className="pl-5 text-xs">
+              List: {listName} | Items: {items.length} | Managed by you: {parsedItems.length}
+            </div>
+            <div className="grow" />
+            <Button variant={"link"}>
+              <Link
+                target="_blank"
+                href={
+                  "https://" +
+                  tenant +
+                  ".sharepoint.com/sites/" +
+                  site +
+                  "/lists/" +
+                  listName +
+                  ""
+                }
+              >
+                View in SharePoint
+              </Link>
+            </Button>
+          </div>
+        </div>
       <RoomsTable
         items={parsedItems}
         site={site}
         listName={listName}
         roles={roles}
         viewFields={["Title", "Capacity","Email","Provisioning_x0020_Status"]}
-      />
+      /></div>}
     </div>
   )
 }

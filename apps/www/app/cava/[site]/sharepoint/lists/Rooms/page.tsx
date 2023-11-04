@@ -38,12 +38,13 @@ export default function ItemPage({ params }: { params: { site: string } }) {
     <div className="container" style={{ minHeight: "100vh" }}>
       {isLoading && <div>Loading...</div>}
       {error && <div className="text-red-700">{error}</div>}
+    
       <RoomsTable
         items={parsedItems}
         site={site}
-        listName={listName}
-      />
-    </div>
+        listName={listName} 
+        roles={[]}      />
+        </div>
   )
 }
 
