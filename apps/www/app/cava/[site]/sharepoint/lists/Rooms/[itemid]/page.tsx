@@ -15,7 +15,7 @@ import { ItemType, dependencies, listName, schema, map, listURL } from ".."
 import { ItemForm } from "../form"
 import Link from "next/link"
 import { LimitAccessToRoomForm } from "../limitaccessform"
-import { PageHeader } from "@/app/cava/components/pageheader"
+import { PageHeader } from "@/app/cava/[site]/components/pageheader"
 
 export default function ItemPage({
 	params,

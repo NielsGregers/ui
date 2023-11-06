@@ -13,7 +13,7 @@ import { AccessRoleType } from "../../../data/roles"
 import { de } from "date-fns/locale"
 import { Button } from "@/registry/new-york/ui/button"
 import Link from "next/link"
-import { PageHeader } from "@/app/cava/components/pageheader"
+import { PageHeader } from "@/app/cava/[site]/components/pageheader"
 
 export default function RoomAdminRole({ params }: { params: { site: string } }) {
   const magicbox = useContext(MagicboxContext)

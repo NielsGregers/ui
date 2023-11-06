@@ -10,21 +10,20 @@ import { Icons } from "@/components/icons"
 import { ForModule, ForRole } from "@/components/roles"
 import { NavigationRootLink } from "./NavigationRootLink"
 import Logo from "@/components/logo"
+import { NavigationMenuCava } from "./cavamenu"
+import Image from "next/image"
+import { Tool } from "@/app/magicbox/components/tools"
 
-export function MainNav() {
+export function MainNav(props: { site: string }) {
   
 
   return (
     <div className="mr-4 hidden md:flex">
-      <div className="ml-[64px]"><Logo homeUrl={siteConfig.root} /></div>
-      <Link href={siteConfig.root} className="mr-6 flex items-center space-x-2">
-      <div >  
-        
-        </div>
-        <span className="hidden font-bold sm:inline-block">
-        {siteConfig.name}
-        </span>
-      </Link>
+      {/* <div className="ml-[64px]"><Logo homeUrl={siteConfig.root} /></div> */} 
+      <div className="h-[64px] w-[64px] bg-slate-900">
+      <Tool standalone noTopMargin link={`/cava`} displayName={""} script={""} iconUrl={"/cava/cava-white.svg"} openIn={"Same page"}></Tool>
+      </div>
+      <NavigationMenuCava site={props.site} tenant="" />
       <nav className="flex items-center space-x-6 text-sm font-medium">
 
 

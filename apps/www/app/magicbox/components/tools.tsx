@@ -6,6 +6,7 @@ import { ToolbarItem } from "../data/sharepoint";
 import {Root as UserProfile} from "../data/sharepoint/userprofile"
 
 import { MagicboxContext } from "@/app/magicbox-context"
+import Link from "next/link";
 
 type openInOptions = "Same page" | "New page" | "Popup"
 export interface ToolProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,6 +15,9 @@ export interface ToolProps extends React.HTMLAttributes<HTMLDivElement> {
 script:string
   iconUrl: string,
   openIn: openInOptions
+  noTopMargin?: boolean
+  isLogo?: boolean
+  standalone?: boolean
 }
 
 export function Tool({
@@ -82,10 +86,17 @@ useEffect(() => {
 }, [script])
 
   return (
-    <div className="mt-4 cursor-pointer  px-[6px]  hover:bg-slate-400 hover:transition-transform">
-      <div className="mt-4 cursor-pointer  p-[6px] hover:scale-[115%]">
+    <div className={cn(`${props.noTopMargin ? "py-[4px]": "py-[4px]"} cursor-pointer  px-[6px]  hover:bg-slate-400 hover:transition-transform`)}>
+      <div className={cn(`${props.noTopMargin ? "": "mt-4"} cursor-pointer  p-[6px] hover:scale-[115%]`)}>
         <div className={cn(className)} {...props}>
+          {props.standalone && 
+          <Link href={url}  rel="noreferrer">
+            <img src={iconUrl} alt={displayName} className="w-[48px] " />
+          </Link>
+            }
+            {!props.standalone && 
           <a href={url} target="_blank" rel="noreferrer" onClick={(e)=>{
+            
             e.preventDefault()
 
               window.parent.postMessage(
@@ -98,19 +109,21 @@ useEffect(() => {
           }}>
             <img src={iconUrl} alt={displayName} className="w-[32px] " />
           </a>
-
+        }
         </div>
 
       </div>
+      {displayName &&
       <div className="w-[48px] whitespace-pre-wrap  text-center text-xs">
         {displayName}
-      </div>
+      </div>}
     </div>
   )
 }
 
 interface ToolsProps extends React.HTMLAttributes<HTMLDivElement> {
   accessToken?: string
+  standalone?: boolean
 }
 
 export function MagicBar({
@@ -145,7 +158,7 @@ export function MagicBar({
   return (
     <div className={cn("overflow-hidden", className)} {...props}>
 
-      {tools?.sort((a, b) => a.fields.SortOrder - b.fields.SortOrder).map((tool, key) => { return <Tool script={tool.fields.Script ?? ""} key={key} link={tool.fields.Link_x0020_URL.Url} displayName={tool.fields.Title} iconUrl={tool.fields.Icon.Url} openIn={tool.fields.Openin as openInOptions ?? "New page"} /> })}
+      {tools?.sort((a, b) => a.fields.SortOrder - b.fields.SortOrder).map((tool, key) => { return <Tool standalone={props.standalone} script={tool.fields.Script ?? ""} key={key} link={tool.fields.Link_x0020_URL.Url} displayName={tool.fields.Title} iconUrl={tool.fields.Icon.Url} openIn={tool.fields.Openin as openInOptions ?? "New page"} /> })}
 
     </div>
   )

@@ -8,33 +8,46 @@ import { SiteFooter as LocalSiteFooter } from "./[site]/components/site-footer"
 import { SiteHeader } from "@/app/cava/[site]/components/site-header"
 
 import { MagicBar } from "@/app/magicbox/components/tools"
+import { CavaProvider } from "./[site]/cavacontextprovider"
 
 interface RootLayoutProps {
   children: React.ReactNode
+  params: { site: string }
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export const metadata: Metadata = {
+  title: {
+    default: "Cava",
+    template: `%s - Cava`,
+  },
+
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+
+
+  },
+
+}
+
+
+export default function RootLayout({ children, params }: RootLayoutProps) {
 
 
 
   return (
-<div>
-<SiteHeader /> 
-
-  <div className="flex">
-
- <div className=" w-[64px] border-r border-gray-400">
-  <div className="sticky top-[48px]">
-  <MagicBar  />
-  </div>
-</div> 
-    <div className="grow" >
-    
-      <div className="flex-1">{children}</div>
-      <LocalSiteFooter />
-      <SiteFooter />
-    </div>
-    </div>
+    <div>
+      <CavaProvider site="cava3" >
+        {children}
+      </CavaProvider>
     </div>
   )
 }
