@@ -28,7 +28,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
 
           <div className="flex-1">{children}</div>
           <LocalSiteFooter />
-          <SiteFooter />
+        
         </div>
       </div>
     </div>

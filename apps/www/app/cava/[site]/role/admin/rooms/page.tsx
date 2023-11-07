@@ -88,12 +88,9 @@ const [hasaccess, sethasaccess] = useState(true)
         <div>
         <PageHeader title="Rooms that you can manage" />
           <div className="flex">
-            <div className="pl-5 text-xs">
-              List: {listName} | Items: {items.length} | Managed by you: {parsedItems.length}
-            </div>
-            <div className="grow" />
-            <Button variant={"link"}>
-              <Link
+          <div className="grow" />
+            <div className="pr-2 text-xs">
+              List: <Link
                 target="_blank"
                 href={
                   "https://" +
@@ -105,9 +102,11 @@ const [hasaccess, sethasaccess] = useState(true)
                   ""
                 }
               >
-                View in SharePoint
-              </Link>
-            </Button>
+               {listName}
+              </Link> | Items: {items.length} | Managed by you: {parsedItems.length}
+            </div>
+       
+
           </div>
         </div>
       <RoomsTable

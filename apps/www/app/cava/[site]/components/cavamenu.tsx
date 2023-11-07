@@ -15,6 +15,21 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { roles } from "../data/roles"
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
 
 
 
@@ -99,116 +114,91 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem"
 export function NavigationMenuCava(props: {site:string,tenant:string}) : JSX.Element {
   const {site,tenant} = props
+return (
+  <div className="flex">
+    <div className="grow"></div>
+  <Menubar className="ml-3  border-0">
+      <MenubarMenu>
+  <MenubarTrigger>CAVA</MenubarTrigger>
+  <MenubarContent>
+    <MenubarItem>
+      Open site
+    </MenubarItem>
+    {/* <MenubarItem>
+      Change site 
+    </MenubarItem> */}
+    <MenubarItem disabled>New Site</MenubarItem>
+    <MenubarSeparator />
 
-  return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
-                  >
-                    <Icons.logo className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components built with Radix UI and
-                      Tailwind CSS.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
-              </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/docs" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Documentation
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
-    // <NavigationMenu>
+    <MenubarSeparator />
   
-    //     <NavigationMenuTrigger>Tasks</NavigationMenuTrigger>
-    //     <NavigationMenuContent>
-    //       <NavigationMenuItem>
-    //         New Tab 
-    //       </NavigationMenuItem>
-    //       <NavigationMenuItem>
-    //         New Window 
-    //       </NavigationMenuItem>
-    //       <NavigationMenuItem disabled>New Incognito Window</NavigationMenuItem>
-    //       <NavigationMenuSeparator />
-    //       <NavigationMenuSub>
-    //         <NavigationMenuSubTrigger>Rooms</NavigationMenuSubTrigger>
-    //         <NavigationMenuSubContent>
-    //           <NavigationMenuItem disabled> New Room</NavigationMenuItem>
-    //           <NavigationMenuItem>List Rooms</NavigationMenuItem>
-    //           <NavigationMenuItem disabled>Delete Room</NavigationMenuItem>
-    //           <NavigationMenuItem disabled>Sync Room Groups</NavigationMenuItem>
-    //         </NavigationMenuSubContent>
-    //       </NavigationMenuSub>
-    //       <NavigationMenuSeparator />
-         
-    //     </NavigationMenuContent>
-    //   </NavigationMenuMenu>
+  </MenubarContent>
+</MenubarMenu>
+<MenubarMenu>
+      <MenubarTrigger>Rooms</MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem disabled> New Room</MenubarItem>
+        <MenubarItem>List Rooms</MenubarItem>
+        <MenubarItem disabled>Delete Room</MenubarItem>
+        <MenubarItem disabled>Sync Room Groups</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  <MenubarMenu>
+  <MenubarTrigger>Tasks</MenubarTrigger>
+  <MenubarContent>
+    <MenubarItem>
+      New Tab 
+    </MenubarItem>
+    <MenubarItem>
+      New Window 
+    </MenubarItem>
+    <MenubarItem disabled>New Incognito Window</MenubarItem>
+    <MenubarSeparator />
+    <MenubarSub>
+      <MenubarSubTrigger>Rooms</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem disabled> New Room</MenubarItem>
+        <MenubarItem>List Rooms</MenubarItem>
+        <MenubarItem disabled>Delete Room</MenubarItem>
+        <MenubarItem disabled>Sync Room Groups</MenubarItem>
+      </MenubarSubContent>
+    </MenubarSub>
+    <MenubarSeparator />
+  
+  </MenubarContent>
+</MenubarMenu>
 
-    //   <NavigationMenuMenu>
-    //     <NavigationMenuTrigger>View</NavigationMenuTrigger>
-    //     <NavigationMenuContent>
-    //     <NavigationMenuSub>
-    //         <NavigationMenuSubTrigger>SharePoint</NavigationMenuSubTrigger>
-    //         <NavigationMenuSubContent>
-    //           <NavigationMenuItem >  <Link className="whitespace-nowrap" target="blank" href={`https://${tenant}.sharepoint.com/sites/${site}/lists/rooms`}>Rooms <MdOpenInNew /></Link></NavigationMenuItem>
-    //           <NavigationMenuItem>List Rooms</NavigationMenuItem>
-    //           <NavigationMenuItem >Delete Room</NavigationMenuItem>
-    //           <NavigationMenuItem >Sync Room Groups</NavigationMenuItem>
-    //         </NavigationMenuSubContent>
-    //       </NavigationMenuSub>
-    //     </NavigationMenuContent>
-    //   </NavigationMenuMenu>
-    //   <NavigationMenuMenu>
-    //     <NavigationMenuTrigger>Roles</NavigationMenuTrigger>
-    //     <NavigationMenuContent>
-    //     {roleMenuItems(site)}
-    //     </NavigationMenuContent>
+<MenubarMenu>
+  <MenubarTrigger>View</MenubarTrigger>
+  <MenubarContent>
+  <MenubarSub>
+      <MenubarSubTrigger>SharePoint</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem >  <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/lists/rooms`}>Rooms <MdOpenInNew /></Link></MenubarItem>
+        <MenubarItem>List Rooms</MenubarItem>
+        <MenubarItem >Delete Room</MenubarItem>
+        <MenubarItem >Sync Room Groups</MenubarItem>
+      </MenubarSubContent>
+    </MenubarSub>
+  </MenubarContent>
+</MenubarMenu>
+<MenubarMenu>
+  <MenubarTrigger>Roles</MenubarTrigger>
+  <MenubarContent>
+  {/* {roleMenuItems(site)} */}
+  </MenubarContent>
+</MenubarMenu>
+<MenubarMenu>
+  <MenubarTrigger>Settings</MenubarTrigger>
+  <MenubarContent>
+  {/* {roleMenuItems(site)} */}
+  </MenubarContent>
+</MenubarMenu>
+</Menubar> 
+</div>
+)
 
-    // </NavigationMenu>
-  )
+  
 }
 
 
