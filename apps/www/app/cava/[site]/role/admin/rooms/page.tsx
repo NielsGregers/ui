@@ -114,7 +114,7 @@ const [hasaccess, sethasaccess] = useState(true)
         site={site}
         listName={listName}
         roles={roles}
-        viewFields={["Title", "Capacity","Email","Provisioning_x0020_Status"]}
+        viewFields={["Title", "Capacity","Email","RestrictedTo"]}
       /></div>}
     </div>
   )

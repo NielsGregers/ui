@@ -159,7 +159,7 @@ export function RoomsTable(props: { items: ItemType[], roles:RoleItem[], viewFie
 			header: ({ column }) => (
 				<DataTableColumnHeader column={column} title="Link" />
 			),
-			cell: ({ row }) => <Link href={"/cava/" + props.site + "/sharepoint/lists/" + props.listName.replaceAll(" ", "") + "/" + row.original.Id}> <Button variant={"link"}>View</Button></Link>,
+			cell: ({ row }) => <Link href={"/cava/" + props.site + "/sharepoint/lists/" + props.listName.replaceAll(" ", "") + "/" + row.original.Id}> <Button variant={"default"}>Manage</Button></Link>,
 			enableSorting: false,
 			enableHiding: true,
 		},

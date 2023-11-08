@@ -4,7 +4,7 @@
 "use client"
 import * as React from "react"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { useForm } from "react-hook-form"
@@ -28,10 +28,17 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Switch } from "@/registry/new-york/ui/switch"
 import { Label } from "@/registry/new-york/ui/label"
+import { MagicboxContext } from "@/app/magicbox-context"
+import { useToast } from "@/registry/default/ui/use-toast"
+import { CavaContext } from "../../../cavacontext"
 
 
-export function LimitAccessToRoomForm(props: { item?: ItemType, backPath?: string }) {
-	const { item } = props
+export function LimitAccessToRoomForm(props: { site: string,item?: ItemType, backPath?: string }) {
+	const {toast} = useToast()
+	const {hasRole} =  useContext(CavaContext) 
+
+	const magicbox = useContext(MagicboxContext)
+	const { item,site } = props
 	const [processing, setProcessing] = useState(false)
 	const [processPercentage, setProcessPercentage] = useState(0)
 	const [processTitle, setProcessTitle] = useState("")
@@ -49,16 +56,22 @@ export function LimitAccessToRoomForm(props: { item?: ItemType, backPath?: strin
 	})
 
 	async function onSubmit(data: ItemType) {
+		
+	
 		setProcessTitle("Updating Room")
 		setProcessDescription("Please wait while your request is processed in Microsoft 365")
 		setProcessPercentage(0)
 		setProcessing(true)
-		const { script, result } = await updateWhocanBook(isbookingrestricted, item as ItemType)
+		const { script, result } = await updateWhocanBook(magicbox.session?.accessToken ??"unknown", site,isbookingrestricted, data)
 		setProcessPercentage(100)
 		if (result.hasError) {
 			alert(result.errorMessage + "/n/n" + script)
 		} else {
-			alert("Success")
+			toast({
+				title: "Room updated",
+				
+			   variant: "default"
+			 })
 		}
 		setProcessing(false)
 
@@ -139,21 +152,22 @@ export function LimitAccessToRoomForm(props: { item?: ItemType, backPath?: strin
 							type="submit"
 
 						>
-							Save
+							Update Microsoft 365
 						</Button>
 						{props.backPath &&
 							<Button className="ml-3" type="button" variant="secondary" ><Link href={props.backPath}> Back</Link></Button>}
+						{hasRole("role.admin.rooms.all") && 	
 							<Button className="ml-3" type="button" variant="secondary" onClick={async ()=>{
 								
 								
 								const {result} = await getExchangeRoomStatus(form.getValues("Email"))
 								
 								setroomstatus(result.data)
-								}} >Get status</Button>
+								}} >Get status</Button>}
 					</form>
 				</Form>
 
-				<ProcessStatusOverlay
+				<ProcessStatusOverlay hideProgress
 					done={!processing}
 					title={processTitle}
 					description={processDescription}

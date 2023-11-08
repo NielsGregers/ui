@@ -50,7 +50,7 @@ export default function ItemPage({
 					<Button variant={"link"}><Link target="_blank" href={"https://" + magicbox.tenant + ".sharepoint.com/sites/" + site + "/" + listURL + "/DispForm.aspx?ID=" + itemid}>View in SharePoint</Link></Button>
 				</div>
 				<div>
-					<LimitAccessToRoomForm item={item} backPath={`/cava/${site}/role/admin/rooms`} />
+					<LimitAccessToRoomForm site={site} item={item} backPath={`/cava/${site}/role/admin/rooms`} />
 
 				</div>
 				{/* <ItemForm item={item} />

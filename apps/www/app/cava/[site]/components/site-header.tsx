@@ -23,7 +23,7 @@ export function SiteHeader(props: { site: string }) {
         <SiteMenu  site={props.site}/>
         <div className="grow"></div>
         <div className="w-[300px]">
-        COMMANDS
+  
         </div>
 
 <div className="grow"></div>

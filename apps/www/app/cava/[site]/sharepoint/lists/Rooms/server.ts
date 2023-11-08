@@ -3,6 +3,7 @@
 import { invokeExchangePowerShell } from "@/app/cava/server"
 
 import { ItemType } from "."
+import { getSpAuthToken, updateItem } from "@/lib/officegraph"
 export interface ExchangeRoomStatus {
   CalendarProcessing: CalendarProcessing
   Room: Room
@@ -395,11 +396,28 @@ $result = $true
   return powershell
 }
 
-export async function updateWhocanBook(restricted : boolean, room: ItemType) {
+export async function updateWhocanBook(accessToken:string,site: string,restricted : boolean, room: ItemType) {
   console.log("updateWhocanBook", room.RestrictedTo)
   const script = await powershellUpdateWhoCanBook(restricted, room.Email, room.RestrictedTo)
+
   const result = await invokeExchangePowerShell<boolean>(script)
   
+   if (result.hasError){
+    result.errorMessage = "Powershell error"
+    return  {script,result}
+   }
+
+  const itemUpdateRequest = await updateItem(accessToken,site,"rooms",room.Id,{fields:{ RestrictedTo:restricted ? room.RestrictedTo : ""}})
+
+  if (itemUpdateRequest.hasError){
+    result.errorMessage = "Script executed, but got an error trying to update SharePoint"
+    return  {script,result}
+   }  
+
+
+
+
+
     return { script, result }
 }
 
