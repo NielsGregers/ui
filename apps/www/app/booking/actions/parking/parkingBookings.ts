@@ -43,55 +43,55 @@ interface ParkingBooking {
   plates: string
 }
 
-//old
-export async function getBookingsByStringDate(date: string) {
-  let agg = [
-    {
-      $unwind: "$bookings",
-    },
-    {
-      $match: {
-        "bookings.date": date,
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        title: 1,
-        EV: 1,
-        handicapped: 1,
-        userEmail: "$bookings.userEmail",
-        plates: "$bookings.plates",
-      },
-    },
-  ]
-  const client = await connectBooking()
-  const coll = client.db("booking-cro").collection("parking")
-  const cursor = coll.aggregate(agg)
-  let result = (await cursor.toArray()) as ParkingBooking[]
-  let agg2 = [
-    {
-      $match: {
-        permanent: true,
-      },
-    },
-    {
-      $project: {
-        _id: 1,
-        title: 1,
-        EV: 1,
-        handicapped: 1,
-        userEmail: "$bookedBy",
-        plates: "$licence",
-      },
-    },
-  ]
-  const cursor2 = coll.aggregate(agg2)
-  const result2 = (await cursor2.toArray()) as ParkingBooking[]
-  result = result.concat(result2)
-  client.close()
-  return result
-}
+// //old
+// export async function getBookingsByStringDate(date: string) {
+//   let agg = [
+//     {
+//       $unwind: "$bookings",
+//     },
+//     {
+//       $match: {
+//         "bookings.date": date,
+//       },
+//     },
+//     {
+//       $project: {
+//         _id: 0,
+//         title: 1,
+//         EV: 1,
+//         handicapped: 1,
+//         userEmail: "$bookings.userEmail",
+//         plates: "$bookings.plates",
+//       },
+//     },
+//   ]
+//   const client = await connectBooking()
+//   const coll = client.db("booking-cro").collection("parking")
+//   const cursor = coll.aggregate(agg)
+//   let result = (await cursor.toArray()) as ParkingBooking[]
+//   let agg2 = [
+//     {
+//       $match: {
+//         permanent: true,
+//       },
+//     },
+//     {
+//       $project: {
+//         _id: 1,
+//         title: 1,
+//         EV: 1,
+//         handicapped: 1,
+//         userEmail: "$bookedBy",
+//         plates: "$licence",
+//       },
+//     },
+//   ]
+//   const cursor2 = coll.aggregate(agg2)
+//   const result2 = (await cursor2.toArray()) as ParkingBooking[]
+//   result = result.concat(result2)
+//   client.close()
+//   return result
+// }
 
 export interface ParkingSpotBooking {
   _id: string | undefined
@@ -176,6 +176,7 @@ export async function getBookingsByDate(date: Date) {
         }
       }
     }) ?? []
+  client.close()
   return bookedParkingSpacesConverted
 }
 
@@ -581,7 +582,7 @@ export async function getAvailableParkingSpaces(date: Date) {
       ],
     })
     .toArray()
-
+  client.close()
   return availableParkingSpaces
 }
 export interface BookingConfirmationType {
@@ -753,6 +754,7 @@ export async function newParkingBooking(
       return { success: false, cause: "Unknown" }
     } else {
       if (iteration == 0) {
+        client.close()
         return await newParkingBooking(
           date,
           userEmail,
@@ -763,6 +765,7 @@ export async function newParkingBooking(
           errorBefore + 1
         )
       } else if (iteration == 1) {
+        client.close()
         return await newParkingBooking(
           date,
           userEmail,
@@ -773,6 +776,7 @@ export async function newParkingBooking(
           errorBefore + 1
         )
       } else {
+        client.close()
         return await newParkingBooking(
           date,
           userEmail,
