@@ -92,6 +92,8 @@
     "react-wrap-balancer": "^0.4.1",
     "recharts": "^2.6.2",
     "sharp": "^0.31.3",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "tailwind-merge": "^1.12.0",
     "zod": "^3.21.4"
   },

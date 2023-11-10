@@ -220,7 +220,7 @@ mode 1
 if (mode==="leftbar"){
   return <div className="h-screen w-[64px] overflow-hidden  bg-gray-200 ">
 
-<MagicBar accessToken={token??""} />
+<MagicBar accessToken={token??""} toolbarId={3} />
 {/* <Button
           variant="link"
           onClick={() => {

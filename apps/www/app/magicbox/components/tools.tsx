@@ -124,6 +124,7 @@ useEffect(() => {
 interface ToolsProps extends React.HTMLAttributes<HTMLDivElement> {
   accessToken?: string
   standalone?: boolean
+  toolbarId?: number
 }
 
 export function MagicBar({
@@ -140,12 +141,12 @@ export function MagicBar({
 
   useEffect(() => {
     (async () => {
-      const token =  (magicbox.session?.accessToken ?? "")
-      //debugger
+      const token =  (accessToken ?? (magicbox.session?.accessToken ?? ""))
+    //debugger
       if (!token) return
       const profileResponse = await https<UserProfile>(token, "GET","https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/nexiintra-hub:/lists/User Profiles/items?$expand=fields&$filter=fields/Title+eq+'niels.johansen@nexigroup.com'")
-      
-      const response = await httpsGetAll<ToolbarItem>(token, "https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/intranets-tools:/lists/ToolbarItems/items?$expand=fields&$filter=fields/ToolbarLookupId eq 2")
+      const id = props.toolbarId ?? 2
+      const response = await httpsGetAll<ToolbarItem>(token, "https://graph.microsoft.com/v1.0/sites/christianiabpos.sharepoint.com:/sites/intranets-tools:/lists/ToolbarItems/items?$expand=fields&$filter=fields/ToolbarLookupId eq "+id)
       if (response.hasError) {
         alert(response.errorMessage)
         return
