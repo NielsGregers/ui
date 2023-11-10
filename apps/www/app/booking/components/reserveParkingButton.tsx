@@ -55,12 +55,15 @@ import { LicencePicker } from "./licenceplate-picker"
 
 function isDisabled(date: Date, hoursUntil: number) {
   return (
-    new Date(date.setHours(12, 0, 0, 0)).getTime() <=
-      new Date(new Date().setHours(12, 0, 0, 0)).getTime() ||
-    (new Date().getTime() >
-      new Date(new Date().setHours(hoursUntil, 0, 0, 0)).getTime() &&
-      new Date(date.setHours(12, 0, 0, 0)).getTime() ===
-        new Date(addDays(new Date().setHours(12, 0, 0, 0), 1)).getTime())
+    // new Date(date.setHours(12, 0, 0, 0)).getTime() <
+    //   new Date(new Date().setHours(12, 0, 0, 0)).getTime() ||
+    // (new Date().getTime() >
+    //   new Date(new Date().setHours(hoursUntil, 0, 0, 0)).getTime() &&
+    //   new Date(date.setHours(12, 0, 0, 0)).getTime() ===
+    //     new Date(addDays(new Date().setHours(12, 0, 0, 0), 1)).getTime())
+
+    new Date(date.setHours(12, 0, 0, 0)).getTime() <
+    new Date(new Date().setHours(12, 0, 0, 0)).getTime()
   )
 }
 
