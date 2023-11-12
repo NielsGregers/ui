@@ -39,40 +39,7 @@ export default function Cava({ params }: { params: {  site: string } }) {
 
       
       <div className="container ">
-         <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
-          Application Roles
-        </h2>
-        <div className="flex flex-wrap">
-          {roles(site)
-            .filter((r) => r.type === "core")
-            .map((role) => {
-              return (
-                <Card className="m-5 w-[350px]" key={role.key}>
-                  <CardHeader>
-                    <CardTitle>{role.name}</CardTitle>
-                    <CardDescription className="h-[40px]">
-                      {role.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="center">
-                    <Image
-                      src={role.image}
-                      width={500}
-                      height={500}
-                      alt={role.name}
-                      className="rounded-md"
-                    />
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
-                    <div className="grow"></div>
-                    <Button disabled={role.version === "draft"}>
-                      <Link href={role.link}>{role.name} role</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )
-            })}
-        </div>
+        
         <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
           Koksmat Daily Tasks
         </h2>
@@ -109,7 +76,40 @@ export default function Cava({ params }: { params: {  site: string } }) {
               )
             })}
         </div>
- 
+        <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
+          Application Roles
+        </h2>
+        <div className="flex flex-wrap">
+          {roles(site)
+            .filter((r) => r.type === "core")
+            .map((role) => {
+              return (
+                <Card className="m-5 w-[350px]" key={role.key}>
+                  <CardHeader>
+                    <CardTitle>{role.name}</CardTitle>
+                    <CardDescription className="h-[40px]">
+                      {role.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="center">
+                    <Image
+                      src={role.image}
+                      width={500}
+                      height={500}
+                      alt={role.name}
+                      className="rounded-md"
+                    />
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <div className="grow"></div>
+                    <Button disabled={role.version === "draft"}>
+                      <Link href={role.link}>{role.name} role</Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )
+            })}
+        </div>
         <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
           Supporting Roles
         </h2>

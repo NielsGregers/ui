@@ -119,7 +119,7 @@ return (
     <div className="grow"></div>
   <Menubar className="ml-3  border-0">
       <MenubarMenu>
-  <MenubarTrigger>Koksmat 2</MenubarTrigger>
+  <MenubarTrigger>Koksmat</MenubarTrigger>
   <MenubarContent>
     <MenubarItem>
       Open site
@@ -144,30 +144,7 @@ return (
         <MenubarItem disabled>Sync Kitchens</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
-  <MenubarMenu>
-  <MenubarTrigger>Tasks</MenubarTrigger>
-  <MenubarContent>
-    <MenubarItem>
-      New Tab 
-    </MenubarItem>
-    <MenubarItem>
-      New Window 
-    </MenubarItem>
-    <MenubarItem disabled>New Incognito Window</MenubarItem>
-    <MenubarSeparator />
-    <MenubarSub>
-      <MenubarSubTrigger>Rooms</MenubarSubTrigger>
-      <MenubarSubContent>
-        <MenubarItem disabled> New Room</MenubarItem>
-        <MenubarItem>List Rooms</MenubarItem>
-        <MenubarItem disabled>Delete Room</MenubarItem>
-        <MenubarItem disabled>Sync Room Groups</MenubarItem>
-      </MenubarSubContent>
-    </MenubarSub>
-    <MenubarSeparator />
-  
-  </MenubarContent>
-</MenubarMenu>
+
 
 <MenubarMenu>
   <MenubarTrigger>View</MenubarTrigger>
@@ -187,7 +164,7 @@ return (
       <MenubarSubTrigger>Kubernetes</MenubarSubTrigger>
       <MenubarSubContent>
         <MenubarItem >  
-          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes`}>Clusters </Link>
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/clusters`}>Clusters </Link>
           </MenubarItem>
           <MenubarItem >  
           <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/namespaces`}>Namespaces </Link>
@@ -208,19 +185,14 @@ return (
     </MenubarSub>
   </MenubarContent>
 </MenubarMenu>
-<MenubarMenu>
-  <MenubarTrigger>Roles</MenubarTrigger>
-  <MenubarContent>
-  {/* {roleMenuItems(site)} */}
-  </MenubarContent>
-</MenubarMenu>
+
 <MenubarMenu>
   <MenubarTrigger>Settings</MenubarTrigger>
   <MenubarContent>
   {/* {roleMenuItems(site)} */}
   </MenubarContent>
 </MenubarMenu>
-<MenubarMenu>
+<MenubarMenu >
   <MenubarTrigger>Help</MenubarTrigger>
   <MenubarContent>
   {/* {roleMenuItems(site)} */}

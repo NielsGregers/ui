@@ -2,15 +2,17 @@ import React from 'react';
 
 
 import RunServerProcess from '@/app/koksmat/[tenant]/[site]/components/runserverprocess';
+import ViewKubernetesNamespaces from '.';
+import { PageContextHeader } from '../../components/page-context-header';
 
 
 export default function Namespaces() {
    
     return (<div>
-      <div>Namespaces in current cluster</div>
-      <RunServerProcess cmd={'kubens'} args={[]} timeout={10} channelname={'kubens'}  />
-      <div>Current namespace</div>
-      <RunServerProcess cmd={'kubens'} args={["--current"]} timeout={10} channelname={'kubens--current'}  />
-          
+       <PageContextHeader title="Namespaces"/>
+      <ViewKubernetesNamespaces/>
+       <div>Current namespace</div>
+      <RunServerProcess cmd={'kubectl'} args={["config","view","--minify","-o=json"]} timeout={10} channelname={'kubens--current'}  />
+        
     </div>)
 }

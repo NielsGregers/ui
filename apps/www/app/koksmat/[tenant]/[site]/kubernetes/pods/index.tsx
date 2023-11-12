@@ -1,12 +1,23 @@
 "use client"
-import React, { use, useEffect, useState } from 'react';
 
-import { useProcess } from '@/lib/useprocess';
-import { Button } from '@/registry/new-york/ui/button';
-import { set } from 'date-fns';
-import { PopUp } from '../../components/popup';
-import PodDetails from './poddetails';
-import { Badge } from '@/registry/new-york/ui/badge';
+import React, { use, useEffect, useState } from "react"
+import { set } from "date-fns"
+
+import { useProcess } from "@/lib/useprocess"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/registry/new-york/ui/badge"
+import { Button } from "@/registry/new-york/ui/button"
+
+import { PopUp } from "../../components/popup"
+import PodDetails from "./poddetails"
+
 export interface Root {
   apiVersion: string
   items: Item[]
@@ -300,7 +311,7 @@ export interface PersistentVolumeClaim {
   claimName: string
 }
 
-export interface EmptyDir { }
+export interface EmptyDir {}
 
 export interface Affinity {
   podAntiAffinity: PodAntiAffinity
@@ -404,68 +415,109 @@ export interface Metadata2 {
   resourceVersion: string
 }
 
-
-
 interface RunServerProcessProps {
-  cmd: string,
-  args: string[],
-  timeout: number,
-  channelname: string,
-
+  cmd: string
+  args: string[]
+  timeout: number
+  channelname: string
 }
 
 function convert(data: string): Root | null {
   if (!data) return null
   return JSON.parse(data) as Root
-
 }
 
 export default function ListPods() {
-
-
-  const { isLoading, error, data } = useProcess("kubectl", ["get", "pods", "-o", "json"], 20, "echo")
+  const { isLoading, error, data } = useProcess(
+    "kubectl",
+    ["get", "pods", "-o", "json"],
+    20,
+    "echo"
+  )
   const [selectedPod, setselectedPod] = useState<Item>()
   const [showDetails, setshowDetails] = useState(false)
 
   useEffect(() => {
     if (selectedPod) {
-
     }
   }, [selectedPod])
 
   if (data) {
-
     console.log(data)
   }
-  return (<div>
-    {isLoading && <div>Loading...</div>}
+  return (
+    <div>
+      {isLoading && <div>Loading...</div>}
 
-    {error && <div className="text-red-700">{error}</div>}
-    <div>Data
-      {convert(data)?.items?.filter((item : Item)=>item.status.phase!="Succeeded" )
-      .map((item: Item) => <div key={item.metadata.name} className="mb-3 rounded-md border bg-slate-800 p-4 text-white">
-        {item.metadata.name} <Button onClick={() => {
-          setselectedPod(item)
-          setshowDetails(true)
-        }}>Details</Button>
-        <Badge variant={item.status.phase === "Running" ? "default" :"destructive"} >{item.status.phase}</Badge>
-    
-
-        <div className=" p-4">{item.spec.containers.map(container => {
-
-          return <div key={container.name}><div className="font-bold" >{container.name} </div>
-            <div>image: {container.image}  </div>
-            {container.command &&
-              <div>cmd: {container.command}  {(container.args as string[] ?? []).map(arg => <span key={arg}>{arg} </span>)}</div>
-            }
-          </div>
-        })}</div>
-
-      </div>)}
+      {error && <div className="text-red-700">{error}</div>}
+      <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+      
+        {convert(data)
+          ?.items?.filter((item: Item) => item.status.phase != "Succeeded")
+          .map((item: Item) => (
+            <Card key={item.metadata.name} >
+              <CardHeader>
+                <CardTitle className="text-2xl">{item.metadata.name}</CardTitle>
+                <CardDescription>
+                  <Badge
+                    variant={
+                      item.status.phase === "Running"
+                        ? "default"
+                        : "destructive"
+                    }
+                  >
+                    {item.status.phase}
+                  </Badge>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>
+                  <div className=" p-4">
+                    {item.spec.containers.map((container) => {
+                      return (
+                        <div key={container.name}>
+                          <div className="font-bold">{container.name} </div>
+                          <div>image: {container.image} </div>
+                          {container.command && (
+                            <div>
+                              cmd: {container.command}{" "}
+                              {((container.args as string[]) ?? []).map(
+                                (arg) => (
+                                  <span key={arg}>{arg} </span>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </p>
+              </CardContent>
+              <CardFooter>
+                <p>
+                  {" "}
+                  <Button
+                    onClick={() => {
+                      setselectedPod(item)
+                      setshowDetails(true)
+                    }}
+                  >
+                    Details
+                  </Button>
+                </p>
+              </CardFooter>
+            </Card>
+          ))}
+      </div>
+      <PopUp
+        show={showDetails}
+        onClose={() => setshowDetails(false)}
+        title={selectedPod?.metadata.name ?? "Details"}
+        description={""}
+      >
+        <PodDetails pod={selectedPod} />
+      </PopUp>
     </div>
-    <PopUp show={showDetails} onClose={() => setshowDetails(false)} title={selectedPod?.metadata.name ?? "Details"} description={""} >
-
-      <PodDetails pod={selectedPod} />
-    </PopUp>
-  </div>)
+  )
 }
