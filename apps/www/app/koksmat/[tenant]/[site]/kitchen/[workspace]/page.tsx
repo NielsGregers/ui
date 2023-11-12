@@ -15,9 +15,8 @@ export default function Workspace(props: WorkspaceProps) {
    
     return (<div>
     {ws && <div>
-      <div>Workspace: {ws.displayName}</div>
-      <div>Branches</div>
-      <RunServerProcess cmd={'git'} args={["branch"]} timeout={10} channelname={'git'} cwd={ws.cwd} />
+<img src={ws.image} />
+
     </div>}
     
     </div>)

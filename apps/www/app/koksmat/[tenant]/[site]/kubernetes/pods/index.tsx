@@ -450,10 +450,10 @@ export default function ListPods() {
       {isLoading && <div>Loading...</div>}
 
       {error && <div className="text-red-700">{error}</div>}
-      <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+      <div className=" items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3 ">
       
         {convert(data)
-          ?.items?.filter((item: Item) => item.status.phase != "Succeeded")
+          ?.items?.filter((item: Item) => item.status.phase !== "Succeeded")
           .map((item: Item) => (
             <Card key={item.metadata.name} >
               <CardHeader>

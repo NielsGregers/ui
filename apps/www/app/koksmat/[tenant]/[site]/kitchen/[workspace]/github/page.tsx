@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 
 import RunServerProcess from '@/app/koksmat/[tenant]/[site]/components/runserverprocess';
 import { findWorkspace } from '../..';
+import ListTasks from './tasks';
 
 interface WorkspaceProps {
     params: {
@@ -9,16 +10,12 @@ interface WorkspaceProps {
     }
 }
 
+
 export default function Workspace(props: WorkspaceProps) {
   const ws = useMemo(() => {return findWorkspace(props.params.workspace)}, [props.params.workspace]);
 
    
     return (<div>
-    {ws && <div>
-      <div>Code</div>
-     
-      <RunServerProcess cmd={'code'} args={["."]} timeout={10} channelname={'git'} cwd={ws.cwd} />
-    </div>}
-    
+ {ws &&  <ListTasks cwd={ws.cwd}/> }
     </div>)
 }

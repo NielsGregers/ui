@@ -101,8 +101,9 @@ function convert(data: string): Root | null {
       <ViewKubernetesNamespace onChanged={ (namespace) =>{
             setcurrentNamespace(namespace)
         } } />
-      <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
-        {convert(data)?.items?.map((item: Item) => <Card key={item.metadata.name} 
+        <div className=" items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3 ">
+      
+        {convert(data)?.items?.map((item: Item) => <div key={item.metadata.name}  ><Card 
         className={currentNamespace===item.metadata.name?"bg-green-100":""}
         
         >
@@ -130,7 +131,7 @@ function convert(data: string): Root | null {
           }}>Set current</Button>
           </p>
   </CardFooter>
-</Card>
+</Card></div>
 )}
       </div>
       <PopUp show={showDetails} onClose={() => setshowDetails(false)} title={selectedNamespace?.metadata.name ?? "Details"} description={""} >
@@ -138,5 +139,6 @@ function convert(data: string): Root | null {
         
         <pre>{JSON.stringify(selectedNamespace,null,2)}</pre>
       </PopUp>
-    </div>)
+    </div>
+    )
   }

@@ -44,11 +44,16 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
           items: [],
         },
         {
+          title: "Kitchen Tickets",
+          href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/github`,
+          items: [],
+        }, 
+        {
           title: "Code",
           href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/code`,
           items: [],
         },
-       
+     
       
       ],
     },

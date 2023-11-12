@@ -146,23 +146,20 @@ return (
     </MenubarMenu>
 
 
-<MenubarMenu>
-  <MenubarTrigger>View</MenubarTrigger>
-  <MenubarContent>
-  <MenubarSub>
-      <MenubarSubTrigger>SharePoint</MenubarSubTrigger>
-      <MenubarSubContent>
+    <MenubarMenu>
+      <MenubarTrigger>SharePoint</MenubarTrigger>
+      <MenubarContent>
         <MenubarItem >  
-          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/viewlsts.aspx?view=14`}>Contents <MdOpenInNew /></Link>
+          <Link className="flex-nowrap whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/viewlsts.aspx?view=14`}><div className="flex space-x-2"><MdOpenInNew /><div>Contents</div></div></Link>
           </MenubarItem>
           <MenubarItem >  
-          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/settings.aspx`}>Settings <MdOpenInNew /></Link>
+          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/settings.aspx`}><div className="flex space-x-2"> <MdOpenInNew /><div>Settings</div></div></Link>
           </MenubarItem>
-      </MenubarSubContent>
-      </MenubarSub>
-      <MenubarSub>
-      <MenubarSubTrigger>Kubernetes</MenubarSubTrigger>
-      <MenubarSubContent>
+      </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+      <MenubarTrigger>Kubernetes</MenubarTrigger>
+      <MenubarContent>
         <MenubarItem >  
           <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/clusters`}>Clusters </Link>
           </MenubarItem>
@@ -172,19 +169,8 @@ return (
           <MenubarItem >  
           <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/pods`}>Pods </Link>
           </MenubarItem>       
-      </MenubarSubContent>
-    </MenubarSub>
-    <MenubarSub>
-      <MenubarSubTrigger>GIT</MenubarSubTrigger>
-      <MenubarSubContent>
-        <MenubarItem >  
-          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/git`}>Repo </Link>
-          </MenubarItem>
-       
-      </MenubarSubContent>
-    </MenubarSub>
-  </MenubarContent>
-</MenubarMenu>
+      </MenubarContent>
+    </MenubarMenu>
 
 <MenubarMenu>
   <MenubarTrigger>Settings</MenubarTrigger>
