@@ -10,7 +10,7 @@ import { Icons } from "@/components/icons"
 import { ForModule, ForRole } from "@/components/roles"
 import { NavigationRootLink } from "./NavigationRootLink"
 import Logo from "@/components/logo"
-import { NavigationMenuCava } from "./cavamenu"
+import { NavigationMenuKoksmat } from "./desktop-menu"
 import Image from "next/image"
 import { Tool } from "@/app/magicbox/components/tools"
 import { useContext } from "react"
@@ -27,7 +27,7 @@ export function MainNav(props: { site: string,tenant?:string }) {
      
       <nav className="flex items-center space-x-6 text-sm font-medium">
       {hasRole("feature.toolbar") &&
-      <NavigationMenuCava site={props.site} tenant={props.tenant??""} />}
+      <NavigationMenuKoksmat site={props.site} tenant={props.tenant??""} />}
 
       </nav>
     </div>

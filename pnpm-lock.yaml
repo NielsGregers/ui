@@ -257,6 +257,9 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.4.0
+      centrifuge:
+        specifier: ^5.0.1
+        version: 5.0.1
       class-variance-authority:
         specifier: ^0.4.0
         version: 0.4.0(typescript@4.9.5)
@@ -2127,7 +2130,7 @@ packages:
       '@types/long': 4.0.2
       lodash.camelcase: 4.3.0
       long: 4.0.0
-      protobufjs: 7.2.4
+      protobufjs: 7.2.5
       yargs: 17.7.2
     dev: false
 
@@ -2826,7 +2829,7 @@ packages:
       '@opentelemetry/api': 1.4.1
       '@opentelemetry/core': 1.13.0(@opentelemetry/api@1.4.1)
       '@opentelemetry/otlp-exporter-base': 0.39.1(@opentelemetry/api@1.4.1)
-      protobufjs: 7.2.4
+      protobufjs: 7.2.5
     dev: false
 
   /@opentelemetry/otlp-transformer@0.39.1(@opentelemetry/api@1.4.1):
@@ -5828,6 +5831,13 @@ packages:
   /ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
+  /centrifuge@5.0.1:
+    resolution: {integrity: sha512-u0Lo2Xy/rfrC5H6UzbKS0MVoS72NbUgwmY3/Y0GnCWgRcQbyk8lFBBSxudp8PIw7YiWRJvb35BQjtI0Vmo3LsA==}
+    dependencies:
+      events: 3.3.0
+      protobufjs: 7.2.5
+    dev: false
+
   /chai@4.3.7:
     resolution: {integrity: sha512-HLnAzZ2iupm25PlN0xFreAlBA5zaBSv3og0DdeGA4Ar6h6rJ3A0rolRUKJhSF2V10GZKDgWF/VmAEsNWjCRB+A==}
     engines: {node: '>=4'}
@@ -7337,6 +7347,11 @@ packages:
 
   /eventemitter3@4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+    dev: false
+
+  /events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
     dev: false
 
   /exceljs@4.4.0:
@@ -11140,8 +11155,8 @@ packages:
   /property-information@6.2.0:
     resolution: {integrity: sha512-kma4U7AFCTwpqq5twzC1YVIDXSqg6qQK6JN0smOw8fgRy1OkMi0CYSzFmsy6dnqSenamAtj0CyXMUJ1Mf6oROg==}
 
-  /protobufjs@7.2.4:
-    resolution: {integrity: sha512-AT+RJgD2sH8phPmCf7OUZR8xGdcJRga4+1cOaXJ64hvcSkVhNcRHOwIxUatPH15+nj59WAGTDv3LSGZPEQbJaQ==}
+  /protobufjs@7.2.5:
+    resolution: {integrity: sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==}
     engines: {node: '>=12.0.0'}
     requiresBuild: true
     dependencies:

@@ -8,7 +8,7 @@ const nextConfig = {
     
   },
   productionBrowserSourceMaps: true,
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   images: {
     remotePatterns: [

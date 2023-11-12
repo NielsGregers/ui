@@ -112,14 +112,14 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
-export function NavigationMenuCava(props: {site:string,tenant:string}) : JSX.Element {
+export function NavigationMenuKoksmat(props: {site:string,tenant:string}) : JSX.Element {
   const {site,tenant} = props
 return (
   <div className="flex">
     <div className="grow"></div>
   <Menubar className="ml-3  border-0">
       <MenubarMenu>
-  <MenubarTrigger>Koksmat</MenubarTrigger>
+  <MenubarTrigger>Koksmat 2</MenubarTrigger>
   <MenubarContent>
     <MenubarItem>
       Open site
@@ -135,12 +135,13 @@ return (
   </MenubarContent>
 </MenubarMenu>
 <MenubarMenu>
-      <MenubarTrigger>Projects</MenubarTrigger>
+      <MenubarTrigger>Kitchens</MenubarTrigger>
       <MenubarContent>
-        <MenubarItem disabled> New Room</MenubarItem>
-        <MenubarItem>List Rooms</MenubarItem>
-        <MenubarItem disabled>Delete Room</MenubarItem>
-        <MenubarItem disabled>Sync Room Groups</MenubarItem>
+        <MenubarItem disabled> New Kitchen</MenubarItem>
+        <MenubarItem>   <Link 
+        href={`/koksmat/${tenant}/${site}/kitchen`}>Open Kitchen </Link></MenubarItem>
+        <MenubarItem disabled>Delete Kitchen</MenubarItem>
+        <MenubarItem disabled>Sync Kitchens</MenubarItem>
       </MenubarContent>
     </MenubarMenu>
   <MenubarMenu>
@@ -174,10 +175,35 @@ return (
   <MenubarSub>
       <MenubarSubTrigger>SharePoint</MenubarSubTrigger>
       <MenubarSubContent>
-        <MenubarItem >  <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/lists/rooms`}>Rooms <MdOpenInNew /></Link></MenubarItem>
-        <MenubarItem>List Rooms</MenubarItem>
-        <MenubarItem >Delete Room</MenubarItem>
-        <MenubarItem >Sync Room Groups</MenubarItem>
+        <MenubarItem >  
+          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/viewlsts.aspx?view=14`}>Contents <MdOpenInNew /></Link>
+          </MenubarItem>
+          <MenubarItem >  
+          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/settings.aspx`}>Settings <MdOpenInNew /></Link>
+          </MenubarItem>
+      </MenubarSubContent>
+      </MenubarSub>
+      <MenubarSub>
+      <MenubarSubTrigger>Kubernetes</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem >  
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes`}>Clusters </Link>
+          </MenubarItem>
+          <MenubarItem >  
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/namespaces`}>Namespaces </Link>
+          </MenubarItem>     
+          <MenubarItem >  
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/pods`}>Pods </Link>
+          </MenubarItem>       
+      </MenubarSubContent>
+    </MenubarSub>
+    <MenubarSub>
+      <MenubarSubTrigger>GIT</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem >  
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/git`}>Repo </Link>
+          </MenubarItem>
+       
       </MenubarSubContent>
     </MenubarSub>
   </MenubarContent>
@@ -192,6 +218,15 @@ return (
   <MenubarTrigger>Settings</MenubarTrigger>
   <MenubarContent>
   {/* {roleMenuItems(site)} */}
+  </MenubarContent>
+</MenubarMenu>
+<MenubarMenu>
+  <MenubarTrigger>Help</MenubarTrigger>
+  <MenubarContent>
+  {/* {roleMenuItems(site)} */}
+  <MenubarItem >  
+          <Link className="whitespace-nowrap" href={`/koksmat/docs/koksmat/about`}>About </Link>
+          </MenubarItem>
   </MenubarContent>
 </MenubarMenu>
 </Menubar> 

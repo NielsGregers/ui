@@ -12,7 +12,7 @@ import { useContext } from "react"
 import { KoksmatToolBar } from "./components/toolbar"
 interface RootLayoutProps {
   children: React.ReactNode,
-  params: { site: string }
+  params: { site: string, tenant: string }
 }
 
 export default function RootLayout({ children, params }: RootLayoutProps) {
@@ -20,15 +20,15 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
   return (
 
     <div>
-      <SiteHeader site={params.site} />
+      <SiteHeader site={params.site} tenant={params.tenant} />
 
       <div className="flex">
-    <KoksmatToolBar />
+        <KoksmatToolBar />
         <div className="grow" >
 
           <div className="flex-1">{children}</div>
           <LocalSiteFooter />
-        
+
         </div>
       </div>
     </div>

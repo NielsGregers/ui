@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react"
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import {test} from "@/app/koksmat/server"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -28,7 +28,7 @@ import { MagicboxContext } from "../../../magicbox-context"
 import { KoksmatContext } from "./koksmatcontext"
 import { getCavaOrders } from "./data"
 import { roles } from "./data/roles"
-import { SocketLogger } from "./components/socket"
+
 
 export default function Cava({ params }: { params: {  site: string } }) {
   const { site } = params
@@ -36,13 +36,8 @@ export default function Cava({ params }: { params: {  site: string } }) {
 
   return (
     <div className="minh-screen w-full">
-      <Button onClick={async ()=>{
-        
-        const r = await test()
-        alert(r)
-        
-        }}>Test</Button>
-        <SocketLogger />
+
+      
       <div className="container ">
          <h2 className={"my-3 text-2xl font-bold leading-none tracking-tight"}>
           Application Roles

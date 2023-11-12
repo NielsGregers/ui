@@ -1,63 +1,75 @@
 "use client"
 
-import { useEffect, useState } from 'react';
-import { Socket,io } from 'socket.io-client';
+import { useEffect, useMemo, useState } from 'react';
+import { Centrifuge } from 'centrifuge';
+import { MessageType } from "../server/MessageType";
 
-export function SocketLogger(){
-    const [log, setlog] = useState<string>("")
-    const [socket, setsocket] = useState<Socket>()
-    const onConnect = () => {
-        debugger
-        console.log("connected");
-        const newLog = log+"connected\n"
-        setlog(newLog)
-        if (!socket) return
-        socket.emit('helloFromClient',{
-            "name":"helloFromClient",
-            "data": "xyz"
-        } );
+export function SocketLogger(props: {channelname:string}) {
+  const log = useMemo<MessageType[]>(() => { return [] }, [])
+  const [refresh, setrefresh] = useState(0)
+  const [socket, setsocket] = useState<Centrifuge>()
+  const onConnect = () => {
 
+    console.log("connected");
+    // log.push("connected")
+
+
+    if (!socket) return
+    // socket.emit('helloFromClient',{
+    //     "name":"helloFromClient",
+    //     "data": "xyz"
+    // } );
+
+  }
+  const onDisconnect = () => {
+    console.log("disconnected");
+    //  log.push("disconnected")
+
+  }
+
+  const receiver = (data: { channel: string, data: MessageType }) => {
+
+    console.log("received", data);
+
+    log.push(data.data)
+    setrefresh(new Date().getTime())
+  }
+  useEffect(() => {
+    // create and assign a socket to a variable.
+
+    let socket = new Centrifuge('ws://localhost:8000/connection/websocket')
+    setsocket(socket)
+
+
+
+    return () => {
+      socket.disconnect()
     }
-    const onDisconnect = () => {
-        console.log("disconnected");
-        const newLog = log+"disconnected\n"
-        setlog(newLog)
+  }, [])
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('connected', onConnect);
+      const sub = socket.newSubscription(props.channelname);
+      sub.on('publication', receiver);
+      sub.subscribe()
+      socket.connect()
     }
 
-    const helloFromServer = (data:any) => {
-        console.log("hello from server", data);
-        const newLog = log+data.message
-        setlog(newLog)
 
-    }
-    useEffect(() => {
-          // create and assign a socket to a variable.
-          let socket = io("ws://localhost:4000",{})
-          setsocket(socket)
-          socket.connect()
-    
-    
-      return () => {
-        socket.disconnect()
-      }
-    }, [])
+  }, [socket])
 
-    useEffect(() => {
-      if (socket){
-        socket.on('connect', onConnect);
-        socket.on('disconnect', onDisconnect);
-        socket.on('helloFromServer', helloFromServer);
 
-      }
-    
-     
-    }, [socket])
-    
-    
-    return (
-<div>
-        <div>Sockets</div>
-<pre>{log}</pre>
-        </div>
-    )
+  return (
+    <div className="bg-slate-950 p-4 text-green-600">
+      {/* <div>Sockets {refresh}</div> */}
+      <pre className="h-[500px] overflow-scroll text-xs">
+        {log.sort((a, b) => a.timestamp - b.timestamp).map((l, i) => {
+          return <div key={i} className={l.isError ? "text-red-500":""}>{l.message}</div>
+        })}
+
+
+      </pre>
+    </div>
+  )
 }

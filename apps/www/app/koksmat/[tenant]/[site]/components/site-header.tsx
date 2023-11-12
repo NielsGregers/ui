@@ -16,11 +16,11 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 
-export function SiteHeader(props: { site: string }) {
+export function SiteHeader(props: { site: string,tenant:string }) {
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
       <div className=" flex h-[64px] items-center">
-        <SiteMenu  site={props.site}/>
+        <SiteMenu  site={props.site} tenant={props.tenant}/>
         <div className="grow"></div>
         <div className="w-[300px]">
   
