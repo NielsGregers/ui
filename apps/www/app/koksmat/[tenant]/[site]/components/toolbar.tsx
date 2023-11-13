@@ -1,12 +1,13 @@
 "use client"
 
+import { KoksmatContext } from "@/app/koksmat/context"
 import { MagicBar } from "@/app/magicbox/components/tools"
 import * as React from "react"
 import { useContext } from "react"
-import { KoksmatContext } from "../koksmatcontext"
+
 export function KoksmatToolBar(){
-    const {hasRole} =  useContext(KoksmatContext) 
-    if (!hasRole("feature.toolbar")) return null
+    const {showToolbar} =  useContext(KoksmatContext) 
+    if (!showToolbar) return null
        
     return (
         <div className="mr-4 hidden md:flex">

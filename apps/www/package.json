@@ -63,6 +63,7 @@
     "@tanstack/react-table": "^8.9.1",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.0.21",
+    "ansicolor": "^2.0.1",
     "async-mutex": "^0.4.0",
     "axios": "^1.4.0",
     "centrifuge": "^5.0.1",

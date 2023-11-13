@@ -44,6 +44,19 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
           items: [],
         },
         {
+          title: "Connect",
+          href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/connect`,
+          items: [],
+        },
+
+        
+      ],
+    },
+    {
+      title: "Cook",
+      items: [
+       
+        {
           title: "Kitchen Tickets",
           href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/github`,
           items: [],
@@ -54,7 +67,19 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
           items: [],
         },
      
-      
+        {
+          title: "Build",
+          disabled: true,
+          href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/build`,
+          items: [],
+        },
+        {
+          title: "Ship",
+          disabled: true,
+          href: `/koksmat/${tenant}/${site}/kitchen/${workspace}/ship`,
+          items: [],
+        },   
+ 
       ],
     },
     // {

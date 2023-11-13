@@ -42,13 +42,19 @@ export const runProcess = (command: string, args : string[], timeout: number,cha
     const options : SpawnOptionsWithoutStdio = {env: process.env,cwd}
     const processHandler = spawn(command, args,options);
 
+    // processHandler.stdio[2].on("data", async (data) => {
+    //   const text = data.toString();
+    //   broadcast(channel,text)
+    //   stdoutput += text;
+     
+    // });
     processHandler.stdout.on("data", async (data) => {
       const text = data.toString();
       broadcast(channel,text)
       stdoutput += text;
      
     });
-
+    
     processHandler.stderr.on("data", (data) => {
       const text = data.toString();
       stderror += text;

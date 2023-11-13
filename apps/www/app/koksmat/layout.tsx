@@ -1,14 +1,7 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-
-import { siteConfig } from "@/config/site"
-
-import { SiteFooter } from "@/components/magicbox-site-footer"
-import { SiteFooter as LocalSiteFooter } from "./[tenant]/[site]/components/site-footer"
-import { SiteHeader } from "@/app/koksmat/[tenant]/[site]/components/site-header"
-
-import { MagicBar } from "@/app/magicbox/components/tools"
-import { KoksmatProvider } from "./[tenant]/[site]/koksmatcontextprovider"
+import { siteConfig } from "./site"
+import { KoksmatProvider } from "./contextprovider"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -45,7 +38,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
 
   return (
     <div>
-      <KoksmatProvider site="cava3" >
+      <KoksmatProvider  >
         {children}
       </KoksmatProvider>
     </div>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Centrifuge } from 'centrifuge';
 import { MessageType } from "../server/MessageType";
+import {strip} from "ansicolor"
 
 export function SocketLogger(props: {channelname:string}) {
   const log = useMemo<MessageType[]>(() => { return [] }, [])
@@ -65,7 +66,7 @@ export function SocketLogger(props: {channelname:string}) {
       {/* <div>Sockets {refresh}</div> */}
       <pre className="h-[500px] overflow-scroll text-xs">
         {log.sort((a, b) => a.timestamp - b.timestamp).map((l, i) => {
-          return <div key={i} className={l.isError ? "text-red-500":""}>{l.message}</div>
+          return <div key={i} className={l.isError ? "text-red-500":""}>{strip(l.message)}</div>
         })}
 
 

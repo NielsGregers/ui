@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 
 import { MagicboxContext } from "../../../magicbox-context"
-import { KoksmatContext } from "./koksmatcontext"
+import { KoksmatContext } from "@/app/koksmat/context"
 import { getCavaOrders } from "./data"
 import { roles } from "./data/roles"
 

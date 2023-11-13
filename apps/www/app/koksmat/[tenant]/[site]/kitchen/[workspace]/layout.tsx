@@ -1,3 +1,4 @@
+"use client"
 import { docsConfig } from "../links"
 
 import { ScrollArea } from "@/registry/new-york/ui/scroll-area"
@@ -6,6 +7,8 @@ import { SiteHeader } from "../header"
 import { PageContextHeader } from "../../components/page-context-header"
 import { findWorkspace } from '..';
 import { useMemo } from "react"
+import { useContext, useEffect } from "react"
+import { KoksmatContext } from "@/app/koksmat/context"
 interface DocsLayoutProps {
   children: React.ReactNode
   params: {
@@ -17,10 +20,13 @@ interface DocsLayoutProps {
 
 export default function DocsLayout({ children,params }: DocsLayoutProps) {
   const ws = useMemo(() => {return findWorkspace(params.workspace)}, [params.workspace]);
-
+  const koksmat = useContext(KoksmatContext)
 
   const {tenant,site,workspace} = params
-  
+  useEffect(() => {
+    koksmat.setKitchenContext(workspace)
+
+  }, [workspace,koksmat])
   return (
     <div className="border-b">
 <PageContextHeader title={"Kitchen: "+ (ws?.displayName ?? "...")} />

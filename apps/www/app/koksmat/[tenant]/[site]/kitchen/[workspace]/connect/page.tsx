@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useMemo } from 'react';
 
 import RunServerProcess from '@/app/koksmat/[tenant]/[site]/components/runserverprocess';
-import { findWorkspace } from '..';
-import { PageContextSectionHeader } from '../../components/page-section-header';
+import { findWorkspace } from '../..';
 
 interface WorkspaceProps {
     params: {
@@ -11,16 +9,15 @@ interface WorkspaceProps {
     }
 }
 
-export default function Workspace(props: WorkspaceProps) {
+export default function Connections(props: WorkspaceProps) {
   const ws = useMemo(() => {return findWorkspace(props.params.workspace)}, [props.params.workspace]);
 
    
     return (<div>
-           
-   <PageContextSectionHeader title="Introduction" />
     {ws && <div>
-<img src={ws.image} alt="Kitchen image"/>
-
+      <div>Connect</div>
+     
+      <RunServerProcess cmd={'pwsh'} args={["/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/koksmat/[tenant]/[site]/kitchen/[workspace]/scripts/connect.ps1"]} timeout={10} channelname={'git'} cwd={ws.cwd} />
     </div>}
     
     </div>)
