@@ -147,19 +147,21 @@ return (
 
 
     <MenubarMenu>
-      <MenubarTrigger>SharePoint</MenubarTrigger>
-      <MenubarContent>
+  <MenubarTrigger>Connections</MenubarTrigger>
+  <MenubarContent>
+  <MenubarSub>
+  <MenubarSub>
+      <MenubarSubTrigger>Azure</MenubarSubTrigger>
+      <MenubarSubContent>
         <MenubarItem >  
-          <Link className="flex-nowrap whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/viewlsts.aspx?view=14`}><div className="flex space-x-2"><MdOpenInNew /><div>Contents</div></div></Link>
+          <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/azure`}>Subscriptions </Link>
           </MenubarItem>
-          <MenubarItem >  
-          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/settings.aspx`}><div className="flex space-x-2"> <MdOpenInNew /><div>Settings</div></div></Link>
-          </MenubarItem>
-      </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu>
-      <MenubarTrigger>Kubernetes</MenubarTrigger>
-      <MenubarContent>
+       
+      </MenubarSubContent>
+    </MenubarSub>
+    <MenubarSub>
+      <MenubarSubTrigger>Kubernetes</MenubarSubTrigger>
+      <MenubarSubContent>
         <MenubarItem >  
           <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/clusters`}>Clusters </Link>
           </MenubarItem>
@@ -169,8 +171,22 @@ return (
           <MenubarItem >  
           <Link className="whitespace-nowrap" href={`/koksmat/${tenant}/${site}/kubernetes/pods`}>Pods </Link>
           </MenubarItem>       
-      </MenubarContent>
-    </MenubarMenu>
+      </MenubarSubContent>
+    </MenubarSub>
+      <MenubarSubTrigger>SharePoint</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem >  
+          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/viewlsts.aspx?view=14`}><div className="flex space-x-2"><MdOpenInNew />Contents</div> </Link>
+          </MenubarItem>
+          <MenubarItem >  
+          <Link className="whitespace-nowrap" target="blank" href={`https:${tenant}.sharepoint.com/sites/${site}/_layouts/15/settings.aspx`}><div className="flex space-x-2"><MdOpenInNew />Settings</div> </Link>
+          </MenubarItem>
+      </MenubarSubContent>
+      </MenubarSub>
+     
+    
+  </MenubarContent>
+</MenubarMenu>
 
 <MenubarMenu>
   <MenubarTrigger>Settings</MenubarTrigger>

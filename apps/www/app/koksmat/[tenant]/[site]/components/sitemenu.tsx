@@ -9,7 +9,7 @@ export function SiteMenu(props: {site: string,tenant:string}){
 
     return (
         <div >
-      <MainNav  site={props.site} tenant={props.tenant}/>
+      <MainNav  />
         <MobileNav />
       </div>
     )

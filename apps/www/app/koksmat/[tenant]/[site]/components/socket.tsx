@@ -5,7 +5,7 @@ import { Centrifuge } from 'centrifuge';
 import { MessageType } from "../server/MessageType";
 import {strip} from "ansicolor"
 
-export function SocketLogger(props: {channelname:string}) {
+export function SocketLogger(props: {channelname:string,traceHidden?:boolean, onMessage?: (data: MessageType) => void}) {
   const log = useMemo<MessageType[]>(() => { return [] }, [])
   const [refresh, setrefresh] = useState(0)
   const [socket, setsocket] = useState<Centrifuge>()
@@ -33,6 +33,10 @@ export function SocketLogger(props: {channelname:string}) {
     console.log("received", data);
 
     log.push(data.data)
+    
+    if (props.onMessage) {
+      props.onMessage(data.data)
+    }
     setrefresh(new Date().getTime())
   }
   useEffect(() => {
@@ -60,7 +64,7 @@ export function SocketLogger(props: {channelname:string}) {
 
   }, [socket])
 
-
+  if (props.traceHidden) return null
   return (
     <div className="bg-slate-950 p-4 text-green-600">
       {/* <div>Sockets {refresh}</div> */}

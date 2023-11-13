@@ -16,7 +16,7 @@ export type KoksmatContextProps = {
   site:string,
   kitchen?:string,
   station?:string
-  workspace?: Workspace,
+  kitchenSpace?: Workspace,
   showToolbar?:boolean,
   hasRole:  (role: string) => boolean
   setSiteContext:(tenant:string,site:string)=>void
@@ -38,7 +38,7 @@ export const KoksmatContext = createContext<KoksmatContextProps>({
   setStationContext: function (kitchen: string, station: string): void {
     throw new Error("Function not implemented.");
   },
-  workspace: undefined,
+  kitchenSpace: undefined,
   setTenantContext: function (tenant: string): void {
     throw new Error("Function not implemented.");
   }

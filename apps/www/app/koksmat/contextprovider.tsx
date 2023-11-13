@@ -173,20 +173,20 @@ useEffect(()=>{
     kitchen,
     showToolbar: true,
     station,
-    workspace,
+    kitchenSpace: workspace,
     setSiteContext: function (tenant: string, site: string): void {
-      settenant(tenant);
-      setsite(site);
+      if (tenant) settenant(tenant);
+      if (site) setsite(site);
     },
     setKitchenContext: function (kitchen: string): void {
-      setkitchen(kitchen);
+      if (kitchen) setkitchen(kitchen);
     },
     setStationContext: function (kitchen: string, station: string): void {
-      setkitchen(kitchen);
-      setstation(station);
+      if (kitchen) setkitchen(kitchen);
+      if (station) setstation(station);
     },
     setTenantContext: function (tenant: string): void {
-      settenant(tenant);
+      if (tenant) settenant(tenant);
     }
   }
 
