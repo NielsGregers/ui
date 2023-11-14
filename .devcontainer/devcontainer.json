@@ -18,12 +18,11 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+// Use 'forwardPorts' to make a list of ports inside the container available locally.
+"forwardPorts": [3001],
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "npm install gulp-cli yo @microsoft/generator-sharepoint --global"
-
+// Use 'postCreateCommand' to run commands after the container is created.
+ "postCreateCommand": "npm run start"
 	// Configure tool-specific properties.
 	// "customizations": {},
 
