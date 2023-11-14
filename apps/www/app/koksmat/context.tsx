@@ -1,6 +1,6 @@
 "use client"
 import { createContext } from "react";
-import { Workspace } from "./[tenant]/[site]/kitchen";
+import { CookingStation, Kitchen } from "./[site]/kitchen";
 
 export interface RoleItem {
   name: string
@@ -12,11 +12,13 @@ export interface RoleItem {
 export type KoksmatContextProps = {
   roles: RoleItem[]
   isloaded: boolean,
+  domain:string,
   tenant:string,
   site:string,
   kitchen?:string,
   station?:string
-  kitchenSpace?: Workspace,
+  currentKitchen?: Kitchen,
+  currentstation?: CookingStation,
   showToolbar?:boolean,
   hasRole:  (role: string) => boolean
   setSiteContext:(tenant:string,site:string)=>void
@@ -38,8 +40,9 @@ export const KoksmatContext = createContext<KoksmatContextProps>({
   setStationContext: function (kitchen: string, station: string): void {
     throw new Error("Function not implemented.");
   },
-  kitchenSpace: undefined,
+  currentKitchen: undefined,
   setTenantContext: function (tenant: string): void {
     throw new Error("Function not implemented.");
-  }
+  },
+  domain: ""
 })

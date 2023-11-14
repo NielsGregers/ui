@@ -6,6 +6,7 @@ import { https, httpsGetAll } from "@/lib/httphelper"
 import { set } from "date-fns"
 import Link from "next/link"
 import { Button } from "@/registry/new-york/ui/button"
+import { PageContextHeader } from "./[site]/components/page-context-header"
 export type Root = Root2[]
 
 export interface Root2 {
@@ -104,7 +105,8 @@ setinstances( getResponse.data ?? [])
 return (
 <div className="container h-screen">
     {error && <div className="text-red-600">{error}</div>}
-    <div className="text-xl">Instances</div>
+    <PageContextHeader title="Sites" />
+  
     <div>
         {instances.map((instance) => {
             return <div key={instance.id}>

@@ -92,7 +92,8 @@ export interface User3 {
 
 import { useSharePointList } from "@/app/sharepoint";
 import { set } from "date-fns";
-import { Workspace, findWorkspace } from "./[tenant]/[site]/kitchen";
+import { CookingStation, Kitchen, findCookingStation, findKitchen } from "./[site]/kitchen";
+import { useProcess } from "@/lib/useprocess";
 type Props = {
   children?: React.ReactNode;
 
@@ -104,7 +105,11 @@ export const KoksmatProvider = ({ children }: Props) => {
   const [site, setsite] = useState("")
   const [kitchen, setkitchen] = useState("")
   const [station, setstation] = useState("")
-  const [workspace, setworkspace] = useState<Workspace>()
+  const [domain, setdomain] = useState("")
+  const [workspace, setworkspace] = useState<Kitchen>()
+  const [currentstation, setcurrentstation] = useState<CookingStation>()
+  const azAccount = useProcess("az", ["account","show"], 20, "echo")
+  const azDomain = useProcess("pwsh", ["/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/koksmat/az-activeuser-getdomain.ps1"], 20, "echo")
 
   const [isloaded, setisloaded] = useState(false)
   const { items, error, isLoading } = useSharePointList(
@@ -115,7 +120,23 @@ export const KoksmatProvider = ({ children }: Props) => {
   )
   const [roles, setroles] = useState<RoleItem[]>([])
 
+useEffect(()=>{
+  if (azAccount && azAccount.data){
+    const parsed = JSON.parse(azAccount.data)
+    if (parsed?.homeTenantId){
+      settenant(parsed?.homeTenantId)
+    }
+  }
+} ,[azAccount])
 
+
+useEffect(()=>{
+  if (azDomain && azDomain.data){
+    
+      setdomain(azDomain.data.replace("\n",""))
+    
+  }
+} ,[azDomain])
   useEffect(() => {
     setroles([])
     if (items && magicbox.session?.user && site) {
@@ -146,7 +167,7 @@ export const KoksmatProvider = ({ children }: Props) => {
   }
     , [items, magicbox.session?.user,tenant,site])
 useEffect(()=>{
-  setworkspace(findWorkspace(kitchen))
+  setworkspace(findKitchen(kitchen))
 },[kitchen,setworkspace])
 
 
@@ -171,22 +192,39 @@ useEffect(()=>{
     site,
     hasRole,
     kitchen,
+    domain,
     showToolbar: true,
     station,
-    kitchenSpace: workspace,
+    currentstation,
+    currentKitchen: workspace,
     setSiteContext: function (tenant: string, site: string): void {
-      if (tenant) settenant(tenant);
+      //if (tenant) settenant(tenant);
       if (site) setsite(site);
     },
     setKitchenContext: function (kitchen: string): void {
-      if (kitchen) setkitchen(kitchen);
+      if (kitchen) {
+        setkitchen(kitchen);
+        const workspace = findKitchen(kitchen) 
+        setworkspace(workspace)
+        if (!currentstation && workspace?.stations?.length){
+          setcurrentstation(workspace.stations[0])
+          setstation(workspace.stations[0].key)
+        }
+      }
     },
     setStationContext: function (kitchen: string, station: string): void {
-      if (kitchen) setkitchen(kitchen);
-      if (station) setstation(station);
+      if (kitchen) {
+        setkitchen(kitchen);
+        setworkspace(findKitchen(kitchen))
+      }
+      if (station){
+         setstation(station);
+         setcurrentstation(findCookingStation(kitchen,station))
+          
+        }
     },
     setTenantContext: function (tenant: string): void {
-      if (tenant) settenant(tenant);
+      //if (tenant) settenant(tenant);
     }
   }
 
