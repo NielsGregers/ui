@@ -3,7 +3,7 @@
 {
 	"name": "Koksmat",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "ghcr.io/koksmat-com/ui:v1.0.0.tools-7",
+	"image": "ghcr.io/koksmat-com/ui:v1.0.0.tools-8",
 	"features": {
 
 	},
