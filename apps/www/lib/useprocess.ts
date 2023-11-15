@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { run } from "@/app/koksmat/[site]/server"
+import { run } from "@/app/koksmat/[tenant]/[site]/server"
 
 export const version = 1
 

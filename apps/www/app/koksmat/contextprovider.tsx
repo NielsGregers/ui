@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { KoksmatContext, KoksmatContextProps, RoleItem } from "./context";
+import { KoksmatContext, KoksmatContextProps, KoksmatOptions, RoleItem } from "./context";
 import { MagicboxContext } from "@/app/magicbox-context";
 
 export interface Root {
@@ -92,7 +92,8 @@ export interface User3 {
 
 import { useSharePointList } from "@/app/sharepoint";
 import { set } from "date-fns";
-import { CookingStation, Kitchen, findCookingStation, findKitchen } from "./[site]/kitchen";
+import { CookingStation, Kitchen} from "./[tenant]/[site]/kitchen/Kitchens";
+import { findCookingStation, findKitchen } from "./[tenant]/[site]/kitchen";
 import { useProcess } from "@/lib/useprocess";
 type Props = {
   children?: React.ReactNode;
@@ -106,6 +107,7 @@ export const KoksmatProvider = ({ children }: Props) => {
   const [kitchen, setkitchen] = useState("")
   const [station, setstation] = useState("")
   const [domain, setdomain] = useState("")
+  const [options, setoptions] = useState<KoksmatOptions>({})
   const [workspace, setworkspace] = useState<Kitchen>()
   const [currentstation, setcurrentstation] = useState<CookingStation>()
   const azAccount = useProcess("az", ["account","show"], 20, "echo")
@@ -204,27 +206,31 @@ useEffect(()=>{
     setKitchenContext: function (kitchen: string): void {
       if (kitchen) {
         setkitchen(kitchen);
-        const workspace = findKitchen(kitchen) 
-        setworkspace(workspace)
-        if (!currentstation && workspace?.stations?.length){
-          setcurrentstation(workspace.stations[0])
-          setstation(workspace.stations[0].key)
+        const workspace = findKitchen(kitchen);
+        setworkspace(workspace);
+        if (!currentstation && workspace?.stations?.length) {
+          setcurrentstation(workspace.stations[0]);
+          setstation(workspace.stations[0].key);
         }
       }
     },
     setStationContext: function (kitchen: string, station: string): void {
       if (kitchen) {
         setkitchen(kitchen);
-        setworkspace(findKitchen(kitchen))
+        setworkspace(findKitchen(kitchen));
       }
-      if (station){
-         setstation(station);
-         setcurrentstation(findCookingStation(kitchen,station))
-          
-        }
+      if (station) {
+        setstation(station);
+        setcurrentstation(findCookingStation(kitchen, station));
+
+      }
     },
     setTenantContext: function (tenant: string): void {
-      //if (tenant) settenant(tenant);
+    if (tenant) settenant(tenant);
+    },
+    options,
+    setOptions: function (changes: KoksmatOptions): void {
+      setoptions({...options,...changes});
     }
   }
 
