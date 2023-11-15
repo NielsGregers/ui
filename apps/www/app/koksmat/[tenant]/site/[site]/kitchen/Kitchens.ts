@@ -50,7 +50,7 @@ export class Koksmat {
                 "cwd": "/Users/nielsgregersjohansen/kitchens/noma/ui",
                 "kitchenUrl": "https://www.langosteria.com",
                 "image": "https://magicbox.blob.core.windows.net/icons/langosteria.jpg",
-                "repoUrl": ""
+                "repoUrl": "https://github.com/koksmat-com/ui.git"
             },
             {
                 "key": "cli",
