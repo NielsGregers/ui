@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site"
 
 import { SiteFooter } from "@/components/magicbox-site-footer"
 import { SiteHeader } from "@/components/sandbox-site-header"
-import { KoksmatToolBar } from "../koksmat/[tenant]/[site]/components/toolbar"
+import { KoksmatToolBar } from "../koksmat/[tenant]/site/[site]/components/toolbar"
 import { MagicBar } from "../magicbox/components/tools"
 
 

@@ -26,7 +26,7 @@
 "forwardPorts": [3001],
 "containerEnv": { "HOMEPAGE": "koksmat" },
 // Use 'postCreateCommand' to run commands after the container is created.
- "postCreateCommand": "npm run start"
+ "postCreateCommand": "cd /usr/src/app/apps/www && npm run start"
 	// Configure tool-specific properties.
 	// "customizations": {},
 

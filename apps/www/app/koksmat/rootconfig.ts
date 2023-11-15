@@ -41,5 +41,9 @@ export class RootConfig {
     public get tenants() : Tenant[] {
         return this._tenants
     }
+
+    public findTenant(tenantName:string) : Tenant | undefined{
+        return this._tenants.find(t=>t.tenantName === tenantName)
+    }
     
 }

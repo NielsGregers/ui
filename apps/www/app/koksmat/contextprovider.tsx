@@ -92,9 +92,10 @@ export interface User3 {
 
 import { useSharePointList } from "@/app/sharepoint";
 import { set } from "date-fns";
-import { CookingStation, Kitchen} from "./[tenant]/[site]/kitchen/Kitchens";
-import { findCookingStation, findKitchen } from "./[tenant]/[site]/kitchen";
+import { CookingStation, Kitchen} from "./[tenant]/site/[site]/kitchen/Kitchens";
+import { findCookingStation, findKitchen } from "./[tenant]/site/[site]/kitchen";
 import { useProcess } from "@/lib/useprocess";
+import { RootConfig } from "./rootconfig";
 type Props = {
   children?: React.ReactNode;
 
@@ -104,10 +105,11 @@ export const KoksmatProvider = ({ children }: Props) => {
   const magicbox = useContext(MagicboxContext)
   const [tenant, settenant] = useState("")
   const [site, setsite] = useState("")
+  const [defaultsite, setdefaultsite] = useState<string>()
   const [kitchen, setkitchen] = useState("")
   const [station, setstation] = useState("")
   const [domain, setdomain] = useState("")
-  const [options, setoptions] = useState<KoksmatOptions>({})
+  const [options, setoptions] = useState<KoksmatOptions>({showContext:true})
   const [workspace, setworkspace] = useState<Kitchen>()
   const [currentstation, setcurrentstation] = useState<CookingStation>()
   const azAccount = useProcess("az", ["account","show"], 20, "echo")
@@ -125,9 +127,9 @@ export const KoksmatProvider = ({ children }: Props) => {
 useEffect(()=>{
   if (azAccount && azAccount.data){
     const parsed = JSON.parse(azAccount.data)
-    if (parsed?.homeTenantId){
-      settenant(parsed?.homeTenantId)
-    }
+    // if (parsed?.homeTenantId){
+    //   settenant(parsed?.homeTenantId)
+    // }
   }
 } ,[azAccount])
 
@@ -192,6 +194,7 @@ useEffect(()=>{
     isloaded: false,
     tenant,
     site,
+    defaultsite,
     hasRole,
     kitchen,
     domain,
@@ -226,7 +229,11 @@ useEffect(()=>{
       }
     },
     setTenantContext: function (tenant: string): void {
-    if (tenant) settenant(tenant);
+    if (tenant) {
+      settenant(tenant);
+      setdefaultsite(RootConfig.instance().findTenant(tenant)?.defaultSite);
+    }
+
     },
     options,
     setOptions: function (changes: KoksmatOptions): void {

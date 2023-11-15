@@ -2,10 +2,12 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 import { siteConfig } from "./site"
 import { KoksmatProvider } from "./contextprovider"
+import { SiteHeader } from "./[tenant]/site/[site]/components/site-header"
+import ClientLayout from "./[tenant]/site/[site]/clientlayout"
 
 interface RootLayoutProps {
   children: React.ReactNode
-  params: { site: string,tenant:string }
+  params: { site: string, tenant: string }
 }
 
 export const metadata: Metadata = {
@@ -33,13 +35,13 @@ export const metadata: Metadata = {
 
 
 export default function RootLayout({ children, params }: RootLayoutProps) {
-
-
-
   return (
     <div>
       <KoksmatProvider  >
-        {children}
+        <SiteHeader />
+        <div >
+          {children}
+        </div>
       </KoksmatProvider>
     </div>
   )
