@@ -1,15 +1,23 @@
 FROM node:lts
 
-RUN apt update  &&  apt install -y curl gnupg apt-transport-https
+###################################
+# Prerequisites
+# Install pre-requisite packages.
+RUN apt-get install -y wget
 
-# Import the public repository GPG keys
-RUN curl https://packages.microsoft.com/keys/microsoft.asc |  apt-key add -
+# Download the PowerShell package file
+RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell_7.3.9-1.deb_amd64.deb
 
-# Register the Microsoft Product feed
-RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list'
+###################################
+# Install the PowerShell package
+RUN dpkg -i powershell_7.3.9-1.deb_amd64.deb
 
-# Install PowerShell
-RUN apt update && apt install -y powershell
+# Resolve missing dependencies and finish the install (if necessary)
+RUN apt-get install -f
+
+# Delete the downloaded package file
+RUN rm powershell_7.3.9-1.deb_amd64.deb
+
 
 # Install Azure CLI
 # RUN apt-get update
