@@ -10,7 +10,7 @@ import {
   } from "@/components/ui/card"
   import { Badge } from "@/registry/new-york/ui/badge"
   import { Button } from "@/registry/new-york/ui/button"
-import { PopUp } from "../../[tenant]/site/[site]/components/popup"
+import { PopUp } from "../../tenants/[tenant]/site/[site]/components/popup"
   
 
 export type Root = Root2[]

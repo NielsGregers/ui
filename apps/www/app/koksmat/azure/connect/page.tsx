@@ -4,11 +4,11 @@ import React, { useContext, useMemo, useState } from "react"
 import Link from "next/link"
 
 import { Button } from "@/registry/new-york/ui/button"
-import RunServerProcess from "@/app/koksmat/[tenant]/site/[site]/components/runserverprocess"
+import RunServerProcess from "@/app/koksmat/tenants/[tenant]/site/[site]/components/runserverprocess"
 import { KoksmatContext } from "@/app/koksmat/context"
 import { MagicboxContext } from "@/app/magicbox-context"
-import { PageContextSectionHeader } from "../../[tenant]/site/[site]/components/page-section-header"
-import { MessageType } from "../../[tenant]/site/[site]/server/MessageType"
+import { PageContextSectionHeader } from "../../tenants/[tenant]/site/[site]/components/page-section-header"
+import { MessageType } from "../../tenants/[tenant]/site/[site]/server/MessageType"
 
 export default function Connections() {
   const [siginUrl, setsiginUrl] = useState("https://microsoft.com/devicelogin")
@@ -42,23 +42,31 @@ export default function Connections() {
   }
  return (
     <div>
-      {koksmat.currentKitchen && (
+    
         <div>
           <PageContextSectionHeader title={"Establish Azure Connection"} />
-
-          {accessChecked && !hasAzAccess && (
+          <div className="mb-3 max-w-[600px]">
+           <p>First of all we need to establish a trust between this computer and Microsoft Online. Notice that everything 
+           is running on the virtual computer that you are connected to, and any credentials are stored on that also. 
+           </p>
+           <p className="mt-3">
+           Most is done by executing PowerShell script on your computer. You can monitor the progress in the
+          terminal window below by clicking `Show Terminal`
+           </p>
+           </div>
+          {true && (
             // Try to login
             <RunServerProcess
               caption="Login to AZ"
               onMessage={onAzMessage}
-              cmd={"az"}
-              args={["login", "--use-device-code", "--allow-no-subscriptions"]}
+              cmd={"pwsh"}
+              args={["-File" ,magicbox.root+"app/koksmat/powershell/connect-azure.ps1"]}
               timeout={120}
               channelname={"az"}
-              cwd={koksmat.currentKitchen.cwd}
+              
             />
           )}
-          <Button
+          {/* <Button
             className="mb-3"
             disabled={createPnpApp}
             onClick={() => {
@@ -66,7 +74,7 @@ export default function Connections() {
             }}
           >
             Register Application in Microsoft Entra ID
-          </Button>
+          </Button> */}
           {signinCode && (
             <div>
               {/* <div className="mb-3">
@@ -87,7 +95,7 @@ export default function Connections() {
           )}
 
         </div>
-      )}
+      
     </div>
   )
 }

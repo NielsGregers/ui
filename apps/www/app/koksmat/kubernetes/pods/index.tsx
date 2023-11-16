@@ -15,7 +15,7 @@ import {
 import { Badge } from "@/registry/new-york/ui/badge"
 import { Button } from "@/registry/new-york/ui/button"
 
-import { PopUp } from "../../[tenant]/site/[site]/components/popup"
+import { PopUp } from "../../tenants/[tenant]/site/[site]/components/popup"
 import PodDetails from "./poddetails"
 
 export interface Root {

@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from 'react';
 import { useProcess } from '@/lib/useprocess';
 import { Button } from '@/registry/new-york/ui/button';
 import { set } from 'date-fns';
-import { PopUp } from '../../[tenant]/site/[site]/components/popup';
+import { PopUp } from '../../tenants/[tenant]/site/[site]/components/popup';
 import {
     Card,
     CardContent,
@@ -14,7 +14,7 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import { Badge } from '@/registry/new-york/ui/badge';
-import { PageContextHeader } from '../../[tenant]/site/[site]/components/page-context-header';
+import { PageContextHeader } from '../../tenants/[tenant]/site/[site]/components/page-context-header';
 export interface Root {
     kind: string
     apiVersion: string

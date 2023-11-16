@@ -37,6 +37,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".contentlayer/generated"
-  ],
+, "app/koksmat/components/AzContext.tsa"  ],
   "exclude": ["node_modules", "./scripts/build-registry.ts"]
 }

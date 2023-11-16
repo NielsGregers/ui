@@ -92,11 +92,11 @@ export interface User3 {
 
 import { useSharePointList } from "@/app/sharepoint";
 import { set } from "date-fns";
-import { CookingStation, Kitchen } from "./[tenant]/site/[site]/kitchen/Kitchens";
-import { findCookingStation, findKitchen } from "./[tenant]/site/[site]/kitchen";
+import { CookingStation, Kitchen } from "./tenants/[tenant]/site/[site]/kitchen/Kitchens";
+import { findCookingStation, findKitchen } from "./tenants/[tenant]/site/[site]/kitchen";
 import { useProcess } from "@/lib/useprocess";
 import { RootConfig } from "./rootconfig";
-import { run } from "./[tenant]/site/[site]/server";
+import { run } from "./tenants/[tenant]/site/[site]/server";
 type Props = {
   children?: React.ReactNode;
 

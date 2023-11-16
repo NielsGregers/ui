@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { run } from "@/app/koksmat/[tenant]/site/[site]/server"
+import { run } from "@/app/koksmat/tenants/[tenant]/site/[site]/server"
 import { Result } from "./httphelper"
 
 export const version = 1

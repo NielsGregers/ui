@@ -1,6 +1,6 @@
 "use client"
 import { createContext } from "react";
-import { CookingStation, Kitchen } from "./[tenant]/site/[site]/kitchen/Kitchens";
+import { CookingStation, Kitchen } from "./tenants/[tenant]/site/[site]/kitchen/Kitchens";
 
 export interface RoleItem {
   name: string
@@ -18,6 +18,7 @@ export type KoksmatOptions = {
   showSidebar?: boolean
   showHeader?: boolean
   showEcho?: boolean
+  showDebug?: boolean
 }
 
 export type KoksmatContextProps = {

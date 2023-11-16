@@ -1,6 +1,6 @@
 import React from 'react';
 
-import RunServerProcess from '@/app/koksmat/[tenant]/site/[site]/components/runserverprocess';
+import RunServerProcess from '@/app/koksmat/tenants/[tenant]/site/[site]/components/runserverprocess';
 
 export default function ClusterInfo() {
    

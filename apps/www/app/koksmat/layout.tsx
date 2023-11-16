@@ -2,8 +2,8 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 import { siteConfig } from "./site"
 import { KoksmatProvider } from "./contextprovider"
-import { SiteHeader } from "./[tenant]/site/[site]/components/site-header"
-import ClientLayout from "./[tenant]/site/[site]/clientlayout"
+import { SiteHeader } from "./tenants/[tenant]/site/[site]/components/site-header"
+import ClientLayout from "./tenants/[tenant]/site/[site]/clientlayout"
 import { useProcess } from "@/lib/useprocess";
 import { RunCentrifugo } from "./run-centrifugo"
 interface RootLayoutProps {

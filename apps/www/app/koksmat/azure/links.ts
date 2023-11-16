@@ -9,7 +9,7 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
   mainNav: [
     {
       title: "Workspace",
-      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}`,
+      href: `/koksmat/tenants/${tenant}/site/${site}/kitchen/${workspace}`,
     },
     {
       title: "Components",

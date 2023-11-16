@@ -3,7 +3,7 @@ import React, { useContext, useMemo, useState } from 'react';
 import { KoksmatContext } from '@/app/koksmat/context';
 
 
-import { PageContextSectionHeader } from '../[tenant]/site/[site]/components/page-section-header';
+import { PageContextSectionHeader } from '../tenants/[tenant]/site/[site]/components/page-section-header';
 import ListAzAccounts from './az-accounts';
 
 

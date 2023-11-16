@@ -5,7 +5,7 @@ import { KoksmatContext } from '@/app/koksmat/context';
 
 
 
-import { PageContextSectionHeader } from '../../[tenant]/site/[site]/components/page-section-header';
+import { PageContextSectionHeader } from '../../tenants/[tenant]/site/[site]/components/page-section-header';
 import ListAzAksClusters from './az-aks-clusters';
 
 

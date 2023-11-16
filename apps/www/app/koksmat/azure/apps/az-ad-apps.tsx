@@ -10,8 +10,8 @@ import {
   } from "@/components/ui/card"
   import { Badge } from "@/registry/new-york/ui/badge"
   import { Button } from "@/registry/new-york/ui/button"
-import { PopUp } from "../../[tenant]/site/[site]/components/popup"
-import { setSubscription } from "../../[tenant]/site/[site]/kitchen/[kitchen]/connect/server"
+import { PopUp } from "../../tenants/[tenant]/site/[site]/components/popup"
+import { setSubscription } from "../../tenants/[tenant]/site/[site]/kitchen/[kitchen]/connect/server"
   
 
 

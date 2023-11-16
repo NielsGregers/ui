@@ -1,8 +1,8 @@
 import React from 'react';
 
-import RunServerProcess from '@/app/koksmat/[tenant]/site/[site]/components/runserverprocess';
+import RunServerProcess from '@/app/koksmat/tenants/[tenant]/site/[site]/components/runserverprocess';
 import ViewKubernetesContexts from './viewclusters';
-import { PageContextHeader } from '../../[tenant]/site/[site]/components/page-context-header';
+import { PageContextHeader } from '../../tenants/[tenant]/site/[site]/components/page-context-header';
 
 
 export default function Clusters() {

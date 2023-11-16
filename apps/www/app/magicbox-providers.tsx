@@ -64,8 +64,8 @@ export const MagicboxProvider = ({ children }: Props) => {
       setversion(version + 1);
     },
     tenant: "christianiabpos",
-    root: process.env.KOKSMATROOT ??"", // "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",
-    kitchenroot:process.env.KITCHENROOT??"" //"/Users/nielsgregersjohansen/kitchens/"
+    root:  "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",//process.env.KOKSMATROOT ??"", 
+    kitchenroot:"/Users/nielsgregersjohansen/kitchens/" // process.env.KITCHENROOT??"" //
   }
   const pca = new PublicClientApplication(configuration);
 
