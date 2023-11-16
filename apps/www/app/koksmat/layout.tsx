@@ -4,7 +4,8 @@ import { siteConfig } from "./site"
 import { KoksmatProvider } from "./contextprovider"
 import { SiteHeader } from "./[tenant]/site/[site]/components/site-header"
 import ClientLayout from "./[tenant]/site/[site]/clientlayout"
-
+import { useProcess } from "@/lib/useprocess";
+import { RunCentrifugo } from "./run-centrifugo"
 interface RootLayoutProps {
   children: React.ReactNode
   params: { site: string, tenant: string }
@@ -39,6 +40,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
     <div>
       <KoksmatProvider  >
         <SiteHeader />
+        <RunCentrifugo/>
         <div >
           {children}
         </div>

@@ -24,7 +24,10 @@
 
 // Use 'forwardPorts' to make a list of ports inside the container available locally.
 "forwardPorts": [3001],
-"containerEnv": { "HOMEPAGE": "koksmat","NEXTAUTH_SECRET":"na" },
+"containerEnv": { "HOMEPAGE": "koksmat",
+				  "NEXTAUTH_SECRET":"na" ,
+				  "KOKSMATROOT":"/usr/src/app/apps/www",
+				  "KITCHENROOT":"/usr/src/app/apps/kitchens"},
 // Use 'postCreateCommand' to run commands after the container is created. 
  "postCreateCommand": "cd /usr/src/app/apps/www  &&  npm run start"
 	// Configure tool-specific properties.

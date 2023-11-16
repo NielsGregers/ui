@@ -113,8 +113,8 @@ export const KoksmatProvider = ({ children }: Props) => {
   const [options, setoptions] = useState<KoksmatOptions>({ showContext: true })
   const [workspace, setworkspace] = useState<Kitchen>()
   const [currentstation, setcurrentstation] = useState<CookingStation>()
-  const azAccount = useProcess("az", ["account", "show"], 20, "echo")
-  const azDomain = useProcess("pwsh", [magicbox.root + "app/koksmat/powershell/az-activeuser-getdomain.ps1"], 20, "echo")
+  const azAccount = useProcess("az", ["account", "show"], 20, "echo.az")
+  const azDomain = useProcess("pwsh", [magicbox.root + "app/koksmat/powershell/az-activeuser-getdomain.ps1"], 20, "echo.az")
 
   const [isloaded, setisloaded] = useState(false)
   const { items, error, isLoading } = useSharePointList(

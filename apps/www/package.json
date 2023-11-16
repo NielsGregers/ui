@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4321",
+    "koksmat:serve":"cd cd /usr/src/app/apps/www  &&  npm run start",
+
     "build": "next build",
     "buildall": "contentlayer build ",
     "buildnext": "next build",

@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -63,8 +64,8 @@ export const MagicboxProvider = ({ children }: Props) => {
       setversion(version + 1);
     },
     tenant: "christianiabpos",
-    root: "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",
-    kitchenroot:"/Users/nielsgregersjohansen/kitchens/"
+    root: process.env.KOKSMATROOT ??"", // "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",
+    kitchenroot:process.env.KITCHENROOT??"" //"/Users/nielsgregersjohansen/kitchens/"
   }
   const pca = new PublicClientApplication(configuration);
 
