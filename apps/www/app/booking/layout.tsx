@@ -3,21 +3,11 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { getUserSession } from "@/lib/user"
-import { cn } from "@/lib/utils"
-import { Analytics } from "@/components/analytics"
-import { LoginButton } from "@/components/login"
-import { SiteFooter } from "@/components/magicbox-site-footer"
-import { ThemeProvider } from "@/components/providers"
-import { ForModule } from "@/components/roles"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { Toaster as DefaultToaster } from "@/registry/default/ui/toaster"
-import { Toaster as NewYorkToaster } from "@/registry/new-york/ui/toaster"
+
 
 import { SiteHeader } from "./components/site-header"
-import { NextAuthProvider } from "./providers"
-import { UsercaseProvider } from "./usecaseproviders"
+import { BookingContextProvider } from "./contextprovider"
+
 
 // This is important, if not set, this page will be statically generated causing the build to fail
 // as the build process would need to have access to the database / api's
@@ -67,6 +57,7 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
+<BookingContextProvider>
     <div className="relative flex min-h-screen flex-col">
       <SiteHeader />
       {/* <ForModule module="Booking"> */}
@@ -74,5 +65,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       {/* </ForModule> */}
       {/* <SiteFooter /> */}
     </div>
+    </BookingContextProvider>
   )
 }

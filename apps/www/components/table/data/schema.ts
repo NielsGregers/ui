@@ -10,6 +10,7 @@ export const schema = z.object({
   string1:z.string().nullable(),  
   string2:z.string().nullable(),
   string3:z.string().nullable(),
+  refObject1:z.any().nullable()
   // created_at:z.date().nullable(),
   // updated_at:z.date().nullable(),
 
