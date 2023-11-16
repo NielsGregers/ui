@@ -789,6 +789,10 @@ export async function newParkingBooking(
       }
     }
   } else {
+    let bookingId = result.insertedId.toString()
+    let bookedParking = availableParkingSpaces[0].title
+    // add event to calendar
+
     await client.close()
     return { success: true, cause: "Success" }
   }
