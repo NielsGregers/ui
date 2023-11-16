@@ -3,6 +3,7 @@ FROM node:lts
 ###################################
 # Prerequisites
 # Install pre-requisite packages.
+
 RUN apt update  &&  apt install -y curl gnupg apt-transport-https
 
 # Import the public repository GPG keys
@@ -13,7 +14,6 @@ RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft
 
 # Install PowerShell
 RUN apt update && apt install -y powershell
-
 
 # Install Azure CLI
 # RUN apt-get update
