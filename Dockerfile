@@ -1,17 +1,16 @@
-FROM node:21-bullseye
+FROM ubuntu:22.04
 
-###################################
-# Prerequisites
-# Install pre-requisite packages.
+# Packages required to run the Azure CLI installation
+RUN	apt-get update && apt-get -y install curl
 
-# Install Azure CLI
- RUN apt update
- RUN apt install azure-cli
+# Azure installation command
+RUN	curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+RUN apt update
+RUN apt-get -y install nodejs
+
 
 # Install PowerShell
 RUN apt update && apt install -y powershell
-
-
 
 # Install ExchangeOnlineManagement and PnP.PowerShell
 RUN pwsh -c "Install-Module -Name ExchangeOnlineManagement -force"
