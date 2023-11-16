@@ -27,9 +27,10 @@ WORKDIR /usr/src/app
 COPY . .
 RUN npm install -g pnpm turbo ts-node
 WORKDIR /usr/src/app/apps/www
+RUN curl -sSLf https://centrifugal.dev/install.sh | sh
 RUN pnpm install
 # RUN mkdir -p /tmp/root/365admin-nodejs
 RUN turbo run build 
 
 EXPOSE 3001
-CMD ["npm", "run","start"]
+# CMD ["npm", "run","start"]
