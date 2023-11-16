@@ -159,27 +159,18 @@ export function NavigationMenuKoksmat(): JSX.Element {
           <MenubarContent>
             <MenubarItem disabled> New Kitchen</MenubarItem>
             <MenubarItem>   <Link
-              href={`/koksmat//${tenant}/site/${site}//kitchen`}>Open Kitchen </Link></MenubarItem>
+              href={`/koksmat/${tenant}/site/${site}/kitchen`}>Open Kitchen </Link></MenubarItem>
             <MenubarItem disabled>Delete Kitchen</MenubarItem>
             <MenubarItem disabled>Sync Kitchens</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger>Cooking Stations</MenubarTrigger>
-          <MenubarContent>
-            <MenubarItem disabled> New Stations</MenubarItem>
-            <MenubarItem disabled={!kitchen}>   <Link
-              href={`/koksmat//${tenant}/site/${site}//kitchen/${kitchen}/stations`}>Open Stations </Link></MenubarItem>
-            <MenubarItem disabled>Delete Stations</MenubarItem>
-            
-          </MenubarContent>
-        </MenubarMenu>
+
         <MenubarMenu>
           <MenubarTrigger>Recipies</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled> New Recipies</MenubarItem>
             <MenubarItem>   <Link
-              href={`/koksmat//${tenant}/site/${site}//kitchen`}>Open Recipies </Link></MenubarItem>
+              href={`/koksmat/${tenant}/site/${site}/kitchen`}>Open Recipies </Link></MenubarItem>
             <MenubarItem disabled>Delete Recipies</MenubarItem>
        
           </MenubarContent>
@@ -192,6 +183,9 @@ export function NavigationMenuKoksmat(): JSX.Element {
               <MenubarSub>
                 <MenubarSubTrigger>Azure</MenubarSubTrigger>
                 <MenubarSubContent>
+                <MenubarItem disabled >
+                    <Link  className="whitespace-nowrap" href={`/koksmat/azure/connect`}>Connect </Link>
+                  </MenubarItem>
                   <MenubarItem >
                     <Link className="whitespace-nowrap" href={`/koksmat/azure`}>Subscriptions </Link>
                   </MenubarItem>
@@ -208,7 +202,7 @@ export function NavigationMenuKoksmat(): JSX.Element {
                     <Link className="whitespace-nowrap" href={`/koksmat/kubernetes/namespaces`}>Namespaces </Link>
                   </MenubarItem>
                   <MenubarItem >
-                    <Link className="whitespace-nowrap" href={`/koksmat//kubernetes/pods`}>Pods </Link>
+                    <Link className="whitespace-nowrap" href={`/koksmat/kubernetes/pods`}>Pods </Link>
                   </MenubarItem>
                 </MenubarSubContent>
               </MenubarSub>
@@ -230,6 +224,11 @@ export function NavigationMenuKoksmat(): JSX.Element {
             koksmat.setOptions({showContext:!koksmat.options.showContext})
           }}>
              {koksmat.options.showContext?"Hide Context":"Show Context"}
+            </MenubarItem>
+            <MenubarItem onClick={()=>{
+            koksmat.setOptions({showEcho:!koksmat.options.showEcho,showContext:koksmat.options.showContext})
+          }}>
+             {koksmat.options.showEcho?"Hide Echo":"Show Echo"}
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>

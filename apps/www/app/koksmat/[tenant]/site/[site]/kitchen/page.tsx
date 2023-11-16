@@ -40,7 +40,7 @@ export default function ClusterInfo(props: {params:{site: string,tenant:string}}
                 <p>
                   {" "}
                   <Button >
-        <Link href={`/koksmat//${tenant}/site/${site}//kitchen/${kitchen.key}`}>Open</Link>
+        <Link href={`/koksmat/${tenant}/site/${site}/kitchen/${kitchen.key}`}>Open</Link>
         </Button>
                   
                    

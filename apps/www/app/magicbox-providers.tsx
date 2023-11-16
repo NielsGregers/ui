@@ -62,7 +62,9 @@ export const MagicboxProvider = ({ children }: Props) => {
     session, version, refresh: () => {
       setversion(version + 1);
     },
-    tenant: "christianiabpos"
+    tenant: "christianiabpos",
+    root: "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",
+    kitchenroot:"/Users/nielsgregersjohansen/kitchens/"
   }
   const pca = new PublicClientApplication(configuration);
 

@@ -41,7 +41,7 @@ export default function Cava() {
       
       <div className="container ">
         
-      <PageContextHeader title="Command Bridge"  />
+      <PageContextHeader title="The Bridge"  />
         <div className="flex flex-wrap">
           {roles(tenant,site)
             .filter((r) => r.type === "service")

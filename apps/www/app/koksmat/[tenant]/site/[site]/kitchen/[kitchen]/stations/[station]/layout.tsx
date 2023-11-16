@@ -11,9 +11,13 @@ interface DocsLayoutProps {
 }
 
 export default function DocsLayout({ children, params }: DocsLayoutProps) {
-  const koksmat = useContext(KoksmatContext)
 
   const { station, kitchen } = params
+  const koksmat = useContext(KoksmatContext)
+
+ 
+
+  
   useEffect(() => {
     koksmat.setStationContext(kitchen, station)
   }, [kitchen, station, koksmat])

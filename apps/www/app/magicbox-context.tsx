@@ -18,12 +18,15 @@ export type  MagicboxContextType= {
   session?:Session,
   version:number,
   tenant:string,
-  refresh:()=>void
-
+  refresh:()=>void,
+  root:string
+  kitchenroot:string
 }
 export const MagicboxContext = createContext<MagicboxContextType>({
   session: { user: { name: "", email: "", image: "" }, expires: "", roles: [], accessToken: "" }, version: 0, refresh: () => { },
-  tenant: ""
+  tenant: "",
+  root: "",
+  kitchenroot:""
 });
 
 

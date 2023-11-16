@@ -9,6 +9,8 @@ import { findKitchen } from '..';
 import { useMemo } from "react"
 import { useContext, useEffect } from "react"
 import { KoksmatContext } from "@/app/koksmat/context"
+import { KitchenProvider } from "../contextprovider"
+
 interface DocsLayoutProps {
   children: React.ReactNode
   params: {
@@ -22,7 +24,7 @@ export default function DocsLayout({ children,params }: DocsLayoutProps) {
   const {tenant,site,kitchen} = params
  
   const koksmat = useContext(KoksmatContext)
-
+  
  
   useEffect(() => {
     
@@ -31,6 +33,7 @@ export default function DocsLayout({ children,params }: DocsLayoutProps) {
 
   }, [kitchen,koksmat])
   return (
+    <KitchenProvider>
     <div className="border-b">
 <PageContextHeader title={"Kitchen: "+ (koksmat?.currentKitchen?.displayName ?? "...")} />
 
@@ -43,5 +46,6 @@ export default function DocsLayout({ children,params }: DocsLayoutProps) {
         {children}
       </div>
     </div>
+    </KitchenProvider>
   )
 }

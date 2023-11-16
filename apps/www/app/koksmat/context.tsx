@@ -17,6 +17,7 @@ export type KoksmatOptions = {
   showMenu?: boolean
   showSidebar?: boolean
   showHeader?: boolean
+  showEcho?: boolean
 }
 
 export type KoksmatContextProps = {

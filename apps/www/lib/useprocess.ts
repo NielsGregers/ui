@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { run } from "@/app/koksmat/[tenant]/site/[site]/server"
+import { Result } from "./httphelper"
 
 export const version = 1
 
@@ -10,9 +11,12 @@ export function useProcess(
   cmd: string,
   args: string[],
   timeout: number,
-
   channel: string,
-  cwd?:string
+  cwd?:string,
+  ran?: boolean,
+  setran?: (ran: boolean) => void,
+  setresult?: (result: Result<string>) => void,
+ 
 ) {
   const [data, setdata] = useState<any>()
   const [isLoading, setisLoading] = useState(false)
@@ -20,10 +24,17 @@ export function useProcess(
  
   useEffect(() => {
     const load = async () => {
+      
+      if (ran) return
+    
       seterror("")
+      if (setran) {
+        setran(true)
+      }
       const result = await run(cmd, args, timeout, channel,cwd)
       
       setisLoading(false)
+      if (setresult) {setresult(result)}
       if (result.hasError) {
         seterror(result.errorMessage ?? "Unknown error")
        
@@ -38,7 +49,7 @@ export function useProcess(
         load()
       
     }
-  }, [channel, cmd, timeout, args,cwd])
+  }, [channel, cmd, timeout, args, cwd, ran, setran])
 
   return {
     data,

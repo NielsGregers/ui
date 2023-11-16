@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Centrifuge } from 'centrifuge';
 import { MessageType } from "../server/MessageType";
 import {strip} from "ansicolor"
+import { Button } from '@/registry/new-york/ui/button';
 
 export function SocketLogger(props: {channelname:string,traceHidden?:boolean, onMessage?: (data: MessageType) => void}) {
   const log = useMemo<MessageType[]>(() => { return [] }, [])
@@ -75,6 +76,10 @@ export function SocketLogger(props: {channelname:string,traceHidden?:boolean, on
 
 
       </pre>
+      <Button variant="link" onClick={() => {
+        log.splice(0, log.length)
+        setrefresh(new Date().getTime())
+      }}>Clear</Button>
     </div>
   )
 }

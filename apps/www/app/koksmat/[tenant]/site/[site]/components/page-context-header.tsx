@@ -3,6 +3,7 @@ import { useContext } from "react"
 import { KoksmatContext } from "../../../../context"
 import { Button } from "@/registry/new-york/ui/button"
 import Link from "next/link"
+import { SocketLogger } from "./socket"
 
 export function PageContextHeader(props: { title: string }) {
   const { title } = props
@@ -31,6 +32,9 @@ export function PageContextHeader(props: { title: string }) {
       <div className="grow" />
       <div> {currentstation?.cwd}</div></div>
     </div>}
+    {options.showEcho &&
+<div><SocketLogger channelname="echo" /></div>
+}
   </div>
 }
 

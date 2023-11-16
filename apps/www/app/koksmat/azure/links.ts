@@ -9,7 +9,7 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
   mainNav: [
     {
       title: "Workspace",
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}`,
     },
     {
       title: "Components",
@@ -58,7 +58,7 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
        
         {
           title: "Azure Clusters",
-          href: `/koksmat//azure/aks`,
+          href: `/koksmat/azure/aks`,
           items: [],
         }, 
         

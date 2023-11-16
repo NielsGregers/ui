@@ -11,7 +11,7 @@ export const docsConfig  = (tenant:string,site:string,workspace:string,station:s
   mainNav: [
     {
       title: "Workspace",
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}`,
     },
     {
       title: "Components",
@@ -42,12 +42,12 @@ export const docsConfig  = (tenant:string,site:string,workspace:string,station:s
       items: [
         {
           title: "Introduction",
-          href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}`,
+          href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}`,
           items: [],
         },
         {
-          title: "Connect",
-          href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}/connect`,
+          title: "Connections",
+          href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}/connect`,
           items: [],
         },
 
@@ -69,26 +69,26 @@ const cookingStations = kitchen?.stations.map(station => {return {
     {
       title: "Kitchen Tickets",
       disabled: !station,
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}/stations/${station.key}/github`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}/stations/${station.key}/github`,
       items: [],
     }, 
     {
       title: "Code",
       disabled: !station,
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}/stations/${station.key}/code`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}/stations/${station.key}/code`,
       items: [],
     },
  
     {
       title: "Build",
       disabled: true,
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}/stations/${station.key}/build`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}/stations/${station.key}/build`,
       items: [],
     },
     {
       title: "Ship",
       disabled: true,
-      href: `/koksmat//${tenant}/site/${site}//kitchen/${workspace}/stations/${station.key}/ship`,
+      href: `/koksmat/${tenant}/site/${site}/kitchen/${workspace}/stations/${station.key}/ship`,
       items: [],
     },   
 

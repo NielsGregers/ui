@@ -92,10 +92,11 @@ export interface User3 {
 
 import { useSharePointList } from "@/app/sharepoint";
 import { set } from "date-fns";
-import { CookingStation, Kitchen} from "./[tenant]/site/[site]/kitchen/Kitchens";
+import { CookingStation, Kitchen } from "./[tenant]/site/[site]/kitchen/Kitchens";
 import { findCookingStation, findKitchen } from "./[tenant]/site/[site]/kitchen";
 import { useProcess } from "@/lib/useprocess";
 import { RootConfig } from "./rootconfig";
+import { run } from "./[tenant]/site/[site]/server";
 type Props = {
   children?: React.ReactNode;
 
@@ -109,11 +110,11 @@ export const KoksmatProvider = ({ children }: Props) => {
   const [kitchen, setkitchen] = useState("")
   const [station, setstation] = useState("")
   const [domain, setdomain] = useState("")
-  const [options, setoptions] = useState<KoksmatOptions>({showContext:true})
+  const [options, setoptions] = useState<KoksmatOptions>({ showContext: true })
   const [workspace, setworkspace] = useState<Kitchen>()
   const [currentstation, setcurrentstation] = useState<CookingStation>()
-  const azAccount = useProcess("az", ["account","show"], 20, "echo")
-  const azDomain = useProcess("pwsh", ["/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/koksmat/az-activeuser-getdomain.ps1"], 20, "echo")
+  const azAccount = useProcess("az", ["account", "show"], 20, "echo")
+  const azDomain = useProcess("pwsh", [magicbox.root + "app/koksmat/powershell/az-activeuser-getdomain.ps1"], 20, "echo")
 
   const [isloaded, setisloaded] = useState(false)
   const { items, error, isLoading } = useSharePointList(
@@ -124,23 +125,23 @@ export const KoksmatProvider = ({ children }: Props) => {
   )
   const [roles, setroles] = useState<RoleItem[]>([])
 
-useEffect(()=>{
-  if (azAccount && azAccount.data){
-    const parsed = JSON.parse(azAccount.data)
-    // if (parsed?.homeTenantId){
-    //   settenant(parsed?.homeTenantId)
-    // }
-  }
-} ,[azAccount])
+  useEffect(() => {
+    if (azAccount && azAccount.data) {
+      const parsed = JSON.parse(azAccount.data)
+      // if (parsed?.homeTenantId){
+      //   settenant(parsed?.homeTenantId)
+      // }
+    }
+  }, [azAccount])
 
 
-useEffect(()=>{
-  if (azDomain && azDomain.data){
-    
-      setdomain(azDomain.data.replace("\n",""))
-    
-  }
-} ,[azDomain])
+  useEffect(() => {
+    if (azDomain && azDomain.data) {
+
+      setdomain(azDomain.data.replace("\n", ""))
+
+    }
+  }, [azDomain])
   useEffect(() => {
     setroles([])
     if (items && magicbox.session?.user && site) {
@@ -169,13 +170,13 @@ useEffect(()=>{
       setisloaded(true)
     }
   }
-    , [items, magicbox.session?.user,tenant,site])
-useEffect(()=>{
-  setworkspace(findKitchen(kitchen))
-},[kitchen,setworkspace])
+    , [items, magicbox.session?.user, tenant, site])
+  useEffect(() => {
+    setworkspace(findKitchen(kitchen))
+  }, [kitchen, setworkspace])
 
 
-  const hasRole =  (role: string): boolean => {
+  const hasRole = (role: string): boolean => {
     const email = magicbox.session?.user?.email ?? ""
     if (!email) return false
     if (!isloaded) return false
@@ -213,31 +214,53 @@ useEffect(()=>{
         setworkspace(workspace);
         if (!currentstation && workspace?.stations?.length) {
           setcurrentstation(workspace.stations[0]);
-          setstation(workspace.stations[0].key);
+          const newstation = workspace.stations[0].key
+          setstation(newstation);
+          // if (station != newstation) {
+          //   run("pwsh", [magicbox.root + "app/koksmat/powershell/station-validate-folder.ps1", "-root", "/Users/nielsgregersjohansen/kitchens", "-kitchenName", kitchen, "-stationname", newstation, "-repourl", workspace.stations[0].repoUrl], 20, "echo")
+          // }
+
         }
       }
     },
-    setStationContext: function (kitchen: string, station: string): void {
+    setStationContext: function (kitchen: string, newstation: string): void {
+      //      const kitchenCwd = useProcess("pwsh", [magicbox.root+"app/koksmat/powershell/station-validate-folder.ps1","-root","/Users/nielsgregersjohansen/kitchens","-kitchenName",kitchen,"-stationname",station,"-repourl",koksmat], 20, "echo")
+
       if (kitchen) {
         setkitchen(kitchen);
         setworkspace(findKitchen(kitchen));
       }
       if (station) {
-        setstation(station);
-        setcurrentstation(findCookingStation(kitchen, station));
+        setstation(newstation);
+        setcurrentstation(findCookingStation(kitchen, newstation));
+        if (kitchen) {
+          setkitchen(kitchen);
+          setworkspace(findKitchen(kitchen));
+        }
+        if (newstation) {
+          debugger
+          const cookingStation = findCookingStation(kitchen, newstation)
+          if (!cookingStation) return
+          setstation(newstation);
+          setcurrentstation(cookingStation)
+          // if (station != newstation) {
+          //   run("pwsh", [magicbox.root + "app/koksmat/powershell/station-validate-folder.ps1", "-root", "/Users/nielsgregersjohansen/kitchens", "-kitchenName", kitchen, "-stationname", newstation, "-repourl", cookingStation.repoUrl], 20, "echo")
+          // }
 
+
+        }
       }
     },
     setTenantContext: function (tenant: string): void {
-    if (tenant) {
-      settenant(tenant);
-      setdefaultsite(RootConfig.instance().findTenant(tenant)?.defaultSite);
-    }
+      if (tenant) {
+        settenant(tenant);
+        setdefaultsite(RootConfig.instance().findTenant(tenant)?.defaultSite);
+      }
 
     },
     options,
     setOptions: function (changes: KoksmatOptions): void {
-      setoptions({...options,...changes});
+      setoptions({ ...options, ...changes });
     }
   }
 

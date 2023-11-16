@@ -32,7 +32,7 @@ export default function CookingStation() {
                 <p>
                   {" "}
                   <Button >
-        <Link href={`/koksmat//${tenant}/site/${site}//kitchen/${kitchen}/stations/${station.key}`}>Open</Link>
+        <Link href={`/koksmat/${tenant}/site/${site}/kitchen/${kitchen}/stations/${station.key}`}>Open</Link>
         </Button>
                   
                    
