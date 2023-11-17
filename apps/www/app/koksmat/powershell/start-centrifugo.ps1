@@ -30,5 +30,5 @@ $config = @"
 
 if (!$centrifugoRunning){
     write-host "Centrifugo process starting" 
-    Start-Process centrifugo -ArgumentList "--swagger --sockjs --admin --health  --client_insecure --admin_insecure"
+    Start-Process $centrifugoRoot/centrifugo -ArgumentList "--swagger --sockjs --admin --health  --client_insecure --admin_insecure"
 } 

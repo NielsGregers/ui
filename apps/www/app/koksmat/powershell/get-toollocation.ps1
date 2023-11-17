@@ -16,7 +16,7 @@ if (!$kitchenRootExists){
   #  Write-Host "Tools Root path created"
 
 }
-$toolsRootPath = "$kitchenRoot/.tools"
+$toolsRootPath = "$kitchenRoot.tools"
 $toolsRootPathExists = Test-Path $toolsRoot
 if (!$toolsRootPathExists){
     $n = New-Item $toolsRootPath -type directory 
