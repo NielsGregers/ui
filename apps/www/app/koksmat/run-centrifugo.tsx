@@ -9,7 +9,7 @@ export function RunCentrifugo(){
     const {root} = useContext(MagicboxContext)
     const koksmat = useContext(KoksmatContext)
 const { isLoading, error, data } = useProcess(
-    root+"apps/www/app/koksmat/powershell/start-centrifugo.ps1",
+    root+"/app/koksmat/powershell/start-centrifugo.ps1",
     [],
     60*60*24, // run for a long time
     "echo"

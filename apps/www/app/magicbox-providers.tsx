@@ -52,6 +52,8 @@ export const MagicboxProvider = ({ children }: Props) => {
   const { data, status } = useSession()
   const [session, setsession] = useState<Session>()
   const [version, setversion] = useState(0)
+  const [root, setroot] = useState("")
+  const [kitchenroot, setkitchenroot] = useState("")
 
   useEffect(() => {
     setsession(data as Session)
@@ -64,8 +66,13 @@ export const MagicboxProvider = ({ children }: Props) => {
       setversion(version + 1);
     },
     tenant: "christianiabpos",
-    root:  "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/",//process.env.KOKSMATROOT ??"", 
-    kitchenroot:"/Users/nielsgregersjohansen/kitchens/" // process.env.KITCHENROOT??"" //
+    root, // : process.env.KOKSMATROOT ?? "",
+    kitchenroot //: process.env.KITCHENROOT ?? "" //"/Users/nielsgregersjohansen/kitchens/" // process.env.KITCHENROOT??"" //
+    ,
+    setPaths: function (root: string, kitchen: string): void {
+      setroot(root)
+      setkitchenroot(kitchen)
+    }
   }
   const pca = new PublicClientApplication(configuration);
 

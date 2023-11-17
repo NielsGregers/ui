@@ -15,3 +15,11 @@ $location = get-location
 . $location/.sharepoint/tenants/$tenantDomain/env.ps1
 Connect-PnPOnline -Url $SiteURL  -ClientId $PNPAPPID -Tenant $PNPTENANTID -CertificatePath "$PNPCERTIFICATEPATH"
 
+$site = Get-PnPSite -Includes RootWeb,ServerRelativeUrl,GroupId,HubSiteId,IsHubSite,SensitivityLabelInfo,SecondaryContact,Owner
+$info  = @{
+    webUrl = $site.Url
+    Title = $site.RootWeb.Title
+    
+}
+
+Get-PnPTenantAppCatalogUrl

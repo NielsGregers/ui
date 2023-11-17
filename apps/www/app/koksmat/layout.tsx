@@ -1,3 +1,4 @@
+/* eslint-disable turbo/no-undeclared-env-vars */
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
@@ -45,7 +46,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
         }
         redirectUri={"/koksmat"}
       >
-        <KoksmatProvider>
+        <KoksmatProvider root={process.env.KOKSMATROOT ?? ""} kitchenroot={process.env?.KITCHENROOT ??""}>
           <SiteHeader />
           <RunCentrifugo />
           <div>{children}</div>

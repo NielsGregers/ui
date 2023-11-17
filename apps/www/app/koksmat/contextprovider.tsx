@@ -99,10 +99,13 @@ import { RootConfig } from "./rootconfig";
 import { run } from "./tenants/[tenant]/site/[site]/server";
 type Props = {
   children?: React.ReactNode;
+  root :string, // : process.env.KOKSMATROOT ?? "",
+  kitchenroot:string, //: process.env.KITCHENROOT ?? "" //"/Users/nielsgregersjohansen/kitchens/" // process.env.KITCHENROOT??"" //
+
 
 };
 
-export const KoksmatProvider = ({ children }: Props) => {
+export const KoksmatProvider = ({ children,root,kitchenroot }: Props) => {
   const magicbox = useContext(MagicboxContext)
   const [tenant, settenant] = useState("")
   const [site, setsite] = useState("")
@@ -133,6 +136,13 @@ export const KoksmatProvider = ({ children }: Props) => {
       // }
     }
   }, [azAccount])
+
+  useEffect(() => {
+    magicbox.setPaths(root, kitchenroot)
+  
+    
+  }, [root,kitchenroot,magicbox])
+  
 
 
   useEffect(() => {

@@ -1,1 +1,1 @@
-#Get-AzContext | Convertto-Json | Set-Clipboard
+Get-PnPSiteCollectionAppCatalog -CurrentSite

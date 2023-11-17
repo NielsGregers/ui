@@ -5,34 +5,9 @@ interface DocsConfig {
   sidebarNav: SidebarNavItem[]
 }
 
-export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsConfig =>  {return {
+export const docsConfig  = (tenant:string) : DocsConfig =>  {return {
   mainNav: [
-    {
-      title: "Workspace",
-      href: `/koksmat/tenants/${tenant}/site/${site}/kitchen/${workspace}`,
-    },
-    {
-      title: "Components",
-      href: "/shadcn/docs/components/accordion",
-    },
-    {
-      title: "Examples",
-      href: "/examples",
-    },
-    {
-      title: "Figma",
-      href: "/shadcn/docs/figma",
-    },
-    {
-      title: "GitHub",
-      href: "https://github.com/shadcn/ui",
-      external: true,
-    },
-    {
-      title: "Twitter",
-      href: "https://twitter.com/shadcn",
-      external: true,
-    },
+    
   ],
   sidebarNav: [
     {
@@ -41,6 +16,7 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
         {
           title: "Introduction",
           href: `/koksmat/welcome`,
+          disabled:false,
           items: [],
         },
         {
@@ -49,39 +25,46 @@ export const docsConfig  = (tenant:string,site:string,workspace:string) : DocsCo
           items: [],
         },
         {
+       
           title: "Connect to SharePoint",
           href: `/koksmat/welcome/sharepoint`,
           items: [],
         },
-        
+        {
+       
+          title: "Install Koksmat",
+          href: `/koksmat/welcome/sharepoint/deploy`,
+          items: [],
+        },
       ],
     },
-    {
-      title: "Takeaways",
-      items: [
+    // {
+    //   title: "Takeaways",
+    //   items: [
        
-        {
-          title: "SharePoint Branding",
-          href: `/koksmat/solution/icing`,
-          items: [],
-        }, 
+    //     {disabled:true,
+    //       title: "SharePoint Branding",
+    //       href: `/koksmat/solution/icing`,
+    //       items: [],
+    //     }, 
         
  
-      ]
-    },
-    {
-      title: "Finer food",
-      items: [
+    //   ]
+    // },
+    // {
+    //   title: "Finer food",
+    //   items: [
        
-        {
-          title: "Channel management",
-          href: `/koksmat/solution/icing`,
-          items: [],
-        }, 
+    //     {
+    //       disabled:true,
+    //       title: "Channel management",
+    //       href: `/koksmat/solution/icing`,
+    //       items: [],
+    //     }, 
         
  
-      ]
-    },
+    //   ]
+    // },
     // {
     //   title: "Installation",
     //   items: [

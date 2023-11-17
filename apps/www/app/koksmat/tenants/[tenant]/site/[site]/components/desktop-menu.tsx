@@ -119,13 +119,13 @@ export function NavigationMenuKoksmat(): JSX.Element {
   return (
     <div className="flex">
       <div className="grow"></div>
-      {site &&   
+   
       <Menubar className="ml-0  border-0">
-        <MenubarMenu>
+        <MenubarMenu >
           <MenubarTrigger>Sites</MenubarTrigger>
           <MenubarContent>
             
-            <MenubarItem>   <Link
+            <MenubarItem disabled={!site}>   <Link
               href={`/koksmat`}>Open Site </Link></MenubarItem>
           
             <MenubarItem disabled>New Site</MenubarItem>
@@ -159,7 +159,7 @@ export function NavigationMenuKoksmat(): JSX.Element {
           <MenubarTrigger>Kitchens</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled> New Kitchen</MenubarItem>
-            <MenubarItem>   <Link
+            <MenubarItem disabled={!site}>   <Link
               href={`/koksmat/tenants/${tenant}/site/${site}/kitchen`}>Open Kitchen </Link></MenubarItem>
             <MenubarItem disabled>Delete Kitchen</MenubarItem>
             <MenubarItem disabled>Sync Kitchens</MenubarItem>
@@ -170,7 +170,7 @@ export function NavigationMenuKoksmat(): JSX.Element {
           <MenubarTrigger>Recipies</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled> New Recipies</MenubarItem>
-            <MenubarItem>   <Link
+            <MenubarItem disabled>   <Link
               href={`/koksmat/tenants/${tenant}/site/${site}/kitchen`}>Open Recipies </Link></MenubarItem>
             <MenubarItem disabled>Delete Recipies</MenubarItem>
        
@@ -229,7 +229,7 @@ export function NavigationMenuKoksmat(): JSX.Element {
             <MenubarItem onClick={()=>{
             koksmat.setOptions({showEcho:!koksmat.options.showEcho,showContext:koksmat.options.showContext})
           }}>
-             {koksmat.options.showEcho?"Hide Echo":"Show Echo"}
+             {false && koksmat.options.showEcho?"Hide Echo":"Show Echo"}
             </MenubarItem>
             <MenubarItem onClick={()=>{
             koksmat.setOptions({showDebug:!koksmat.options.showDebug,showContext:koksmat.options.showContext})
@@ -248,7 +248,7 @@ export function NavigationMenuKoksmat(): JSX.Element {
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
-      }
+      
     </div>
   )
 

@@ -26,7 +26,7 @@ interface RunServerProcessProps {
 }
 
 export default function RunServerProcess(props: RunServerProcessProps) {
-  const {options} = useContext(KoksmatContext)
+  const {options,setOptions} = useContext(KoksmatContext)
   const {
     cmd,
     args,
@@ -67,8 +67,13 @@ useEffect(() => {
       {options?.showDebug && <div>
       {isLoading && <div>Loading...</div>}
       {error && <div className="text-red-700">{error}</div>}
-      <div className="mr-4 mt-[-10px] text-right text-xs">
-        <Button variant={"link"} onClick={() => setshowTrace(!showTrace)}>
+      <div className="mb-4 mr-4 mt-[-10px] flex bg-slate-100 p-4">
+<div className="font-bold">Server script: {props.caption}</div>
+<div className="grow"></div>
+<Button variant={"link"} onClick={() => setOptions({showDebug:false,showContext:options.showContext})}>
+          Debug off
+        </Button>
+        <Button variant={"default"} onClick={() => setshowTrace(!showTrace)}>
           {showTrace ? "Hide Terminal" : "Show Terminal"}
         </Button>
       </div></div>}
@@ -95,9 +100,9 @@ useEffect(() => {
           </div>
           {showCmd && (
             <div>
-              <pre>
-                {cmd} {args.join(" ")}
-              </pre>{" "}
+              <textarea className="h-[300px] w-[800px]" value={ cmd + " " + args.join(" ")}>
+               
+              </textarea>{" "}
               <pre>{cwd}</pre>
             </div>
           )}

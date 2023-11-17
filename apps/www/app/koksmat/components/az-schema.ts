@@ -1,3 +1,5 @@
+import { name } from "@azure/msal-browser/dist/packageMetadata";
+
 export namespace AzContext {
     export interface Root {
         Name: string;
@@ -135,4 +137,34 @@ export namespace AzContext {
     export interface ExtendedProperties4 { }
 
     export interface ExtendedProperties5 { }
+}
+
+export namespace AzDomain {
+    export type Root = Root2[]
+
+export interface Root2 {
+  Id: string
+  TenantId: string
+  ExtendedProperties: ExtendedProperties
+  TenantCategory: string
+  Country: any
+  CountryCode: string
+  Name: string
+  Domains: string[]
+  DefaultDomain: string
+  TenantType: string
+  TenantBrandingLogoUrl?: string
+}
+
+export interface ExtendedProperties {
+  TenantBrandingLogoUrl?: string
+  TenantCategory: string
+  CountryCode: string
+  DefaultDomain: string
+  DisplayName: string
+  TenantType: string
+  Domains: string
+  Directory: string
+}
+
 }

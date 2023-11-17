@@ -21,12 +21,15 @@ export type  MagicboxContextType= {
   refresh:()=>void,
   root:string
   kitchenroot:string
+  setPaths:(root:string,kitchen:string)=>void
 }
 export const MagicboxContext = createContext<MagicboxContextType>({
   session: { user: { name: "", email: "", image: "" }, expires: "", roles: [], accessToken: "" }, version: 0, refresh: () => { },
   tenant: "",
   root: "",
-  kitchenroot:""
-});
+  kitchenroot: "",
+  setPaths: (root: string, kitchen: string) => { }
+
+}); 
 
 

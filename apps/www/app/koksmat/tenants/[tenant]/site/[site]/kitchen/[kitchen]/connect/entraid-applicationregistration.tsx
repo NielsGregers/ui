@@ -42,8 +42,6 @@ export  function RegistreEntraIdApplication() {
 
     console.log(msg)
   }
-  const path =
-    "/Users/nielsgregersjohansen/code/koksmat/ui/apps/www/app/koksmat/[site]/kitchen/[workspace]/connect/"
   return (
     <div>
       {koksmat.currentKitchen && (

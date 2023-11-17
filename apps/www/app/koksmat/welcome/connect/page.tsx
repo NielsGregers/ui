@@ -3,10 +3,16 @@
 import React, { useContext, useMemo, useState } from "react"
 import Link from "next/link"
 
+import { CardContent, CardHeader } from "@/registry/default/ui/card"
 import { Button } from "@/registry/new-york/ui/button"
-import RunServerProcess from "@/app/koksmat/tenants/[tenant]/site/[site]/components/runserverprocess"
+import { Card, CardFooter } from "@/registry/new-york/ui/card"
 import { KoksmatContext } from "@/app/koksmat/context"
+import RunServerProcess from "@/app/koksmat/tenants/[tenant]/site/[site]/components/runserverprocess"
 import { MagicboxContext } from "@/app/magicbox-context"
+
+import { AzContext } from "../../components/az-schema"
+import { AzureContext } from "../../components/azureContext"
+import { PowerShell } from "../../components/powershell"
 import { PageContextSectionHeader } from "../../tenants/[tenant]/site/[site]/components/page-section-header"
 import { MessageType } from "../../tenants/[tenant]/site/[site]/server/MessageType"
 
@@ -15,9 +21,13 @@ export default function Connections() {
   const [signinCode, setsigninCode] = useState("")
   const [accessChecked, setaccessChecked] = useState(false)
   const [hasAzAccess, sethasAzAccess] = useState(false)
+  const [azureContext, setazureContext] = useState<AzContext.Root>()
+  const [error, seterror] = useState("")
   const [createPnpApp, setcreatePnpApp] = useState(false)
-  const koksmat = useContext(KoksmatContext)
+  const { setOptions, options } = useContext(KoksmatContext)
+  const { showDebug, showContext } = options
   const magicbox = useContext(MagicboxContext)
+
   const onMessage = (msg: MessageType) => {
     if (msg.isError) return
 
@@ -40,32 +50,66 @@ export default function Connections() {
 
     console.log(msg)
   }
- return (
+  return (
     <div>
-    
-        <div>
-          <PageContextSectionHeader title={"Establish Azure Connection"} />
-          <div className="mb-3 max-w-[600px]">
-           <p>First of all we need to establish a trust between this computer and Microsoft Online. Notice that everything 
-           is running on the virtual computer that you are connected to, and any credentials are stored on that also. 
-           </p>
-           <p className="mt-3">
-           Most is done by executing PowerShell script on your computer. 
-           </p>
-           </div>
-          {true && (
-            // Try to login
-            <RunServerProcess
-              caption="Login to AZ"
-              onMessage={onAzMessage}
-              cmd={"pwsh"}
-              args={["-File" ,magicbox.root+"app/koksmat/powershell/connect-azure.ps1"]}
-              timeout={120}
-              channelname={"az"}
-              
+      <div>
+        <PageContextSectionHeader title={"Establish Azure Connection"} />
+        <div className="mb-3 max-w-[600px]">
+          <div>
+            First of all we need to establish a trust between this computer and
+            Microsoft Online.
+          </div>
+          <div className="mt-3">
+            If you are not already connect, we will present you with a device
+            code which you need to use for establishing the connection.
+          </div>
+        </div>
+        <Card className="mr-8">
+          <CardHeader title="Access Check" />
+          <CardContent>
+            {!accessChecked && <div> Checking access to Azure</div>}
+            {error && <div className="text-red-600"> {error}</div>}
+            <AzureContext
+              onError={(error) => {
+                seterror(error)
+                sethasAzAccess(false)
+                setaccessChecked(true)
+              }}
+              onData={(ctx) => {
+                setazureContext(ctx)
+                setaccessChecked(true)
+                sethasAzAccess(ctx.Account.Id != "")
+              }}
             />
-          )}
-          {/* <Button
+            {accessChecked && hasAzAccess && (
+              <div>
+                Access to Azure looks good. You are signed in as{" "}
+                {azureContext?.Account.Id}
+                <Button
+                  variant={"link"}
+                  onClick={() =>
+                    sethasAzAccess(false) 
+                  }
+                >
+                  Reconnect
+                </Button>
+              </div>
+            )}
+            {accessChecked && !hasAzAccess && (
+              // Try to login
+              <RunServerProcess
+                caption="Login to AZ"
+                onMessage={onAzMessage}
+                cmd={"pwsh"}
+                args={[
+                  "-File",
+                  magicbox.root + "app/koksmat/powershell/connect-azure.ps1",
+                ]}
+                timeout={120}
+                channelname={"az"}
+              />
+            )}
+            {/* <Button
             className="mb-3"
             disabled={createPnpApp}
             onClick={() => {
@@ -74,27 +118,39 @@ export default function Connections() {
           >
             Register Application in Microsoft Entra ID
           </Button> */}
-          {signinCode && (
-            <div>
-              {/* <div className="mb-3">
+            {signinCode && (
+              <div>
+                {/* <div className="mb-3">
             Copy this, you will be asked to enter that code in the browser when you click the link below
           </div> */}
-              <div className="mt-[15px]">
-                <textarea style={{fontSize:"20px",borderWidth:0}} >{signinCode}</textarea>
+                <div className="mt-[15px]">
+                  <textarea style={{ fontSize: "20px", borderWidth: 0 }}>
+                    {signinCode}
+                  </textarea>
+                </div>
               </div>
-
+            )}
+          </CardContent>
+          <CardFooter>
+            {signinCode && (
               <div>
-                <Button variant="default">
-                  <Link href={siginUrl} target="_blank">
-                    Copy the code above, then click here
-                  </Link>
-                </Button>
+                <div>
+                  <Button variant="default">
+                    <Link href={siginUrl} target="_blank">
+                      Copy the code above, then click here
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
-
-        </div>
-      
+            )}
+            {hasAzAccess && (
+              <Button>
+                <Link href="/koksmat/welcome/sharepoint">Continue</Link>
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -52,7 +52,7 @@ export function DocsSidebarNavItems({
                 ? "font-medium text-foreground"
                 : "text-muted-foreground"
             )}
-            target={item.external ? "_blank" : ""}
+           // target={item.external ? "_blank" : "_self"}
             rel={item.external ? "noreferrer" : ""}
           >
             {item.title}
