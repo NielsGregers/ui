@@ -1,14 +1,18 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { siteConfig } from "./site"
+
+import { MSALContextProvider } from "@/lib/msal/contextprovider"
+import { useProcess } from "@/lib/useprocess"
+
 import { KoksmatProvider } from "./contextprovider"
-import { SiteHeader } from "./tenants/[tenant]/site/[site]/components/site-header"
-import ClientLayout from "./tenants/[tenant]/site/[site]/clientlayout"
-import { useProcess } from "@/lib/useprocess";
 import { RunCentrifugo } from "./run-centrifugo"
+import { siteConfig } from "./site"
+import ClientLayout from "./tenants/[tenant]/site/[site]/clientlayout"
+import { SiteHeader } from "./tenants/[tenant]/site/[site]/components/site-header"
+
 interface RootLayoutProps {
   children: React.ReactNode
-  params: { site: string, tenant: string }
+  params: { site: string; tenant: string }
 }
 
 export const metadata: Metadata = {
@@ -28,23 +32,25 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
-
-
   },
-
 }
-
 
 export default function RootLayout({ children, params }: RootLayoutProps) {
   return (
     <div>
-      <KoksmatProvider  >
-        <SiteHeader />
-        <RunCentrifugo/>
-        <div >
-          {children}
-        </div>
-      </KoksmatProvider>
+      <MSALContextProvider
+        clientId={"2c1a064d-6ec3-4f83-9ac7-6996c22247e0"}
+        authority={
+          "https://login.microsoftonline.com/79dc228f-c8f2-4016-8bf0-b990b6c72e98"
+        }
+        redirectUri={"/koksmat"}
+      >
+        <KoksmatProvider>
+          <SiteHeader />
+          <RunCentrifugo />
+          <div>{children}</div>
+        </KoksmatProvider>
+      </MSALContextProvider>
     </div>
   )
 }
