@@ -1,0 +1,470 @@
+{
+  "journey": "v1",
+  "metadata": {
+    "app": "cava",
+    "name": "Meeting",
+    "description": "This is the recipie for running a meeting. Each \"instance\"\nof this recipie is called a ship, and what is keeping everybody\nonboard are the Koksmat's which do all of the trivial work of\nmaking nice food and drinks for the crew and the passengers.\n"
+  },
+  "waypoints": [
+    {
+      "port": "Planning",
+      "loads": {
+        "containers": [
+          {
+            "container": null,
+            "name": "prepare-meeting",
+            "who": [
+              "organizer email:string",
+              "chair email:string"
+            ],
+            "needs": [
+              "meetingPurpose"
+            ],
+            "produces": [
+              "agenda-suggestion",
+              "time-suggestion",
+              "place-suggestion"
+            ],
+            "script": "write-host \"Prepared agenda\"\n"
+          },
+          {
+            "container": null,
+            "name": "pre-invitation",
+            "who": [
+              "organizer"
+            ],
+            "needs": [
+              "attendees-proposed",
+              "time-suggestion",
+              "place-suggestion",
+              "meetingPurpose",
+              "agenda-suggestion"
+            ],
+            "produces": [
+              "time-agreed",
+              "place-agreed",
+              "agenda-agreed",
+              "attendees"
+            ],
+            "script": "write-host \"Aggreed on time,place and agenda\"    \n"
+          },
+          {
+            "container": null,
+            "name": "prepare-meeting",
+            "who": [
+              "organizer",
+              "chair"
+            ],
+            "needs": [
+              "attendee-list",
+              "time-agreed",
+              "place-agreed",
+              "agenda-agreed"
+            ],
+            "produces": [
+              "agenda",
+              "time",
+              "place"
+            ],
+            "script": "write-host \"Agenda approved\"                     \n"
+          },
+          {
+            "container": null,
+            "name": "prepare-invitation",
+            "who": [
+              "organizer",
+              "chair"
+            ],
+            "needs": [
+              "attendees",
+              "agenda",
+              "time",
+              "place"
+            ],
+            "produces": [
+              "resources-requirements"
+            ],
+            "script": "write-host \"Resources being booked\" \n"
+          },
+          {
+            "container": null,
+            "name": "resource-booking",
+            "who": [
+              "organizer",
+              "resourceowner"
+            ],
+            "needs": [
+              "resources-suggestion",
+              "time",
+              "place"
+            ],
+            "produces": [
+              "resources-booking"
+            ],
+            "script": "write-host \"Resources being booked\"                                   \n"
+          },
+          {
+            "container:": null,
+            "name": "send-invitation",
+            "who": [
+              "organizer"
+            ],
+            "needs": [
+              "resource-requirements",
+              "resource-booking",
+              "organizer",
+              "attendees",
+              "agenda",
+              "time",
+              "place"
+            ],
+            "produces": [
+              "invitation"
+            ],
+            "script": "write-host \"Invitation send\"     \n"
+          }
+        ]
+      }
+    }
+  ],
+  "shipyards": {
+    "description": "The shipyard is responsible for making sure that the ships\nare in good shape and that the crew is well trained and\nwell rested. The shipyard is also responsible for making\nsure that the ships are properly equipped for the journey\nahead.\n",
+    "facility": {
+      "-description": "The facility is responsible for making sure that the\nships are in good shape.\n"
+    },
+    "human": "The human is responsible for making sure that the crew\nis well trained and well rested.\n"
+  },
+  "kitchens": {
+    "description": "The kitchen is responsible for making sure that the dishes is\nprepared and served at the right time. The kitchen is also\nresponsible for making sure that the dishes is of the right\nquality and that the dished is served in a nice way.\n",
+    "stations": {
+      "templates": {
+        "values": [
+          {
+            "creator": [
+              {
+                "name": "string"
+              },
+              {
+                "email": "string"
+              },
+              {
+                "phone": "string"
+              }
+            ]
+          },
+          {
+            "created": "datetime"
+          },
+          {
+            "title": "string"
+          },
+          {
+            "description": "multilinestring"
+          },
+          {
+            "modified": "datetime"
+          },
+          {
+            "modifiedbu": [
+              {
+                "name": "string"
+              },
+              {
+                "email": "string"
+              },
+              {
+                "phone": "string"
+              }
+            ]
+          },
+          {
+            "id": "string"
+          },
+          {
+            "version": "number"
+          }
+        ]
+      },
+      "pantry": {
+        "tickets": {
+          "prepare-meeting": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ],
+          "pre-invitation": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ],
+          "approve-agenda": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ],
+          "prepare-invitation": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ],
+          "resource-booking": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ],
+          "send-invitation": [
+            {
+              "creator": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "created": "datetime"
+            },
+            {
+              "title": "string"
+            },
+            {
+              "description": "multilinestring"
+            },
+            {
+              "modified": "datetime"
+            },
+            {
+              "modifiedbu": [
+                {
+                  "name": "string"
+                },
+                {
+                  "email": "string"
+                },
+                {
+                  "phone": "string"
+                }
+              ]
+            },
+            {
+              "id": "string"
+            },
+            {
+              "version": "number"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

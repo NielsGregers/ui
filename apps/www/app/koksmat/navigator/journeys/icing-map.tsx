@@ -5,10 +5,10 @@ import { useContext, useEffect } from "react"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/registry/new-york/ui/button"
-import { Container, Port, Waypoints, Ship } from "@/app/koksmat/navigator"
+import { Container, Port, Waypoints, Shipping } from "@/app/koksmat/navigator"
 
 import { NavigationContext } from "../context"
-import Shipping from "../navcomponents/shipping"
+
 
 export default function IcingMap(props: { whatIf?: boolean }) {
   const { whatIf } = props

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useContext, useEffect, useState } from "react"
+import React, { use, useContext, useEffect, useState } from "react"
 import { set } from "date-fns"
 
 import { KoksmatContext } from "@/app/koksmat/context"
@@ -9,7 +9,7 @@ import { PowerShell } from "../../components/powershell"
 import { PageContextSectionHeader } from "../../tenants/[tenant]/site/[site]/components/page-section-header"
 import { NavigationContext } from "../context"
 
-interface ShippingProps {
+export interface ShippingProps {
   label:string,
   need: string
   produce: string
@@ -17,12 +17,13 @@ interface ShippingProps {
   script: string
   showDebug?: boolean
   timeout: number
+  simulate?: boolean
   children?: React.ReactNode | React.ReactNodeArray
 }
 
-export default function Shipping(props: ShippingProps) {
+export default function Comp(props: ShippingProps) {
   const navigator = useContext(NavigationContext)
-  const { need, produce,label } = props
+  const { need, produce,label,simulate } = props
 
   const [data, setdata] = useState("")
   const [error, seterror] = useState("")
@@ -34,6 +35,29 @@ export default function Shipping(props: ShippingProps) {
   const [lastbatch, setlastbatch] = useState(-1)
   const [ran, setran] = useState(true)
   const [currentVersion, setcurrentVersion] = useState(0)
+  const [neededVersion, setneededVersion] = useState("")
+  const [produceVersion, setproduceVersion] = useState("")
+
+  useEffect(() => {
+    if (produce !== produceVersion) {
+      setproduceVersion(produce)
+    }
+  } , [produce, produceVersion])
+
+  useEffect(() => {
+    if (need !== neededVersion) {
+      setneededVersion(need)
+    }
+  } , [need, neededVersion])
+
+  useEffect(() => {
+    if (!simulate) return
+    const timer = setTimeout(() => {
+      setsatisfied(true)
+
+    }, 2000)
+    return () => {if (timer) clearTimeout(timer)}
+  } , [neededVersion,simulate])
 
   useEffect(() => {
     if (batch !== lastbatch) {
@@ -47,54 +71,37 @@ export default function Shipping(props: ShippingProps) {
     
     if (need===""){
       setsatisfied(true)
-      setworking(true)
-      setran(false)
+      // setworking(true)
+      // setran(false)
       return
     }
-    if (bag.has(need))  {
+    if (bag.has(neededVersion))  {
       setsatisfied(true)
-      setworking(true)
-      setran(false)
+      // setworking(true)
+      // setran(false)
     }
-  }, [batch, need, bag,currentVersion])
-
-  // useEffect(() => {
-  //   if (!satisfied) return
-  
-  //     setworking(true)
-  //     setran(false)
-     
-  // }, [satisfied])
+  }, [batch, neededVersion, bag, currentVersion, need])
 
   useEffect(() => {
+    if (!satisfied) return
+  
+      setworking(true)
+      setran(false)
+     
+  }, [satisfied])
 
+  useEffect(() => {
+    if (currentVersion !== version){
       setcurrentVersion(version)
-    
+    }
   }, [version])
 
   
   return (
     <div>
     
-      <PowerShell<any>
-        {...props}
-        ran={ran}
-        setran={r=>{
-          
-          setran(r)}}
-        onData={(data) => {
-          setworking(false)
-          ship(produce, data)
-          setdata(data)
-        }}
-        onMessage={(message) => {
-          setlog(message.message)
-        }}
-        onError={(error) => {
-          seterror(error)
-        }}
-      />
       
+      {navigator.traceLevel > 3 &&  
       <div>
         <div className="mb-4">
           <div className="font-bold">{label}</div>
@@ -117,7 +124,25 @@ export default function Shipping(props: ShippingProps) {
             </div>
           </div>
         )}
-      </div>
+      </div>}
+      <PowerShell<any>
+        {...props}
+        ran={ran}
+        setran={r=>{
+          
+          setran(r)}}
+        onData={(data) => {
+          setworking(false)
+          ship(produce, data)
+          setdata(data)
+        }}
+        onMessage={(message) => {
+          setlog(message.message)
+        }}
+        onError={(error) => {
+          seterror(error)
+        }}
+      />
     </div>
   )
 }

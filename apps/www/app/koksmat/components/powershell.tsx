@@ -5,9 +5,11 @@ import { use, useEffect, useState } from "react"
 import RunServerProcess from "../tenants/[tenant]/site/[site]/components/runserverprocess"
 import { tr } from "date-fns/locale"
 import { MessageType } from "../tenants/[tenant]/site/[site]/server/MessageType"
+import { set } from "date-fns"
 
 
 export function PowerShell<T>(props: {
+  produce?: string,
   showResults?: boolean,
   script:string,
   args?: string[],
@@ -22,12 +24,20 @@ export function PowerShell<T>(props: {
   onError?: (errorMessage: string) => void
 }) {
 
-const {ran, setran} = props
+const {ran, setran,produce} = props
 const [error, seterror] = useState("")
 const [version, setversion] = useState(0)
 
 const [localRan, localSetran] = useState(false)
 
+const [versionToProduce, setVersionToProduce] = useState("")
+useEffect(() => {
+  if (!produce) return
+  if (versionToProduce === produce) return
+  setVersionToProduce(produce)
+  localSetran(false)
+
+}, [versionToProduce,produce])
 
 
 
@@ -39,9 +49,9 @@ const [localRan, localSetran] = useState(false)
       <RunServerProcess
       caption="PowerShell"
       timeout={props.timeout?props.timeout:30}
-      ran={ran ?? localRan}
+      ran={localRan}
       showDebug={props.showDebug}
-      setran={setran ?? localSetran}
+      setran={localSetran}
         cmd={"pwsh"}
         args={props.args?props.args:[
           "-Command",

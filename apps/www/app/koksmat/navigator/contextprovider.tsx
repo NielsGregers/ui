@@ -13,7 +13,7 @@ type Props = {
 
 export const NavigationProvider = ({ children }: Props) => {
 
-const [traceLevel, settraceLevel] = useState(5)
+const [traceLevel, setinternaltraceLevel] = useState<number>(0)
 const [row, setrow] = useState(0)
 const [whatIf, setwhatIf] = useState(false)
 const [column, setcolumn] = useState(0)
@@ -21,8 +21,22 @@ const [column, setcolumn] = useState(0)
 const [batch, setbatch] = useState(0)
 const [version, setversion] = useState(0)
 const [bag, setbag] = useState(new Map<string, string>())
+const [internalInstanceId, setInternalInstanceId] = useState("1")
+const settraceLevel = (level: number) => {
+  debugger
+  if (level == traceLevel) return
+  setinternaltraceLevel(level)
+  setversion(version + 1)
+}
   const navigator: NavigationContextProps = {
     ship: function (tag: string, data: string): void {
+
+      if (!tag) return
+      if (!data) return
+      if (bag.has(tag)) {
+        if (bag.get(tag) === data) return
+      }
+      console.log("bag update", tag, data)
       bag.set(tag, data)
       setversion(version + 1)
     },
@@ -33,6 +47,7 @@ const [bag, setbag] = useState(new Map<string, string>())
       column
     },
     setTraceLevel: function (level: NavigationTrace): void {
+
       switch (level) {
         case "none":
           settraceLevel(0)
@@ -55,7 +70,7 @@ const [bag, setbag] = useState(new Map<string, string>())
         default:
           break
       }
-
+      //  
     },
 
     setPosition: function (position: Position): void {
@@ -69,10 +84,16 @@ const [bag, setbag] = useState(new Map<string, string>())
     bag,
     newBatch: function (): void {
       setbatch(batch + 1)
-      
+
     },
     batch: batch,
-    version
+    version,
+    instanceId: internalInstanceId,
+    setInstanceId: function (newInstanceId: string): void {
+      if (internalInstanceId === newInstanceId) return
+      setInternalInstanceId(newInstanceId)
+      setversion(version + 1)
+    }
   }
   return (
     <NavigationContext.Provider value={navigator}>

@@ -278,11 +278,11 @@ export const KoksmatProvider = ({ children,root,kitchenroot }: Props) => {
   return <KoksmatContext.Provider value={koksmat}>
 
     {children}
-    <div className="flex"><div className="p-2">
+    {/* <div className="flex"><div className="p-2">
       Roles for {magicbox.session?.user?.email}:
     </div>
       {roles.map((role: RoleItem) => { return <div key={role.id} className="mx-2 rounded-lg bg-lime-300 p-2" >{role.name} </div> })}
-    </div>
+    </div> */}
 
   </KoksmatContext.Provider>;
 };

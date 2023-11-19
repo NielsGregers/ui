@@ -20,6 +20,8 @@ export type NavigationContextProps = {
   setWhatIf: (on: boolean) => void
   whatIf: boolean
   newBatch: () => void
+  instanceId : string
+  setInstanceId: (instanceId: string) => void 
 }
 export const NavigationContext = createContext<NavigationContextProps>({
   ship: function (tag: string, data: string): void {
@@ -47,5 +49,9 @@ export const NavigationContext = createContext<NavigationContextProps>({
     throw new Error("Function not implemented.")
   },
   batch: 0,
-  version: 0
+  version: 0,
+  instanceId: "",
+  setInstanceId: function (instanceId: string): void {
+    throw new Error("Function not implemented.")
+  }
 })
