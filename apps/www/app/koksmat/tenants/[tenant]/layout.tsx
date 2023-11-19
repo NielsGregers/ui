@@ -23,7 +23,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
   
   
   return (
-    <div className="ml-3">
+    <div className="">
    
         {children}
 

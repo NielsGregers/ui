@@ -54,7 +54,7 @@ export default function Connections() {
     <div>
       <div>
         <PageContextSectionHeader title={"Establish Azure Connection"} />
-        <div className="mb-3 max-w-[600px]">
+        <div className="mb-3 mr-8">
           <div>
             First of all we need to establish a trust between this computer and
             Microsoft Online.
@@ -84,15 +84,8 @@ export default function Connections() {
             {accessChecked && hasAzAccess && (
               <div>
                 Access to Azure looks good. You are signed in as{" "}
-                {azureContext?.Account.Id}
-                <Button
-                  variant={"link"}
-                  onClick={() =>
-                    sethasAzAccess(false) 
-                  }
-                >
-                  Reconnect
-                </Button>
+               <span className="font-bold"> {azureContext?.Account.Id}</span>
+              
               </div>
             )}
             {accessChecked && !hasAzAccess && (
@@ -131,7 +124,7 @@ export default function Connections() {
               </div>
             )}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="space-x-3">
             {signinCode && (
               <div>
                 <div>
@@ -147,6 +140,17 @@ export default function Connections() {
               <Button>
                 <Link href="/koksmat/welcome/sharepoint">Continue</Link>
               </Button>
+            )}{accessChecked && hasAzAccess && (
+         
+                <Button
+                  variant={"secondary"}
+                  onClick={() =>
+                    sethasAzAccess(false) 
+                  }
+                >
+                  Reconnect
+                </Button>
+              
             )}
           </CardFooter>
         </Card>

@@ -36,7 +36,11 @@ export const runProcess = (command: string, args : string[], timeout: number,cha
     };
     const timer = setTimeout(() => {
       processHandler.kill();
-      reject("Timeout");
+      result.hasError = true;
+      result.errorMessage = "Timeout";
+      result.data = "Timeout";
+      resolve(result);
+      //reject("Timeout");
     }, timeout * 1000);
     
     const options : SpawnOptionsWithoutStdio = {env: process.env,cwd}

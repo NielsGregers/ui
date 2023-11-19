@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from 'react';
-import { Centrifuge } from 'centrifuge';
+import { Centrifuge, TransportEndpoint } from 'centrifuge';
 import { MessageType } from "../server/MessageType";
 import {strip} from "ansicolor"
 import { Button } from '@/registry/new-york/ui/button';
@@ -40,30 +40,59 @@ export function SocketLogger(props: {channelname:string,traceHidden?:boolean, on
     }
     setrefresh(new Date().getTime())
   }
+
+  useEffect(() => {
+    const latestItem = document.getElementById("koksmatlog-"+(log.length-1))
+  
+    latestItem?.scrollIntoView({behavior: "smooth"})
+  
+  
+  }, [refresh])
+  
   useEffect(() => {
     // create and assign a socket to a variable.
 
-    let socket = new Centrifuge('ws://localhost:8000/connection/websocket')
-    setsocket(socket)
-
-
-
+    //let socket = new Centrifuge('ws://localhost:8000/connection/websocket')
+    //setsocket(socket)
+    const transports : TransportEndpoint[] = [
+      {
+          transport: 'websocket',
+          endpoint: 'ws://localhost:8000/connection/websocket'
+      },
+      {
+          transport: 'http_stream',
+          endpoint: 'http://localhost:8000/connection/http_stream'
+      },
+      {
+          transport: 'sse',
+          endpoint: 'http://localhost:8000/connection/sse'
+      }
+  ];
+  const centrifuge = new Centrifuge(transports);
+  centrifuge.connect()
+  centrifuge.on('connected', onConnect);
+  const sub = centrifuge.newSubscription(props.channelname);
+  sub.on('publication', receiver);
+  sub.subscribe()
+  //centrifuge.connect()
     return () => {
-      socket.disconnect()
+      sub.unsubscribe
+      centrifuge.disconnect()
+      
     }
   }, [])
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('connected', onConnect);
-      const sub = socket.newSubscription(props.channelname);
-      sub.on('publication', receiver);
-      sub.subscribe()
-      socket.connect()
-    }
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on('connected', onConnect);
+  //     const sub = socket.newSubscription(props.channelname);
+  //     sub.on('publication', receiver);
+  //     sub.subscribe()
+  //     socket.connect()
+  //   }
 
 
-  }, [socket])
+  // }, [socket])
 
   if (props.traceHidden) return null
   return (
@@ -71,7 +100,9 @@ export function SocketLogger(props: {channelname:string,traceHidden?:boolean, on
       {/* <div>Sockets {refresh}</div> */}
       <pre className="h-[500px] overflow-scroll text-xs">
         {log.sort((a, b) => a.timestamp - b.timestamp).map((l, i) => {
-          return <div key={i} className={l.isError ? "text-red-500":""}>{strip(l.message)}</div>
+          return <div key={i} id={"koksmatlog-"+i} className={l.isError ? "text-red-500":"border-b-0 border-cyan-400"}>
+            {/* Line {i} */}
+            {strip(l.message)}</div>
         })}
 
 

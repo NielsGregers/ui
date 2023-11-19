@@ -25,19 +25,38 @@ export const docsConfig  = (tenant:string) : DocsConfig =>  {return {
           items: [],
         },
         {
-       
+        
           title: "Connect to SharePoint",
           href: `/koksmat/welcome/sharepoint`,
           items: [],
         },
         {
-       
+          disabled:!tenant,
           title: "Install Koksmat",
-          href: `/koksmat/welcome/sharepoint/deploy`,
+          href: `/koksmat/welcome/sharepoint/deploy`+tenant,
           items: [],
         },
+        
       ],
     },
+        {
+      title: "Compliance & Security",
+      items: [
+       
+        {
+          title: "Transparency",
+          href: `/koksmat/welcome/transparent`,
+          disabled:false,
+          items: [],
+        },
+        {
+          title: "Privacy",
+          href: `/koksmat/welcome/privacy`,
+          disabled:false,
+          items: [],
+        },
+      ]
+    }
     // {
     //   title: "Takeaways",
     //   items: [

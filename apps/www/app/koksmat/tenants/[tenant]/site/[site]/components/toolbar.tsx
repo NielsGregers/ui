@@ -8,7 +8,7 @@ import { useContext } from "react"
 export function KoksmatToolBar(){
     const {showToolbar} =  useContext(KoksmatContext) 
     if (!showToolbar) return null
-       return null
+      // return null
     return (
         <div className="mr-4 hidden md:flex">
         <div className=" w-[64px] border-r border-gray-400">

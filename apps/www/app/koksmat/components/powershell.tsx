@@ -1,29 +1,47 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 
 import RunServerProcess from "../tenants/[tenant]/site/[site]/components/runserverprocess"
 import { tr } from "date-fns/locale"
+import { MessageType } from "../tenants/[tenant]/site/[site]/server/MessageType"
 
 
 export function PowerShell<T>(props: {
+  showResults?: boolean,
   script:string,
   args?: string[],
   dontparse?:boolean,
+  showDebug?: boolean,
+  timeout?:number,
+  ran?:boolean,
+  setran?: (ran: boolean) => void,
   children?: React.ReactNode,
   onData?: (data: T)=>void,
+  onMessage?: (message: MessageType)=>void,
   onError?: (errorMessage: string) => void
 }) {
-const [error, seterror] = useState("")
 
-  const [ran, setran] = useState(false)
+const {ran, setran} = props
+const [error, seterror] = useState("")
+const [version, setversion] = useState(0)
+
+const [localRan, localSetran] = useState(false)
+
+
+
+
+
   return (
     <div>
+      
       {error && <div className="text-red-600">{error}</div>}
       <RunServerProcess
       caption="PowerShell"
-      ran={ran}
-      setran={setran}
+      timeout={props.timeout?props.timeout:30}
+      ran={ran ?? localRan}
+      showDebug={props.showDebug}
+      setran={setran ?? localSetran}
         cmd={"pwsh"}
         args={props.args?props.args:[
           "-Command",
@@ -61,7 +79,8 @@ const [error, seterror] = useState("")
           }
       
         }}
-        timeout={3600}
+        onMessage={props.onMessage}
+   
         channelname={"pwsh"}
       />
     </div>

@@ -7,7 +7,7 @@ import { Result } from "./httphelper"
 
 export const version = 1
 
-export function useProcess(
+export function   useProcess(
   cmd: string,
   args: string[],
   timeout: number,
@@ -49,7 +49,7 @@ export function useProcess(
         load()
       
     }
-  }, [channel, cmd, timeout, args, cwd, ran, setran])
+  }, [channel, cmd, timeout, args, cwd, ran, setran, setresult])
 
   return {
     data,

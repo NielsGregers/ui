@@ -236,6 +236,9 @@ export function NavigationMenuKoksmat(): JSX.Element {
           }}>
              {koksmat.options.showDebug?"Hide Debug":"Show Debug"}
             </MenubarItem>
+            <MenubarItem >
+                  <Link className="whitespace-nowrap"  href={`/koksmat/navigator`}><div className="flex space-x-2">Navigator</div> </Link>
+                </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu >

@@ -3,7 +3,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import Link from "next/link"
 
-import { CardContent, CardHeader } from "@/registry/default/ui/card"
+import { CardContent, CardHeader, CardTitle } from "@/registry/default/ui/card"
 import { Badge } from "@/registry/new-york/ui/badge"
 import { Button } from "@/registry/new-york/ui/button"
 import { Card, CardFooter } from "@/registry/new-york/ui/card"
@@ -33,7 +33,8 @@ export default function Connections() {
   const magicbox = useContext(MagicboxContext)
   const [adminurl, setadminurl] = useState("")
   const welcomeContext = useContext(WelcomeContext)
-  const [domains, setdomains] = useState<AzDomain.Root>([])
+  const [domains, setdomains] = useState<AzDomain.Root>()
+  const [tenantselected, settenantselected] = useState("")
   const onMessage = (msg: MessageType) => {
     if (msg.isError) return
 
@@ -60,7 +61,7 @@ export default function Connections() {
     <div>
       <div>
         <PageContextSectionHeader title={"Connect to SharePoint"} />
-        <div className="mb-3 max-w-[600px]">
+        <div className="mb-3 mr-8">
           <div className="mt-3">
             SharePoint is considered the Primary data store for everything we
             do. So you need to establish a connection.
@@ -76,47 +77,81 @@ export default function Connections() {
             </a>
           </div>
         </div>
+        {!domains && <div className="italic">
+          Reading domains from Azure
+          </div>}
         {!welcomeContext.tenant && (
           <div>
+           
             <AzureDomain
               onData={(data) => {
                 setdomains(data)
               }}
             />
-            <div>Select the tenant you like to use</div>
-            {domains &&
-              domains.map((domain) => {
-                return (
-                  <div key={domain.Id}>
-                    <div className="text-bold mr-4">{domain.Name}</div>
-                    <div className="space-x-3">
-                      {/* {domain.Domains.map((d)=>{return (<Badge key={d}>{d}</Badge>)} )} */}
-                      {(
-                        domain.Domains.filter(
-                          (d) => d.toLowerCase().indexOf("onmicrosoft.com") > -1
-                        ).filter(
-                          (d) =>
-                            d.toLowerCase().indexOf("mail.onmicrosoft.com") ===
-                            -1
-                        ) ?? []
-                      ).map((d) => {
-                        return (
-                          <Button
-                            variant={"link"}
-                            key={d}
-                            onClick={() => welcomeContext.settenant(d.split(".")[0].toLowerCase())}
-                          >
-                            {d.split(".")[0].toLowerCase()}
-                          </Button>
-                        )
-                      })}
-                    </div>{" "}
-                  </div>
-                )
-              })}
           </div>
         )}
-        {welcomeContext.tenant && (
+        {!tenantselected && domains && (
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle> Select the SharePoint domain that you like to use</CardTitle>
+                </CardHeader>
+                <CardContent>
+          
+            <table className="mt-4">
+              <tr>
+                <td className="font-bold">Tenant</td>
+                <td className="ml-5 font-bold">SharePoint domain</td>
+              </tr>
+              {domains
+                .sort((a, b) => {
+                  return a.Name.localeCompare(b.Name)
+                })
+                .map((domain) => {
+                  return (
+                    <tr key={domain.Id}>
+                      <td>{domain.Name}</td>
+                      <td>
+                        <div className="flex">
+                        {(
+                          domain.Domains.filter(
+                            (d) =>
+                              d.toLowerCase().indexOf("onmicrosoft.com") > -1
+                          ).filter(
+                            (d) =>
+                              d
+                                .toLowerCase()
+                                .indexOf("mail.onmicrosoft.com") === -1
+                          ) ?? []
+                        ).map((d) => {
+                          return (
+                            <div key={d} className="space-3 p-3">
+                              <Button
+                                variant={"default"}
+                                onClick={() =>{
+                                  settenantselected(d.split(".")[0].toLowerCase())
+                                  welcomeContext.settenant(
+                                    d.split(".")[0].toLowerCase()
+                                  )}
+                                }
+                              >
+                                {d.split(".")[0].toLowerCase()}
+                              </Button>
+                            </div>
+                          )
+                        })}</div>
+                      </td>
+                    </tr>
+                  )
+                })}
+            </table>
+            </CardContent>
+            </Card>
+          </div>
+          
+        )}
+
+        {tenantselected && (
           <Card className="mr-8">
             <CardHeader title="Access Check" />
             <CardContent>
@@ -132,8 +167,6 @@ export default function Connections() {
                         setaccessChecked(true)
                       }}
                       onData={(url) => {
-                        
-                       
                         setaccessChecked(true)
                         sethasSharePointAccess(url !== "")
                         setadminurl(url)
@@ -147,13 +180,12 @@ export default function Connections() {
 
               {accessChecked && hasSharePointAccess && (
                 <div>
-                  Access to SharePoint looks good, this should be the App Catalogue.{" "}<a      className="text-blue-700" href={adminurl} target="_blank">{adminurl}</a>
-                  <Button
-                    variant={"link"}
-                    onClick={() => welcomeContext.settenant("")}
-                  >
-                    Change tenant
-                  </Button>
+                  Access to SharePoint looks good, this should be the App
+                  Catalogue.{" "}
+                  <a className="text-blue-700" href={adminurl} target="_blank">
+                    {adminurl}
+                  </a>
+                 
                 </div>
               )}
             </CardContent>
@@ -169,11 +201,39 @@ export default function Connections() {
                   </div>
                 </div>
               )}
-              {hasSharePointAccess && <Button><Link href={"/koksmat/welcome/sharepoint/deploy/"+welcomeContext.tenant}>Continue</Link></Button>}
+              {hasSharePointAccess && (
+                <div>
+                <Button>
+                  <Link
+                    href={
+                      "/koksmat/welcome/sharepoint/deploy/" +
+                      welcomeContext.tenant
+                    }
+                  >
+                    Continue
+                  </Link>
+                </Button>
+               
+            
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => {
+                      sethasSharePointAccess(false)
+                      
+                      setaccessChecked(false)
+                      settenantselected("")}}
+                  >
+                    Change tenant
+                  </Button>
+         
+                </div>
+              )}
             </CardFooter>
           </Card>
         )}
+        
       </div>
+      
     </div>
   )
 }

@@ -161,7 +161,7 @@ export function MagicBar({
 
       {tools?.sort((a, b) => a.fields.SortOrder - b.fields.SortOrder).map((tool, key) => { return <Tool standalone={props.standalone} script={tool.fields.Script ?? ""} key={key} link={tool.fields.Link_x0020_URL.Url} displayName={tool.fields.Title} iconUrl={tool.fields.Icon.Url} openIn={tool.fields.Openin as openInOptions ?? "New page"} /> })}
       <div className="relative h-32 w-32 ">
-  <div className="absolute inset-x-0 bottom-0 h-16 bg-black ">08</div>
+  {/* <div className="absolute inset-x-0 bottom-0 h-16 bg-black ">08</div> */}
 </div>
     </div>
   )

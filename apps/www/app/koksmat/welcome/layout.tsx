@@ -30,7 +30,7 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
   }, [])
 
   return (
-    <div className="border-b">
+    <div className="ml-3 border-b">
       <WelcomeProvider>
         <PageContextHeader title={"Welcome"} />
 

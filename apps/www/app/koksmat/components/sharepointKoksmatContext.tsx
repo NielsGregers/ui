@@ -3,6 +3,10 @@
 import { useContext } from "react"
 import { MagicboxContext } from "@/app/magicbox-context"
 import { PowerShell } from "./powershell"
+export interface Root {
+  webUrl: string
+  Title: string
+}
 
 export function SharePointKoksmatContext(props: {
   tenant: string
@@ -14,11 +18,12 @@ export function SharePointKoksmatContext(props: {
   return ( 
     <div>
       
-    <PowerShell<any>
-      dontparse
+    <PowerShell<Root>
+      timeout={3600}
+      dontparse={false}
       script=""
       args={["-File",
-        magicbox.root + "app/koksmat/powershell/connect-pnp-returnsiteinfo.ps1",
+        magicbox.root + "app/koksmat/powershell/deploy-pnp-intra365.ps1",
         "-tenantdomain",
         props.tenant,
         "-siteurl",
