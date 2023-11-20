@@ -1,8 +1,7 @@
 "use client"
 
-import React, { use, useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { addDays, set } from "date-fns"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { BiHandicap } from "react-icons/bi"
 import { BsFillEvStationFill } from "react-icons/bs"
@@ -14,8 +13,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/registry/default/ui/dropdown-menu"
-import { Input } from "@/registry/default/ui/input"
-import { Label } from "@/registry/default/ui/label"
 import { Switch } from "@/registry/default/ui/switch"
 import {
   Tooltip,
@@ -27,8 +24,6 @@ import { useToast } from "@/registry/default/ui/use-toast"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -39,22 +34,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
-import { UsecaseContext } from "@/app/booking/usecasecontext"
 
 import {
   BookingConfirmationType,
   UserParkingBooking,
   deleteBooking,
   getBookingByDate,
-  getParkingAvailability,
-  getUsersBookingByDate,
   newParkingBooking,
 } from "../actions/parking/parkingBookings"
-import { getUserPlates } from "../actions/parking/user"
 import { LicencePicker } from "./licenceplate-picker"
 
 function isDisabled(date: Date, hoursUntil: number) {
   return (
+    //restricted for earliest booking the next day
     // new Date(date.setHours(12, 0, 0, 0)).getTime() <
     //   new Date(new Date().setHours(12, 0, 0, 0)).getTime() ||
     // (new Date().getTime() >
@@ -62,6 +54,7 @@ function isDisabled(date: Date, hoursUntil: number) {
     //   new Date(date.setHours(12, 0, 0, 0)).getTime() ===
     //     new Date(addDays(new Date().setHours(12, 0, 0, 0), 1)).getTime())
 
+    //no restrictions for earliest booking
     new Date(date.setHours(12, 0, 0, 0)).getTime() <
     new Date(new Date().setHours(12, 0, 0, 0)).getTime()
   )
@@ -92,21 +85,16 @@ function ReserveParkingButton(params: {
   useEffect(() => {
     async function getBooking() {
       let result = await getBookingByDate(params.userEmail ?? "", params.date)
-      if (!result) {
-        let available = await getParkingAvailability(params.date)
-        if (available) {
-          setavailable(available)
-        }
+      if (!result.booking) {
+        // let available = await getParkingAvailability(params.date)
+        setavailable(result.availableSpaces)
       }
 
-      if (newBooking && result === undefined) {
-        result = await getUsersBookingByDate(
-          params.userEmail ?? "",
-          params.date
-        )
+      if (newBooking && result.booking === undefined) {
+        result = await getBookingByDate(params.userEmail ?? "", params.date)
       }
 
-      setbooking(result)
+      setbooking(result.booking)
       setnewBooking(false)
       setloading(false)
     }

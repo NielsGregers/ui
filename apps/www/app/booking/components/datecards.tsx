@@ -1,49 +1,24 @@
 /* eslint-disable react/jsx-key */
 "use client"
 
-import React, { use, useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import React, { useEffect, useState } from "react"
 import { addDays } from "date-fns"
-import { Car } from "lucide-react"
 import { DateRange } from "react-day-picker"
 import { BsFillMapFill } from "react-icons/bs"
-import { FaQuestion } from "react-icons/fa"
-import { GiDesk } from "react-icons/gi"
 import { HiMail } from "react-icons/hi"
-import { Cell, Pie, PieChart } from "recharts"
 
 import { Button } from "@/registry/default/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/registry/default/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/registry/default/ui/dialog"
-import { Label } from "@/registry/default/ui/label"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/registry/default/ui/tooltip"
 
 import { UserParkingBooking } from "../actions/parking/parkingBookings"
 import DateCard from "./datecard"
-import PieGraph from "./piegraph"
 import Rules from "./rules"
-
-const delay = async (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 interface PropTypes {
   dateRange: DateRange
@@ -52,10 +27,6 @@ interface PropTypes {
 
 function DateCards(props: PropTypes) {
   const [dates, setdates] = useState<Date[]>([])
-  const [userbookings, setuserbookings] = useState<UserParkingBooking[]>([])
-  const [refresh, setrefresh] = useState<number>(0)
-
-  const router = useRouter()
 
   useEffect(() => {
     let datesSelected: Date[] = []
