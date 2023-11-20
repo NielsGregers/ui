@@ -271,46 +271,46 @@ export async function getBookingByDate(userEmail: string, date: Date) {
   return { booking, availableSpaces }
 }
 
-//old
-// export async function getParkingAvailability(date: Date) {
-//   const dateString = date.toLocaleDateString("en-GB", {
-//     day: "2-digit",
-//     month: "2-digit",
-//     year: "numeric",
-//   })
-//   let filter = {
-//     $or: [
-//       {
-//         permanent: false,
-//       },
-//       {
-//         permanent: true,
-//         free: { $in: [dateString] },
-//       },
-//     ],
-//   }
-//   const client = await connectBooking()
-//   const parkingSpacesCollection = client.db("booking-cro").collection("parking")
-//   const parkingBookingsCollection = client
-//     .db("booking-cro")
-//     .collection<ParkingBooking>("parking_bookings")
+//NEEDS TO BE OPTIMIZED!!!
+export async function getParkingAvailability(date: Date) {
+  const dateString = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+  let filter = {
+    $or: [
+      {
+        permanent: false,
+      },
+      {
+        permanent: true,
+        free: { $in: [dateString] },
+      },
+    ],
+  }
+  const client = await connectBooking()
+  const parkingSpacesCollection = client.db("booking-cro").collection("parking")
+  const parkingBookingsCollection = client
+    .db("booking-cro")
+    .collection<ParkingBooking>("parking_bookings")
 
-//   const bookingsForDate = (await parkingBookingsCollection
-//     .find({ date: dateString })
-//     .toArray()) as ParkingBooking[]
+  const bookingsForDate = (await parkingBookingsCollection
+    .find({ date: dateString })
+    .toArray()) as ParkingBooking[]
 
-//   const availableParkingSpaces = await parkingSpacesCollection
-//     .find({
-//       $and: [
-//         filter,
+  const availableParkingSpaces = await parkingSpacesCollection
+    .find({
+      $and: [
+        filter,
 
-//         { title: { $nin: bookingsForDate.map((booking) => booking.parking) } },
-//       ],
-//     })
-//     .toArray()
+        { title: { $nin: bookingsForDate.map((booking) => booking.parking) } },
+      ],
+    })
+    .toArray()
 
-//   return availableParkingSpaces.length
-// }
+  return availableParkingSpaces.length
+}
 
 export async function getAvailableParkingSpaces(date: Date) {
   const dateString = date.toLocaleDateString("en-GB", {
