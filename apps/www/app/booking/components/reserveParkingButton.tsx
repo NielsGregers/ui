@@ -209,7 +209,7 @@ function ReserveParkingButton(params: {
           >
             <DialogTrigger asChild>
               <Button
-                disabled={isDisabled(date, 16)}
+                disabled={isDisabled(date, 16) || available === 0}
                 className="w-full rounded-full"
                 variant="outline"
                 //   onClick={() => setisopen(true)}
@@ -285,6 +285,12 @@ function ReserveParkingButton(params: {
                       </Button>
                     </div>
                   )}
+                  {result?.cause === "No available parking slots" && (
+                    <div className="sm:max-w-[425px]">
+                      <div className="sm:max-w-[425px]">{result.cause}</div>
+                    </div>
+                  )}
+
                   {result?.cause === "No available parking slots for EV" && (
                     <div className="sm:max-w-[425px]">
                       <div className="sm:max-w-[425px]">{result.cause}</div>
@@ -411,6 +417,9 @@ function ReserveParkingButton(params: {
           {!isDisabled(date, 16) && (
             <div className="flex w-full items-center justify-center text-xs ">
               {available ? available + " spots available" : ""}
+              {available === 0 && (
+                <span style={{ color: "red" }}>No spots available</span>
+              )}
             </div>
           )}
         </div>
