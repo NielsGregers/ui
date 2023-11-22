@@ -1,6 +1,6 @@
 "use client"
 import { useContext } from "react"
-import { NavigationItemProps, NavigationItemWithPositionProps, NavigationTraceWarning } from "./elements"
+import { NavigationItemProps, NavigationItemWithPositionProps, NavigationTraceInfo, NavigationTraceWarning } from "./elements"
 import { NavigationContext } from "../context"
 import Plotter from "./plotter"
 
@@ -16,7 +16,7 @@ export default function Comp(props:PortProps){
     const { traceLevel } = navigator
     const {children,portname} = props
     return  <div>
-        {traceLevel > NavigationTraceWarning && <div className="text-xl">
+        {traceLevel > NavigationTraceInfo && <div className="text-xl">
             {portname}
             </div>}
     <Plotter typename={"Port"} {...props} tag={props.portname} />

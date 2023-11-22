@@ -1,5 +1,6 @@
 import { createContentlayerPlugin } from "next-contentlayer"
 
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   

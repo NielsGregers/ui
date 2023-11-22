@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4321",
-    "koksmat:serve":"cd cd /usr/src/app/apps/www  &&  npm run start",
-
+    "koksmat:serve": "cd cd /usr/src/app/apps/www  &&  npm run start",
     "build": "next build",
     "buildall": "contentlayer build ",
     "buildnext": "next build",
@@ -26,6 +25,7 @@
     "@azure/msal-react": "^2.0.4",
     "@faker-js/faker": "^7.6.0",
     "@hookform/resolvers": "^3.1.0",
+    "@monaco-editor/react": "^4.6.0",
     "@pnp/graph": "^3.17.0",
     "@pnp/nodejs": "^3.17.0",
     "@pnp/nodejs-commonjs": "^2.15.0",
@@ -63,6 +63,7 @@
     "@svgdotjs/svg.js": "^3.2.0",
     "@tanstack/react-query": "^4.33.0",
     "@tanstack/react-table": "^8.9.1",
+    "@types/js-yaml": "^4.0.9",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.0.21",
     "ansicolor": "^2.0.1",
@@ -78,6 +79,7 @@
     "exceljs": "^4.4.0",
     "fast-xml-parser": "^4.3.0",
     "jotai": "^2.1.0",
+    "js-yaml": "^4.1.0",
     "lodash.template": "^4.5.0",
     "lucide-react": "0.214.0",
     "markdown-wasm": "^1.2.0",
@@ -99,6 +101,7 @@
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "tailwind-merge": "^1.12.0",
+    "yaml-loader": "^0.8.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

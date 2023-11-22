@@ -23,7 +23,7 @@ const [version, setversion] = useState(0)
 const [bag, setbag] = useState(new Map<string, string>())
 const [internalInstanceId, setInternalInstanceId] = useState("1")
 const settraceLevel = (level: number) => {
-  debugger
+  
   if (level == traceLevel) return
   setinternaltraceLevel(level)
   setversion(version + 1)

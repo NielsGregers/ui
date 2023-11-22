@@ -38,6 +38,7 @@ export function DocsSidebarNavItems({
   items,
   pathname,
 }: DocsSidebarNavItemsProps) {
+  
   return items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {items.map((item, index) =>
@@ -48,14 +49,14 @@ export function DocsSidebarNavItems({
             className={cn(
               "group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:underline",
               item.disabled && "cursor-not-allowed opacity-60",
-              pathname === item.href
+              decodeURIComponent(pathname??"") ===  item.href
                 ? "font-medium text-foreground"
                 : "text-muted-foreground"
             )}
             target={item.external ? "_blank" : ""}
             rel={item.external ? "noreferrer" : ""}
           >
-            {item.title}
+            {item.title + " " + pathname}
             {item.label && (
               <span className="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline">
                 {item.label}

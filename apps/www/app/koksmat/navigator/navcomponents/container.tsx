@@ -4,6 +4,7 @@ import { NavigationContext } from "../context"
 import {
   NavigationItemProps,
   NavigationItemWithPositionProps,
+  NavigationTraceInfo,
   NavigationTraceWarning,
 } from "./elements"
 import Plotter from "./plotter"
@@ -20,7 +21,7 @@ export default function Comp(props: ContainerProps) {
   const { traceLevel } = navigator
   return (
     <div className={cn("")}>
-      {traceLevel > NavigationTraceWarning && (
+      {traceLevel > NavigationTraceInfo && (
         <div className="text-l">
             
             {containername}</div>
