@@ -1,7 +1,7 @@
 /* eslint-disable tailwindcss/classnames-order */
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { addDays, set, setDate } from "date-fns"
 import { DateRange } from "react-day-picker"
 import { ThreeCircles } from "react-loader-spinner"
@@ -10,6 +10,10 @@ import CurrentTime from "./currentTime"
 import DateCards from "./datecards"
 import { DateRangePicker } from "./datepicker"
 import Mobile from "./mobile"
+import { aquireToken } from "../msal"
+import { BookingContext } from "../context"
+import { https } from "@/lib/httphelper"
+import {Root as Me} from "../schema/me"
 
 export interface DateRangeSelection {
   from: Date
@@ -27,20 +31,46 @@ function HomeScreen(props: PropTypes) {
   })
   const [loading, setloading] = useState(true)
 
+  const [me, setme] = useState<Me>()
+const context = useContext(BookingContext)
+
+
+const getMe = async () => {
+  const tokenRequest = await context.getToken(["User.Read"])
+  if (tokenRequest.hasError ){
+    alert("error  " +  tokenRequest.errorMessage)
+    return 
+
+  }
+
+  const meResponse = await https<Me>(tokenRequest.data??"","GET", "https://graph.microsoft.com/v1.0/me")
+  if (meResponse.errorMessage){
+    alert("error  " +  meResponse.errorMessage)
+    return 
+
+  }
+  setme(meResponse.data)
+
+}
+
   useEffect(() => {
     setTimeout(() => {
       setloading(false)
     }, 500)
+    getMe()
   }, [])
 
   const onDateChange = (dateRange: DateRange) => {
     setdate(dateRange)
   }
 
+
+
   return (
     <div>
       <div className="hidden md:flex">
         <CurrentTime />
+        {me?.displayName}
         {!loading && (
           <div className="min-h-[90vh] container flex flex-col gap-2 justify-center">
             <DateRangePicker numberOfDays={3} onDateChange={onDateChange} />

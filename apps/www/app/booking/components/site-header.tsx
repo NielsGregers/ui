@@ -38,7 +38,7 @@ export function SiteHeader() {
 
             <ModeToggle />
 
-             <UserNav /> 
+              <UserNav />  
           </nav>
         </div>
       </div>

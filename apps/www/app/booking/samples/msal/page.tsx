@@ -9,12 +9,14 @@ import React, { useContext, useEffect, useState } from "react"
 import { useMsal, useAccount } from "@azure/msal-react";
 import { https } from "@/lib/httphelper"
 import { BookingContext } from "../../context"
-interface CaseProps {
-    scopes:string[],
-    title:string,
-    testurl:string,
-    token?:string
+ interface CaseProps {
+  scopes:string[],
+  title:string,
+  testurl:string,
+  token?:string
 }
+
+
 const cases : CaseProps[]=[
     {scopes:["User.Read"],
     title:"Read user profile",
