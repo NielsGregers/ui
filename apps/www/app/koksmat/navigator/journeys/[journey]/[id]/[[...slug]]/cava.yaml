@@ -7,9 +7,19 @@ metadata:
     of this recipie is called a ship, and what is keeping everybody
     onboard are the Koksmat's which do all of the trivial work of
     making nice food and drinks for the crew and the passengers.
+triggers:
+  - trigger:
+    name: meetingPurpose
+    key: meetingPurpose
+    details:
+      - title
+      - description
 
 waypoints:
   - port: Planning
+    done:
+      - invitation
+
     loads:
       containers:
         - container:
@@ -19,11 +29,13 @@ waypoints:
             - organizer
               email
               title
-              name
-            - chair    
-              email
-              title
-              name                 
+              name              
+          approve:
+            - chair
+          consult:
+            - speakers
+          inform:
+            - attendees  
           needs: 
             - meetingPurpose
 
@@ -38,7 +50,8 @@ waypoints:
           name: Pre Settlement
           key: meeting:10.20          
           who:
-            - organizer   
+            - organizer        
+
           needs: 
             - attendees-proposed 
               email
@@ -70,7 +83,9 @@ waypoints:
           key: meeting:10.30          
           who:
             - organizer
-            - chair            
+          approve:
+            - chair
+    
           needs: 
             - attendee-list
             - time-agreed
@@ -88,6 +103,7 @@ waypoints:
           key: meeting:10.40          
           who:
             - organizer
+          approve:
             - chair            
           needs: 
             - attendees
@@ -103,7 +119,6 @@ waypoints:
           name: Resource Booking
           key: meeting:10.50          
           who:
-            - organizer
             - resourceowner            
           needs: 
             - resources-suggestion
@@ -186,21 +201,55 @@ waypoints:
             - rsvp            
           script: |
             write-host "Arrival Received"               
+        - container:
+          name: Registration
+          key: meeting:30.20          
+
+          who: 
+            - reception
+          needs:   
+            - attendee  
+          produces: 
+            - accessticket            
+          script: |
+            write-host "Registration Received"    
   - port: Meet
     loads:
       containers:    
         - container:
           name: Meet
           key: meeting:40.10          
-
           who: 
             - attendees
           needs:   
-            - invitation   
+            - accessticket   
           produces: 
             - rsvp            
           script: |
             write-host "Meet Received"             
+        - container:
+          name: Welcome
+          key: meeting:40.10          
+          who: 
+            - chair
+          needs:   
+            - agendaitems
+          produces: 
+            - baton            
+          script: |
+            write-host "Meet Received"             
+        - container:
+          name: Present
+          key: meeting:40.10          
+          who: 
+            - presenters
+          needs:   
+            - baton   
+            - agendaitem
+          produces: 
+            - decesion        
+          script: |
+            write-host "Meet Received"  
   - port: Departure
     loads:
       containers:    

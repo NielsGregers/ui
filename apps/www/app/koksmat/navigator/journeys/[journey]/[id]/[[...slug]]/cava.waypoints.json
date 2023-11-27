@@ -5,9 +5,23 @@
     "name": "Meeting",
     "description": "This is the recipie for running a meeting. Each \"instance\"\nof this recipie is called a ship, and what is keeping everybody\nonboard are the Koksmat's which do all of the trivial work of\nmaking nice food and drinks for the crew and the passengers.\n"
   },
+  "triggers": [
+    {
+      "trigger": null,
+      "name": "meetingPurpose",
+      "key": "meetingPurpose",
+      "details": [
+        "title",
+        "description"
+      ]
+    }
+  ],
   "waypoints": [
     {
       "port": "Planning",
+      "done": [
+        "invitation"
+      ],
       "loads": {
         "containers": [
           {
@@ -15,8 +29,16 @@
             "name": "Prepare Meeting",
             "key": "meeting:10.10",
             "who": [
-              "organizer email title name",
-              "chair email title name"
+              "organizer email title name"
+            ],
+            "approve": [
+              "chair"
+            ],
+            "consult": [
+              "speakers"
+            ],
+            "inform": [
+              "attendees"
             ],
             "needs": [
               "meetingPurpose"
@@ -55,7 +77,9 @@
             "name": "Settle Meeting",
             "key": "meeting:10.30",
             "who": [
-              "organizer",
+              "organizer"
+            ],
+            "approve": [
               "chair"
             ],
             "needs": [
@@ -76,7 +100,9 @@
             "name": "Prepare Invitation",
             "key": "meeting:10.40",
             "who": [
-              "organizer",
+              "organizer"
+            ],
+            "approve": [
               "chair"
             ],
             "needs": [
@@ -95,7 +121,6 @@
             "name": "Resource Booking",
             "key": "meeting:10.50",
             "who": [
-              "organizer",
               "resourceowner"
             ],
             "needs": [
@@ -209,6 +234,21 @@
               "rsvp"
             ],
             "script": "write-host \"Arrival Received\"               \n"
+          },
+          {
+            "container": null,
+            "name": "Registration",
+            "key": "meeting:30.20",
+            "who": [
+              "reception"
+            ],
+            "needs": [
+              "attendee"
+            ],
+            "produces": [
+              "accessticket"
+            ],
+            "script": "write-host \"Registration Received\"    \n"
           }
         ]
       }
@@ -225,12 +265,43 @@
               "attendees"
             ],
             "needs": [
-              "invitation"
+              "accessticket"
             ],
             "produces": [
               "rsvp"
             ],
             "script": "write-host \"Meet Received\"             \n"
+          },
+          {
+            "container": null,
+            "name": "Welcome",
+            "key": "meeting:40.10",
+            "who": [
+              "chair"
+            ],
+            "needs": [
+              "agendaitems"
+            ],
+            "produces": [
+              "baton"
+            ],
+            "script": "write-host \"Meet Received\"             \n"
+          },
+          {
+            "container": null,
+            "name": "Present",
+            "key": "meeting:40.10",
+            "who": [
+              "presenters"
+            ],
+            "needs": [
+              "baton",
+              "agendaitem"
+            ],
+            "produces": [
+              "decesion"
+            ],
+            "script": "write-host \"Meet Received\"  \n"
           }
         ]
       }

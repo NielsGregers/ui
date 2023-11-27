@@ -2,63 +2,27 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { IoIosCheckmarkCircle } from "react-icons/io"
-import { NavItem } from "types/nav"
+import { NavItem, SidebarNavItem } from "types/nav"
 
 import { cn } from "@/lib/utils"
 
 export interface DocsSidebarNavProps {
-  currentPath: string
-  items: NavItem[]
+  items: SidebarNavItem[]
 }
 
-export default function SidebarNav(props: {
-  currentPath: string
-  items: NavItem[]
-}) {
-  const { items, currentPath } = props
-  const status = (isCurrent: boolean) => {
-    if (isCurrent) {
-      return <IoIosCheckmarkCircle />
-    }
-    return <div />
-  }
+export default function RightbarNav(params : { items : NavItem[]}) {
+  const pathname = usePathname()
+  const {items} = params
+  if (items?.length === 0) return null
 
-  return items.length ? (
-    <div className="w-full">
-      {items.map((item, index) => {
-        const isCurrent = item.href?.startsWith(currentPath)
-        return (
-          <div key={index} className={cn("")}>
-            <h4
-              className={cn(
-                " pointer mb-1 text-clip whitespace-nowrap rounded-md px-2 py-1 text-sm font-semibold" +
-                  (isCurrent ? "" : "text-red-400")
-              )}
-            >
-              <Link href={item.href ?? ""}>
-                <div className="flex">
-                  <div className="mt-1 w-5">
-                    {status(item.checked ? true : false)}
-                  </div>{" "}
-                  {item.title}
-                </div>
-              </Link>
-            </h4>
-            {/* {item?.items?.length && (
-            <DocsSidebarNavItems items={item.items} pathname={pathname} />
-          )} */}
-          </div>
-        )
-      })}
-    </div>
-  ) : null
+  return <DocsSidebarNavItems items={items} pathname={pathname} />
 }
 
 interface DocsSidebarNavItemsProps {
   items: NavItem[]
   pathname: string | null
 }
+
 
 export function DocsSidebarNavItems({
   items,

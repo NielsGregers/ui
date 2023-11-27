@@ -1,6 +1,7 @@
 "use client"
 
 import React, { use, useContext, useEffect, useState } from "react"
+import { set } from "date-fns"
 
 import { Result } from "@/lib/httphelper"
 import { useProcess } from "@/lib/useprocess"
@@ -9,13 +10,12 @@ import { KoksmatContext } from "@/app/koksmat/context"
 
 import { MessageType } from "../server/MessageType"
 import { SocketLogger } from "./socket"
-import { set } from "date-fns"
 
 interface RunServerProcessProps {
   cmd: string
   ran?: boolean
   setran?: (ran: boolean) => void
-  showDebug?: boolean,
+  showDebug?: boolean
   args: string[]
   timeout: number
   channelname: string
@@ -40,7 +40,7 @@ export default function RunServerProcess(props: RunServerProcessProps) {
     onError,
     ran,
     setran,
-    showDebug
+    showDebug,
   } = props
   const { isLoading, error, data } = useProcess(
     cmd,
@@ -48,7 +48,7 @@ export default function RunServerProcess(props: RunServerProcessProps) {
     timeout,
     channelname,
     cwd,
-    
+
     props.ran,
     props.setran,
     props.setresult
@@ -56,7 +56,7 @@ export default function RunServerProcess(props: RunServerProcessProps) {
 
   const [showTrace, setshowTrace] = useState(false)
   const [showCmd, setshowCmd] = useState(false)
-const [showDebugForThis, setshowDebugForThis] = useState(false)
+  const [showDebugForThis, setshowDebugForThis] = useState(false)
 
   useEffect(() => {
     if (data && onData) {
@@ -68,35 +68,33 @@ const [showDebugForThis, setshowDebugForThis] = useState(false)
   }, [data, error])
 
   useEffect(() => {
-    if (showDebug || options.showDebug){
-      setshowDebugForThis(true)
-    }else{
-      setshowDebugForThis(false)
-    }}
     
-  
-  , [showDebug,options.showDebug])
+    if (showDebug || options.showDebug) {
+      setshowDebugForThis(true)
+    } else {
+      setshowDebugForThis(false)
+    }
+  }, [showDebug, options.showDebug])
 
   return (
     <div>
       {showDebugForThis && (
         <div>
           {isLoading && <div>Loading...</div>}
-         
+
           <div className="mb-4 mr-4 mt-[-10px] flex bg-slate-100 p-4">
             <div className="font-bold">Server script: {props.caption}</div>
-            
+
             <div className="grow"></div>
             <Button
               variant={"link"}
-              onClick={() =>{
+              onClick={() => {
                 setOptions({
                   showDebug: false,
                   showContext: options.showContext,
                 })
                 if (showDebug) setshowDebugForThis(false)
-               }
-              }
+              }}
             >
               Debug off
             </Button>

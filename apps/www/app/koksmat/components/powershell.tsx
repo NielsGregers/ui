@@ -28,15 +28,15 @@ const {ran, setran,produce} = props
 const [error, seterror] = useState("")
 const [version, setversion] = useState(0)
 
-const [localRan, localSetran] = useState(false)
+
 
 const [versionToProduce, setVersionToProduce] = useState("")
 useEffect(() => {
+  
   if (!produce) return
   if (versionToProduce === produce) return
   setVersionToProduce(produce)
-  localSetran(false)
-
+  
 }, [versionToProduce,produce])
 
 
@@ -49,9 +49,9 @@ useEffect(() => {
       <RunServerProcess
       caption="PowerShell"
       timeout={props.timeout?props.timeout:30}
-      ran={localRan}
+      ran={ran}
       showDebug={props.showDebug}
-      setran={localSetran}
+      setran={setran}
         cmd={"pwsh"}
         args={props.args?props.args:[
           "-Command",

@@ -27,11 +27,11 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"you"}>
                 <Shipping
                   label="Get a user started"
-                  produce={`user:${batch}`}
+                  produce={[`user:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`Write-Host "I am a guy"`}
-                  need={""}
+                  need={[]}
                 ></Shipping>
               </Container>
             </Port>
@@ -39,8 +39,8 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"you"}>
                 <Shipping
                   label="Get the user to sign in"
-                  need={`user:${batch}`}
-                  produce={`credentials:${batch}`}
+                  need={[`user:${batch}`]}
+                  produce={[`credentials:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`
@@ -54,8 +54,8 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"sharepoint credentials"}>
                 <Shipping
                   label="Let user select a tenant"
-                  need={`credentials:${batch}`}
-                  produce={`selectedtenant:${batch}`}
+                  need={[`credentials:${batch}`]}
+                  produce={[`selectedtenant:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`Write-Host "I am a guys which have selected a tenant"`}
@@ -67,8 +67,8 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"sharepoint config"}>
                 <Shipping
                   label="Configuration site"
-                  need={`selectedtenant:${batch}`}
-                  produce={`sharepointsite:${batch}`}
+                  need={[`selectedtenant:${batch}`]}
+                  produce={[`sharepointsite:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`Write-Host "I am a guys which have a site"`}
@@ -79,8 +79,8 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"you"}>
                 <Shipping
                   label="Get the user to sign in"
-                  need={`user:${batch}`}
-                  produce={`credentials2:${batch}`}
+                  need={[`user:${batch}`]}
+                  produce={[`credentials2:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`
@@ -94,8 +94,8 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <Container containername={"sharepoint extention"}>
                 <Shipping
                   label="Deploy extention"
-                  need={`sharepointsite:${batch}`}
-                  produce={`deployedextention:${batch}`}
+                  need={[`sharepointsite:${batch}`]}
+                  produce={[`deployedextention:${batch}`]}
                   dontparse
                   timeout={8}
                   script={`Write-Host "I have deployed an extention"`}

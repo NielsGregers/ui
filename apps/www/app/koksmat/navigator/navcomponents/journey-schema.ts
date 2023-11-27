@@ -1,6 +1,7 @@
 export interface Root {
   journey: string
   metadata: Metadata
+  triggers: Trigger[]
   waypoints: Waypoint[]
 }
 
@@ -10,8 +11,16 @@ export interface Metadata {
   description: string
 }
 
+export interface Trigger {
+  trigger: any
+  name: string
+  key: string
+  details: string[]
+}
+
 export interface Waypoint {
   port: string
+  done?: string[]
   loads: Loads
   services?: Service[]
 }
@@ -25,6 +34,9 @@ export interface Container {
   name: string
   key: string
   who: string[]
+  approve?: string[]
+  consult?: string[]
+  inform?: string[]
   needs: string[]
   produces: string[]
   script: string

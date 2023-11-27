@@ -31,8 +31,7 @@ export default function Page(props: {
                 items: waypoint.loads.containers.map((container) => {
                   return {
                     title: container.name,
-                    href:
-                      "/koksmat/navigator/journeys/" +
+                    href: "/koksmat/navigator/journeys/" +
                       journey +
                       "/" +
                       id +
@@ -45,8 +44,7 @@ export default function Page(props: {
                   }
                 }),
               }
-            })}
-          />
+            })} currentPath={""}          />
         </div>
         <div className="grow">
           <JourneyView
