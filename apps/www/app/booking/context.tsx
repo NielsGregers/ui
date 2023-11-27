@@ -1,4 +1,5 @@
 "use client"
+import { AccountInfo } from "@azure/msal-browser";
 import { createContext } from "react";
 
 
@@ -7,6 +8,7 @@ export type BookingContextProps = {
   changeSomething:(changeTo:string)=>void
   roles:string[],
   setRoles:(roles:string[])=>void
+  account: AccountInfo | null | undefined
 }
 export const BookingContext = createContext<BookingContextProps>({
   something: "234",
@@ -16,5 +18,6 @@ export const BookingContext = createContext<BookingContextProps>({
   changeSomething: function (changeTo: string): void {
     throw new Error("Function not implemented.");
   },
-  roles: []
+  roles: [],
+  account: undefined
 })

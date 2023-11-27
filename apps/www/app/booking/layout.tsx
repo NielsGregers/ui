@@ -1,13 +1,14 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { InteractionType } from "@azure/msal-browser"
+import { MsalAuthenticationTemplate } from "@azure/msal-react"
 
 import { siteConfig } from "@/config/site"
 
-
 import { SiteHeader } from "./components/site-header"
 import { BookingContextProvider } from "./contextprovider"
-
+import MSALWrapper from "./msalwrapper"
 
 // This is important, if not set, this page will be statically generated causing the build to fail
 // as the build process would need to have access to the database / api's
@@ -57,14 +58,13 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-<BookingContextProvider>
-    <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
-      {/* <ForModule module="Booking"> */}
-      <div className="flex-1">{children}</div>
-      {/* </ForModule> */}
-      {/* <SiteFooter /> */}
-    </div>
+    <BookingContextProvider>
+      <div className="relative flex min-h-screen flex-col">
+        <SiteHeader />
+        <MSALWrapper>
+          <div className="flex-1">{children}</div>
+        </MSALWrapper>
+      </div>
     </BookingContextProvider>
   )
 }

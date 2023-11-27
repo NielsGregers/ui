@@ -1,7 +1,8 @@
-import React, { use } from "react"
+"use client"
+import React, { use, useContext } from "react"
 
-import { getUserSession } from "@/lib/user"
-import { LoginButton, LogoutButton } from "@/components/login"
+// import { getUserSession } from "@/lib/user"
+// import { LoginButton, LogoutButton } from "@/components/login"
 import {
   Avatar,
   AvatarFallback,
@@ -18,20 +19,22 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/registry/new-york/ui/dropdown-menu"
+import { BookingContext } from "../../context"
 
-async function getSession() {
-  return getUserSession()
-}
+// async function getSession() {
+//   return getUserSession()
+// }
 export function UserNav() {
-  const session = use(getSession())
+  const bookingContext = useContext(BookingContext)
 
-  if (!session) {
+  // return <pre>{JSON.stringify(bookingContext, null, 2)}</pre>
+  if (!bookingContext.account) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage />
+              <AvatarImage /> 
 
               <AvatarFallback>?</AvatarFallback>
             </Avatar>
@@ -39,7 +42,8 @@ export function UserNav() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuItem>
-            <LoginButton />
+            Login in - Not implemented
+            {/* <LoginButton /> */}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -49,7 +53,8 @@ export function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-6 w-6 ">
+        <AvatarImage /> 
+          {/* <Avatar className="h-6 w-6 ">
             <AvatarImage src={session?.user?.image as string} alt="@shadcn" />
             <AvatarFallback>
               {session?.user?.name
@@ -60,17 +65,17 @@ export function UserNav() {
                 ?.join("")
                 .toLocaleUpperCase()}
             </AvatarFallback>
-          </Avatar>
+          </Avatar> */}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {session?.user?.name}
+              {bookingContext.account?.name}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {session?.user?.email}
+              {bookingContext.account?.username}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -91,10 +96,10 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator /> */}
-        <DropdownMenuItem>
+        {/* <DropdownMenuItem>
           <LogoutButton />
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   )
