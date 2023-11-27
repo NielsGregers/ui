@@ -9,7 +9,7 @@ import { MobileDatePicker, SingleDatePicker } from "./datepicker"
 type InputProps = { email: string | undefined | null }
 
 function Mobile(props: InputProps) {
-  const [date, setdate] = useState<Date>(new Date(addDays(new Date(), 1)))
+  const [date, setdate] = useState<Date>(new Date())
 
   const onDateChange = (dateValue: Date) => {
     setdate(dateValue)
