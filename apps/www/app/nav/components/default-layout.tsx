@@ -8,26 +8,34 @@ import { JourneyProps, Navigator } from "@/app/koksmat/navigator"
 import travelplan from "@/app/koksmat/navigator/journeys/[journey]/[id]/[[...slug]]"
 import { Waypoint } from "@/app/koksmat/navigator/navcomponents/journey-schema"
 
-import { getLevels } from "."
-import { journeyFromNodes } from ".."
-import { nodes } from "../server"
+import { getLevels } from "@/app/nav/components"
+import { journeyFromNodes } from "@/app/nav"
+import { nodes } from "@/app/nav/server"
+import { SecurityContext } from "../context"
 
 //import travelplan from "@/app/koksmat/navigator/";
-export default function JourneyLayout(props: {
+export function JourneyLayout(props: {
   children: React.ReactNode
-  params: { slug: string[] }
+  params: { slug: string[],journey:string}
 
 }) {
   const navigator = useContext(NavigationContext)
-  const { slug } = props.params
+  const { slug ,journey} = props.params
   const id: string = useSearchParams()?.get("id") ?? ""
   //const [waypoints, setwaypoints] = useState<Waypoint[]>([])
   const { position } = navigator
   const [lastKnownPosition, setlastKnownPosition] = useState<Position>()
-
+  const securityContext = useContext(SecurityContext)
+  const {account} = securityContext
+  useEffect(() => {
+    if (!account){
+  securityContext.signIn()
+}
+    
+  }, [securityContext,account])
   useEffect(() => {
     
-    const levels = getLevels(slug)
+    const levels = getLevels(journey,slug)
     const newPosition: Position = {
       journeyName: levels.journey,
       id: "",
@@ -63,7 +71,7 @@ export default function JourneyLayout(props: {
       </pre>  */}
 
       <Navigator
-        rootPath="/nav/cava/"
+        rootPath="/nav/journey/cava/"
         params={{
           journey: "cava2",
           slug: props.params.slug,

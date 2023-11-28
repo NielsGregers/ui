@@ -31,7 +31,7 @@ export default function ShippingComponent(props: ShippingProps) {
   const [error, seterror] = useState("")
   const [log, setlog] = useState("")
 
-  const { bag, ship, batch, version } = navigator
+  const { cargo: bag, ship, batch, version } = navigator
   const [satisfied, setsatisfied] = useState(false)
   const [working, setworking] = useState(false)
 
@@ -43,7 +43,7 @@ export default function ShippingComponent(props: ShippingProps) {
       need,
       (tag, data) => {
         let allNeedSatisfied = true
-        debugger
+        
         for (const n of need) {
           if (!bag.has(n)) {
             allNeedSatisfied = false

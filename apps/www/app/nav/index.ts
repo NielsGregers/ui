@@ -14,6 +14,7 @@ import {
 } from "@/app/koksmat/navigator/navcomponents/journey-schema"
 
 import { Port } from "../koksmat/navigator"
+import { getLevels } from "./components"
 
 export interface TreeNode {
   filename: string
@@ -55,4 +56,20 @@ return nodes.filter(node=>!node.isHidden) .map((node) => {
     }
     return { port, loads:{containers:[container]}, services:[] } as Waypoint
   })
+}
+
+
+
+export function customComponentKey(slug: string){
+
+  const levels = getLevels("", slug.split("/"))
+  let filename = ""
+  filename += "port-" +levels.port
+
+  if (!levels.container) return
+
+
+  filename += "-container-" +levels.container
+  return filename
+
 }

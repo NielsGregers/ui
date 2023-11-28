@@ -20,7 +20,8 @@ export type LogEntry = {
   data: string
 }
 export type NavigationContextProps = {
-  bag: Map<string, string>,
+  cargoKeys: () =>  string[],
+  cargo: (key:string) =>  string | undefined,
   ship: (tag: string, data: string) => void
   postlog: (tag: string, data: string) => void
   log: LogEntry[]
@@ -64,7 +65,7 @@ export const NavigationContext = createContext<NavigationContextProps>({
   setWhatIf: function (on: boolean): void {
     throw new Error("Function not implemented.")
   },
-  bag: new Map<string, string>(),
+
   newBatch: function (): void {
     throw new Error("Function not implemented.")
   },
@@ -85,5 +86,11 @@ export const NavigationContext = createContext<NavigationContextProps>({
     throw new Error("Function not implemented.")
   },
   log: [],
-  shippingMan: new ShippingMan
+  shippingMan: new ShippingMan,
+  cargoKeys: function (): string[] {
+    throw new Error("Function not implemented.")
+  },
+  cargo: function (key: string): string | undefined {
+    throw new Error("Function not implemented.")
+  }
 })

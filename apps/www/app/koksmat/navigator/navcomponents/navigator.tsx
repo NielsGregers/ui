@@ -13,13 +13,14 @@ import { NavigationContext } from "../context"
 import { Waypoint,Root } from "./journey-schema"
 import RightbarNav from "./rightbar-nav"
 import MermaidView from "./mermaid"
+import { getSlugElement } from "@/app/nav/components"
 
 export function containerHref(rootPath: string, port: string, container: string,id:string) {
-  return rootPath + "/port/" + port + "/container/" + container + "?id="+id
+  return rootPath + "/port/" + getSlugElement(port) + "/container/" +getSlugElement( container )+ "?id="+id
 }
 
 export function portHref(rootPath: string, port: string,id:string) {
-  return rootPath + "/port/" + port + "?id="+id
+  return rootPath + "/port/" + getSlugElement(port) + "?id="+id
 }
 
 function getRightBarNavItems(
@@ -29,7 +30,7 @@ function getRightBarNavItems(
   journey: string,
   id: string
 ): NavItem[] {
-  const wp = waypoints.find((wp) => wp.port === port)
+  const wp = waypoints.find((wp) => getSlugElement( wp.port) === port)
   if (!wp) return []
 
   return wp.loads.containers.map((container) => {
@@ -66,6 +67,7 @@ export default function Navigator(props: {
   const { travelplan, rootPath } = props
   const { journey, slug } = props.params
   const { id } = navigator.position
+
 
   return (
     <div className="flex">

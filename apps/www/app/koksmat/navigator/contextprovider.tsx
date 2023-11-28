@@ -12,6 +12,7 @@ import { NavigationTrace } from "./navcomponents/elements"
 import { Container, Waypoint } from "./navcomponents/journey-schema"
 import { PortType } from "./navcomponents/port"
 import { ShippingMan } from "./lib"
+import { getSlugElement } from "@/app/nav/components"
 
 type Props = {
   children?: React.ReactNode
@@ -25,7 +26,7 @@ export const NavigationProvider = ({ children }: Props) => {
   const [waypoints, setwaypoints] = useState<Waypoint[]>([])
   const [batch, setbatch] = useState(0)
   const [version, setversion] = useState(0)
-  const [bag, setbag] = useState(new Map<string, string>())
+  const [cargo, setcargo] = useState(new Map<string, string>())
   const [shippingMan, setshippingMan] = useState(new ShippingMan())
   const [internalInstanceId, setInternalInstanceId] = useState("1")
   const [log, setlog] = useState<LogEntry[]>([])
@@ -49,12 +50,12 @@ export const NavigationProvider = ({ children }: Props) => {
     const setCurrentWaypoint = (port: string, waypoints: Waypoint[]) => {
       const findWaypoint = (port: string): Waypoint | undefined => {
         return waypoints.find(
-          (wp) => wp.port.toLowerCase() === port.toLowerCase()
+          (wp) =>  getSlugElement(wp.port) === port
         )
       }
       const findContainer = (containerName: string,waypoint?:Waypoint): Container | undefined => {
         if (!waypoint) return undefined
-        return waypoint.loads.containers.find((container) => container.name.toLowerCase() === containerName.toLowerCase() ?? undefined
+        return waypoint.loads.containers.find((container) =>  getSlugElement(container.name) === containerName ?? undefined
         )
       }
       const wp = findWaypoint(port)
@@ -67,7 +68,7 @@ export const NavigationProvider = ({ children }: Props) => {
   }, [position, waypoints])
 
   const saveBag = () => {
-    localStorage.setItem("bag", JSON.stringify(Array.from(bag.entries())))
+    localStorage.setItem("bag", JSON.stringify(Array.from(cargo.entries())))
   }
 
   const postlog = (tag: string, data: string) => {
@@ -83,11 +84,11 @@ export const NavigationProvider = ({ children }: Props) => {
     ship: function (tag: string, data: string): void {
       if (!tag) return
       if (!data) return
-      if (bag.has(tag)) {
-        if (bag.get(tag) === data) return
+      if (cargo.has(tag)) {
+        if (cargo.get(tag) === data) return
       }
 
-      bag.set(tag, data)
+      cargo.set(tag, data)
       saveBag()
       const logEntry: LogEntry = {
         tag: "bag updated",
@@ -137,7 +138,7 @@ export const NavigationProvider = ({ children }: Props) => {
     setWhatIf: function (on: boolean): void {
       setwhatIf(on)
     },
-    bag,
+
     newBatch: function (): void {
       setbatch(batch + 1)
     },
@@ -158,7 +159,14 @@ export const NavigationProvider = ({ children }: Props) => {
     currentContainer,
     postlog,
     log,
-    shippingMan
+    shippingMan,
+    cargoKeys: function (): string[] {
+      return Array.from( cargo.keys())
+    },
+    cargo: function (key: string): string | undefined {
+      return cargo.get(key)
+     
+    }
   }
   return (
     <NavigationContext.Provider value={navigator}>

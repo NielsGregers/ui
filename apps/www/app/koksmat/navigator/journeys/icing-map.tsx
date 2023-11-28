@@ -117,10 +117,10 @@ export default function IcingMap(props: { whatIf?: boolean }) {
               <td>Value</td>
             </tr>
 
-            {Array.from(navigator.bag.keys()).map((key) => (
+            {navigator.cargoKeys().map((key) => (
               <tr key={key}>
                 <td>{key}</td>
-                <td>{navigator.bag.get(key)}</td>
+                <td>{navigator.cargo(key)}</td>
               </tr>
             ))}
           </table>

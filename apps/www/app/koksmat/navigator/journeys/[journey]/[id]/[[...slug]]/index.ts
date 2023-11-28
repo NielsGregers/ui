@@ -60,34 +60,34 @@ function cargoTypeFromTag(tag: string): CargoType {
   const n = s2[0]
   let stage = s2[1] ?? ""
   const stageSplit =  stage.split(" ").filter(s => s.length > 0)
-  const cargo : CargoType = { name:n.trim(), stages: [], isList: n.trim().endsWith("s") ,attributes:[]}
+  const cargoType : CargoType = { name:n.trim(), stages: [], isList: n.trim().endsWith("s") ,attributes:[]}
 
   if (stageSplit.length > 0) {
-    cargo.stages.push(stageSplit[0])
+    cargoType.stages.push(stageSplit[0])
   }else{
-    cargo.stages.push("")
+    cargoType.stages.push("")
   }
 if (stageSplit.length > 1){
-    cargo.attributes = stageSplit.slice(1)
+    cargoType.attributes = stageSplit.slice(1)
 }
 
-  return cargo
+  return cargoType
 }
 function cargoTypes(journey: Journey): CargoType[] {
   const map = new Map<string, CargoType>()
 
   const process = (artifact: string) => {
-    const cargo = cargoTypeFromTag(artifact)
-    if (map.has(cargo.name)) {
-      const existingCargoType = map.get(cargo.name)
+    const cargoType = cargoTypeFromTag(artifact)
+    if (map.has(cargoType.name)) {
+      const existingCargoType = map.get(cargoType.name)
       if (existingCargoType) {
-        const newStages = cargo.stages.filter(
+        const newStages = cargoType.stages.filter(
           (stage) => (!existingCargoType.stages.includes(stage)) && stage !== ""
         )
         existingCargoType.stages.push(...newStages)
       }
     } else {
-      map.set(cargo.name, cargo)
+      map.set(cargoType.name, cargoType)
     }
   }
   journey.waypoints.map((waypoint) => {

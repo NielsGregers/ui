@@ -107,17 +107,17 @@ export function JourneyView(props: {
       <div className="">{children}</div>
       {navigator.traceLevel > 2 && (
         <div>
-          {navigator.bag.size > 0 && (
+          {navigator.cargoKeys().length > 0 && (
             <table>
               <tr className="mt-3 font-bold">
                 <td className="w-[200px]">Key</td>
                 <td>Value</td>
               </tr>
 
-              {Array.from(navigator.bag.keys()).map((key) => (
+              {navigator.cargoKeys().map((key) => (
                 <tr key={key}>
                   <td>{key}</td>
-                  <td>{navigator.bag.get(key)}</td>
+                  <td>{navigator.cargo(key)}</td>
                 </tr>
               ))}
             </table>
