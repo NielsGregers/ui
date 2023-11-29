@@ -13,12 +13,35 @@ import { Container, Waypoint } from "./navcomponents/journey-schema"
 import { PortType } from "./navcomponents/port"
 import { ShippingMan } from "./lib"
 import { getSlugElement } from "@/app/nav/components"
+import { loadCargo, saveCargo } from "@/app/nav/server"
+import { debug } from "console"
+import { useSearchParams } from "next/navigation"
 
 type Props = {
   children?: React.ReactNode
 }
 
+export interface StoredJourney {
+  _id: Id
+  log: Log[]
+  cargo: string[][]
+  journeyId: string
+}
+
+export interface Id {
+  $oid: string
+}
+
+export interface Log {
+  tag: string
+  data: string
+  timestamp: string
+}
+
+
 export const NavigationProvider = ({ children }: Props) => {
+
+  const searchParams = useSearchParams()
   const [traceLevel, setinternaltraceLevel] = useState<number>(4)
   const [row, setrow] = useState(0)
   const [whatIf, setwhatIf] = useState(false)
@@ -45,7 +68,22 @@ export const NavigationProvider = ({ children }: Props) => {
     setversion(version + 1)
   }
 
-
+  useEffect(() => {
+    const load = async () => {
+      const savedCargo = await loadCargo(position.journeyName,position.id)
+      if (!savedCargo) return
+      
+      const journey: StoredJourney = savedCargo as any as  StoredJourney
+      journey.cargo.forEach((item) => {
+        cargo.set(item[0], item[1])
+      })
+    
+    }
+    if (!position.journeyName) return
+    if (!position.id) return
+    load()
+  }, [position.id, position.journeyName])
+  
   useEffect(() => {
     const setCurrentWaypoint = (port: string, waypoints: Waypoint[]) => {
       const findWaypoint = (port: string): Waypoint | undefined => {
@@ -81,24 +119,30 @@ export const NavigationProvider = ({ children }: Props) => {
     //setversion(version + 1)
   }
   const navigator: NavigationContextProps = {
-    ship: function (tag: string, data: string): void {
+    ship: async function (tag: string, data: string) {
       if (!tag) return
       if (!data) return
       if (cargo.has(tag)) {
         if (cargo.get(tag) === data) return
       }
-
+      
       cargo.set(tag, data)
-      saveBag()
+     
       const logEntry: LogEntry = {
         tag: "bag updated",
         data: tag,
         timestamp: new Date().toISOString(),
       }
       setlog([...log, logEntry])
+      
       console.log("bag update", tag, data)
       shippingMan.announce(tag, data)
       setversion(version + 1)
+      
+      return saveCargo(position.journeyName,position.id,
+        {
+        log:[...log, logEntry],
+        cargo:Array.from(cargo.entries())})
     },
     traceLevel,
 
@@ -130,6 +174,7 @@ export const NavigationProvider = ({ children }: Props) => {
     },
 
     setPosition: function (position: Position): void {
+      position.id = searchParams?.get("id") ?? "123"
       setposition(position)
 
       setversion(version + 1)

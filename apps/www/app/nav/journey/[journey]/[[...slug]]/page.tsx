@@ -15,22 +15,16 @@ export default function Page(props: { params: { journey:string,slug: string[] } 
   const { cargo: bag, position, currentWaypoint, currentContainer } = navigator
 const [customcomponent, setcustomcomponent] = useState<any>()
   useEffect(() => {
-    const customcomponent = custom(journey,slug.join("/"))
+    const customcomponent = custom(journey,(slug ?? []).join("/"))
     setcustomcomponent(customcomponent)
  
   }, [journey, slug])
   
   return (
+    <div>
     <div className="min-h-screen">
 
-      {!customcomponent && slug && <Button
-        onClick={async () => {
-          
-          createPageFromSlug(journey,slug.join("/"))
-        }}
-      >
-        Customize
-      </Button>}
+  
       {customcomponent && customcomponent
 
       }
@@ -46,5 +40,14 @@ const [customcomponent, setcustomcomponent] = useState<any>()
         }}
       />
     </div>
+        {!customcomponent && slug && <Button
+          onClick={async () => {
+            
+            createPageFromSlug(journey,slug.join("/"))
+          }}
+        >
+          Customize
+        </Button>}
+        </div>
   )
 }

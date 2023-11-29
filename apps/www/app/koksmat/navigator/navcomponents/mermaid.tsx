@@ -109,7 +109,7 @@ const { waypoint } = props
     mermaid.contentLoaded()
   }, [diagram])
 
-  return null
+   return null
 
   return <div>
     <pre className="mermaid">{diagram}</pre>

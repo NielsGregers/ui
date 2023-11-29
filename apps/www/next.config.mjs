@@ -21,9 +21,7 @@ const nextConfig = {
       },
   ],
   },
-  experimental : {  
-    serverActions: true,
-  },
+
   redirects() {
     return [
       {

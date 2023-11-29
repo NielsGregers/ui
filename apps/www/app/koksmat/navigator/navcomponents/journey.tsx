@@ -242,6 +242,7 @@ export default function View(props: ScopedProps<ViewProps>): SeaView{
               if (travelplan.waypoints[0].loads.containers.length === 0) return
               const container = travelplan.waypoints[0].loads.containers[0]
               container.needs.forEach((need)=>{
+                
                 navigator.ship(need, "seed")
               })
 

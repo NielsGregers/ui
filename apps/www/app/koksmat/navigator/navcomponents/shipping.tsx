@@ -31,7 +31,7 @@ export default function ShippingComponent(props: ShippingProps) {
   const [error, seterror] = useState("")
   const [log, setlog] = useState("")
 
-  const { cargo: bag, ship, batch, version } = navigator
+  const { cargo, ship, batch, version } = navigator
   const [satisfied, setsatisfied] = useState(false)
   const [working, setworking] = useState(false)
 
@@ -41,23 +41,23 @@ export default function ShippingComponent(props: ShippingProps) {
     if (!navigator.shippingMan) return
     const subscriptionId = navigator.shippingMan.subscribe(
       need,
-      (tag, data) => {
+      {onTagAdded: (tag, data) => {
         let allNeedSatisfied = true
         
         for (const n of need) {
-          if (!bag.has(n)) {
+          if (!cargo(n)) {
             allNeedSatisfied = false
             break
           }
         }
         setsatisfied(allNeedSatisfied)
-      }
+      }}
     )
 
     return () => {
       navigator.shippingMan.unsubscribe(subscriptionId)
     }
-  }, [bag, navigator.shippingMan, need])
+  }, [cargo, navigator.shippingMan, need])
 
   useEffect(() => {
     if (!simulate) return

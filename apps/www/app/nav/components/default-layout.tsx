@@ -12,6 +12,7 @@ import { getLevels } from "@/app/nav/components"
 import { journeyFromNodes } from "@/app/nav"
 import { nodes } from "@/app/nav/server"
 import { SecurityContext } from "../context"
+import { Button } from "@/registry/new-york/ui/button"
 
 //import travelplan from "@/app/koksmat/navigator/";
 export function JourneyLayout(props: {
@@ -29,7 +30,7 @@ export function JourneyLayout(props: {
   const {account} = securityContext
   useEffect(() => {
     if (!account){
-  securityContext.signIn()
+  //securityContext.signIn()
 }
     
   }, [securityContext,account])
@@ -69,8 +70,14 @@ export function JourneyLayout(props: {
       {/* <pre>
         {JSON.stringify(waypoints,null,2)}
       </pre>  */}
+{/* <Button onClick={()=>{securityContext.signOut()}}>out</Button> */}
+<div>
+  {securityContext.account && <div>Logged in as {securityContext.account.name} <Button variant={"link"} onClick={()=>{securityContext.signOut()}}>Sign Out</Button></div>}
+  {!securityContext.account && <div> <Button variant={"link"} onClick={()=>{securityContext.signIn()}}>Sign In</Button></div>}
 
-      <Navigator
+</div>
+
+{securityContext.account &&       <Navigator
         rootPath="/nav/journey/cava/"
         params={{
           journey: "cava2",
@@ -88,7 +95,7 @@ export function JourneyLayout(props: {
         }}
       >
         <div>{props.children}</div>
-      </Navigator>
+      </Navigator>}
     </div>
   )
 }

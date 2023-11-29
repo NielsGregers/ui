@@ -22,14 +22,15 @@ interface CaseProps {
   title: string
   testurl: string
   token?: string
+  
 }
 
 const configuration: Configuration = {
   auth: {
-    clientId: "2c1a064d-6ec3-4f83-9ac7-6996c22247e0",
+    clientId: "c56dd27d-20a6-41de-a0f9-7c955cb5194f",
     authority:
       "https://login.microsoftonline.com/79dc228f-c8f2-4016-8bf0-b990b6c72e98",
-    redirectUri: "/booking",
+    redirectUri: "/nav",
   },
   system: {
     allowNativeBroker: false, // Disables WAM Broker
@@ -121,12 +122,12 @@ export const SecurityContextProvider = ({ children }: Props) => {
     roles,
 
     account,
-    getToken: async function (scopes: string[]): Promise<Result<string>> {
+    getToken: async function (scopes: string[],silentOnly:boolean): Promise<Result<string>> {
       if (!account) {
         return { hasError: true, errorMessage: "No account" }
 
       }
-      const tokenResult = await aquireToken(instance, account, scopes)
+      const tokenResult = await aquireToken(instance, account, scopes,silentOnly)
       return tokenResult
     },
     signIn: function (): void {

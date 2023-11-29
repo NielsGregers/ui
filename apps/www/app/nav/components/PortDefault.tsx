@@ -32,9 +32,9 @@ export default function PortDefaults(props: {
 
   return (
     <div className="mt-4">
-      <div className="bold text-xl">Port: {portname}</div>
+      {/* <div className="bold text-xl">Port: {portname}</div> */}
       <MermaidView waypoint={waypoint}></MermaidView>
-      <div>{waypoint?.loads.containers.length ?? 0} Containers to load</div>
+      {/* <div>{waypoint?.loads.containers.length ?? 0} Containers to load</div> */}
       <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>

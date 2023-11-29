@@ -7,6 +7,7 @@ import { launchEditor } from "@/navigator/lib/launchEditor"
 
 import { TreeNode, displayNameFromFilename, isHiddenFromFilename } from "."
 import { getLevels } from "./components"
+import { mongoLoadCargo, mongoSaveCargo } from "./storage/mongo"
 
 function nodesFromDirectory(dirName: string): TreeNode[] {
   const dir = fs.readdirSync(dirName, { withFileTypes: true })
@@ -94,18 +95,20 @@ export async function createPageFromSlug(journey: string, slug: string) {
   import { Button } from "@/registry/new-york/ui/button"
   import { Container, Port } from "@/app/nav/components"
   import { launchPageFromSlug } from "@/app/nav/server"
-  
+  import { Badge } from "@/registry/new-york/ui/badge"
+
   export default function Page() {
     const navigator = useContext(NavigationContext)
-    const { bag, position, currentWaypoint, currentContainer } = navigator
+    const {  position, currentWaypoint, currentContainer } = navigator
   
     return (
       <div className="min-h-screen">
+      <Badge>Under contruction</Badge>
         <Button
           onClick={async () => {
             launchPageFromSlug(
               position.journeyName,
-              $key
+              ${key}
             )
           }}
         >
@@ -131,3 +134,16 @@ export async function createPageFromSlug(journey: string, slug: string) {
   fs.writeFileSync(path.join(journeyPath, `${filename}.tsx`), containerPageSrc)
   launchEditor(path.join(journeyPath, `${filename}.tsx`), 25, 9)
 }
+
+
+export async function saveCargo(journey : string, id : string,cargo: object) {
+  
+ return mongoSaveCargo(journey,id,cargo)
+
+}
+
+export async function loadCargo(journey : string, id : string) {
+  
+  return mongoLoadCargo(journey,id)
+ 
+ }
