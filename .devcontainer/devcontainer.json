@@ -16,3 +16,4 @@
 		},
 		"postCreateCommand": "cd /usr/src/app/apps/www  &&  npm run start"
 	}
+	}
